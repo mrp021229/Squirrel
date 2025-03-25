@@ -1,7 +1,9 @@
 import random
 import getDBMS
-# def init(seed):
-#     pass
+def init(seed):
+    new_seed = seed
+
+
 # def deinit():  # optional for Python
 #     passs
 # def queue_new_entry(filename_new_queue, filename_orig_queue):
