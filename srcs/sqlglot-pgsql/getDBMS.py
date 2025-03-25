@@ -3,16 +3,16 @@ import psycopg2
 def getDBMS():
     db_dict = {}
     connection = psycopg2.connect(
-        host='localhost',  # æ•°æ®åº“ä¸»æœº
-        user='postgres',  # æ•°æ®åº“ç”¨æˆ·å
-        password='root',  # æ•°æ®åº“å¯†ç 
-        dbname='postgres'  # æ•°æ®åº“åç§°
+        host='localhost',  # Êı¾İ¿âÖ÷»ú
+        user='dobigthing',  # Êı¾İ¿âÓÃ»§Ãû
+        password='',  # Êı¾İ¿âÃÜÂë
+        dbname='postgres'  # Êı¾İ¿âÃû³Æ
     )
 
     try:
         cursor = connection.cursor()
 
-        # æŸ¥è¯¢æ‰€æœ‰è¡¨å
+        # æŸ¥è?¢æ‰€æœ‰è¡¨å?
         cursor.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';")
         tables = cursor.fetchall()
 
@@ -20,7 +20,7 @@ def getDBMS():
             for table in tables:
                 table_name = table[0]
 
-                # æŸ¥è¯¢è¡¨çš„åˆ—ä¿¡æ¯
+                # æŸ¥è?¢è¡¨çš„åˆ—ä¿¡æ¯
                 cursor.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name = '{table_name}';")
                 columns = cursor.fetchall()
 
