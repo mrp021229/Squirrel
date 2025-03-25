@@ -7,6 +7,21 @@ RUN apt-get -y install make cmake build-essential vim sudo git \
     clang ninja-build pkg-config clang-format libpq-dev llvm libyaml-cpp-dev zlib1g-dev \
     libreadline8 libreadline-dev bison flex python3-fire
 
+# 更新 apt 并安装 Python3 和 pip
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip && \
+    apt-get clean
+
+# 安装 sqlglot 库
+RUN pip3 install sqlglot
+
+# 安装Python依赖
+RUN pip3 install --upgrade pip
+RUN pip3 install psycopg2-binary chardet
+
+
+
+
 RUN mkdir -p /home && \
     groupadd dobigthing && \
     useradd -l -K UMASK=0000 -d /home -g dobigthing dobigthing && \
@@ -36,6 +51,8 @@ RUN cd bld/ && make -j && sudo make install && \
     AFL_IGNORE_PROBLEMS=1 /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
 
 RUN AFL_DEBUG=1 __AFL_SHM_ID=1234 /usr/local/pgsql/bin/postgres 2>&1 | grep "__afl_map_size" | tail -n 1 | cut -d"," -f8 | cut -d" " -f 3 > /tmp/mapsize
-WORKDIR /home/Squirrel/scripts/utils
-ENTRYPOINT AFL_MAP_SIZE=$(cat /tmp/mapsize) python3 run.py postgresql ../../data/fuzz_root/pqsql_input/
+WORKDIR /home/Squirrel/srcs/sqlglot-pgsql
+ENTRYPOINT AFL_MAP_SIZE=$(cat /tmp/mapsize) python3 getDBMS.py
+# WORKDIR /home/Squirrel/scripts/utils
+# ENTRYPOINT AFL_MAP_SIZE=$(cat /tmp/mapsize) python3 run.py postgresql ../../data/fuzz_root/pqsql_input/
 #docker中适配python-sqlglot环境，试运行sqlglot脚本
