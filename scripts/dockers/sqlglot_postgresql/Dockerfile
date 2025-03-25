@@ -35,7 +35,7 @@ RUN chmod +w /etc/sudoers && \
 USER dobigthing
 WORKDIR /home
 
-RUN git clone git@github.com:mrp021229/Squirrel.git && \
+RUN git clone https://github.com/mrp021229/Squirrel.git && \
     cd Squirrel && git submodule update --init && \
     cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DPOSTGRESQL=ON && \
     cmake --build build -j && \
