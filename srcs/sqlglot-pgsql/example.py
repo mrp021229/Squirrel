@@ -3,6 +3,8 @@ import getDBMS
 def init(seed):
     new_seed = seed
 
+def deinit():
+    pass
 
 # def deinit():  # optional for Python
 #     passs
