@@ -51,8 +51,7 @@ RUN cd bld/ && make -j && sudo make install && \
     AFL_IGNORE_PROBLEMS=1 /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
 
 RUN AFL_DEBUG=1 __AFL_SHM_ID=1234 /usr/local/pgsql/bin/postgres 2>&1 | grep "__afl_map_size" | tail -n 1 | cut -d"," -f8 | cut -d" " -f 3 > /tmp/mapsize
-WORKDIR /home/Squirrel/srcs/sqlglot-pgsql
-ENTRYPOINT AFL_MAP_SIZE=$(cat /tmp/mapsize) python3 getDBMS.py
-# WORKDIR /home/Squirrel/scripts/utils
-# ENTRYPOINT AFL_MAP_SIZE=$(cat /tmp/mapsize) python3 run.py postgresql ../../data/fuzz_root/pqsql_input/
+
+WORKDIR /home/Squirrel/scripts/utils
+ENTRYPOINT AFL_MAP_SIZE=$(cat /tmp/mapsize) python3 run.py postgresql ../../data/fuzz_root/pqsql_input/
 #docker中适配python-sqlglot环境，试运行sqlglot脚本
