@@ -29,9 +29,9 @@ def set_env(database):
 
 
 
-  
+
   os.environ["PYTHONPATH"] = get_mutator_py_path(database)
-  os.environ["AFL_PYTHON_MODULE"] = example
+  os.environ["AFL_PYTHON_MODULE"] = "example"
   os.environ["SQUIRREL_CONFIG"] = get_config_path(database)
 
 
