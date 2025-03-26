@@ -8,11 +8,11 @@ def deinit():
 
 # def deinit():  # optional for Python
 #     passs
-# def queue_new_entry(filename_new_queue, filename_orig_queue):
-#     return False
+def queue_new_entry(filename_new_queue, filename_orig_queue):
+    return False
 
-# def fuzz_count(buf):
-#     return cnt
+def fuzz_count(buf):
+    return 10
 
 
 
