@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
   }
   */
 
-  const char *query = "select 1;";
+  const char *query = "create table v0(v1 int ,v2 int);";
   for (int i = 0; i < 0x100; ++i) {
     test_client->prepare_env();
     client::ExecutionStatus result = test_client->execute(query, strlen(query));

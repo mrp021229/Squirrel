@@ -4,8 +4,8 @@ def getDBMS():
     db_dict = {}
     connection = psycopg2.connect(
         host='localhost',  # 数据库主机
-        user='postgres',  # 数据库用户名
-        password='root',  # 数据库密码
+        user='dobigthing',  # 数据库用户名
+        password='',  # 数据库密码
         dbname='postgres'  # 数据库名称
     )
 

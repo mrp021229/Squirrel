@@ -1,5 +1,8 @@
 {
   "clang-format.fallbackStyle": "Google",
   "editor.formatOnSave": false,
-  "editor.formatOnPaste": false
+  "editor.formatOnPaste": false,
+  "files.associations": {
+    "iosfwd": "cpp"
+  }
 }
