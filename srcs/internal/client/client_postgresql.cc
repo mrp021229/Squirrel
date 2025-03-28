@@ -78,6 +78,7 @@ ExecutionStatus PostgreSQLClient::execute(const char *query, size_t size) {
     PQfinish(conn);
     return kExecuteError;
   }
+
   // 获取当前数据库的所有表
   PGresult *table_list_res = PQexec(conn, 
     "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';");
