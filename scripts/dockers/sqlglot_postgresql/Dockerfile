@@ -35,7 +35,7 @@ RUN chmod +w /etc/sudoers && \
 # 配置SSH（通过传递无密码的密钥）
 ARG SSH_PRIVATE_KEY
 RUN mkdir -p /home/dobigthing/.ssh && \
-    echo "$SSH_PRIVATE_KEY" > /home/dobigthing/.ssh/id_ed25519_nopass && \
+    printf "%s" "$SSH_PRIVATE_KEY" > /home/dobigthing/.ssh/id_ed25519_nopass && \
     chmod 600 /home/dobigthing/.ssh/id_ed25519_nopass && \
     ssh-keyscan github.com >> /home/dobigthing/.ssh/known_hosts && \
     chown -R dobigthing:dobigthing /home/dobigthing/.ssh
