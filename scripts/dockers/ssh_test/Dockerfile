@@ -7,17 +7,6 @@ RUN apt-get -y install make cmake build-essential vim sudo git \
     clang ninja-build pkg-config clang-format libpq-dev llvm libyaml-cpp-dev zlib1g-dev \
     libreadline8 libreadline-dev bison flex python3-fire
 
-# 更新 apt 并安装 Python3 和 pip
-RUN apt-get update && \
-    apt-get install -y python3 python3-pip && \
-    apt-get clean
-
-# 安装 sqlglot 库
-RUN pip3 install sqlglot
-
-# 安装Python依赖
-RUN pip3 install --upgrade pip
-RUN pip3 install psycopg2-binary chardet
 
 
 
@@ -34,25 +23,5 @@ RUN chmod +w /etc/sudoers && \
 
 USER dobigthing
 WORKDIR /home
-ARG CACHEBUST=1
-RUN git clone https://github.com/mrp021229/Squirrel.git && \
-    cd Squirrel && git submodule update --init && \
-    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DPOSTGRESQL=ON && \
-    cmake --build build -j && \
-    cd AFLplusplus/ && LLVM_CONFIG=llvm-config-14 make -j20
 
-RUN git clone https://github.com/postgres/postgres.git postgres/ && \
-    mkdir bld/ && cd bld/ && \
-    CC=/home/Squirrel/AFLplusplus/afl-cc CXX=/home/Squirrel/AFLplusplus/afl-c++ \
-    ../postgres/configure
-
-RUN cd bld/ && make -j && sudo make install && \
-    sudo mkdir /usr/local/pgsql/data && sudo chown dobigthing /usr/local/pgsql/data &&  \
-    AFL_IGNORE_PROBLEMS=1 /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
-
-RUN AFL_DEBUG=1 __AFL_SHM_ID=1234 /usr/local/pgsql/bin/postgres 2>&1 | grep "__afl_map_size" | tail -n 1 | cut -d"," -f8 | cut -d" " -f 3 > /tmp/mapsize
-WORKDIR /home/Squirrel/build
-ENTRYPOINT ./test_client
-# WORKDIR /home/Squirrel/scripts/utils
-# ENTRYPOINT AFL_MAP_SIZE=$(cat /tmp/mapsize) python3 run.py postgresql ../../data/fuzz_root/pqsql_input/
-#docker中适配python-sqlglot环境，试运行sqlglot脚本
+RUN git clone https://github.com/mrp021229/Squirrel.git
