@@ -65,7 +65,23 @@ ExecutionStatus PostgreSQLClient::execute(const char *query, size_t size) {
   std::string cmd(query, size);
 
 
-// 获取当前数据库的所有表
+
+  auto res = PQexec(conn, cmd.c_str());
+  if (PQstatus(conn) != CONNECTION_OK) {
+    fprintf(stderr, "Error3: %s\n", PQerrorMessage(conn));
+    PQclear(res);
+    return kServerCrash;
+  }
+
+  if (PQresultStatus(res) != PGRES_COMMAND_OK &&
+      PQresultStatus(res) != PGRES_TUPLES_OK) {
+    fprintf(stderr, "Error4: %s\n", PQerrorMessage(conn));
+    PQclear(res);
+    PQfinish(conn);
+    return kExecuteError;
+  }
+
+  // 获取当前数据库的所有表
   PGresult *table_list_res = PQexec(conn, 
     "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';");
 
@@ -114,21 +130,6 @@ if (PQresultStatus(table_list_res) != PGRES_TUPLES_OK) {
     fprintf(stderr, "Error opening file to save table and column list\n");
   }
 }
-  auto res = PQexec(conn, cmd.c_str());
-  if (PQstatus(conn) != CONNECTION_OK) {
-    fprintf(stderr, "Error3: %s\n", PQerrorMessage(conn));
-    PQclear(res);
-    return kServerCrash;
-  }
-
-  if (PQresultStatus(res) != PGRES_COMMAND_OK &&
-      PQresultStatus(res) != PGRES_TUPLES_OK) {
-    fprintf(stderr, "Error4: %s\n", PQerrorMessage(conn));
-    PQclear(res);
-    PQfinish(conn);
-    return kExecuteError;
-  }
-
   
 
   PQclear(res);

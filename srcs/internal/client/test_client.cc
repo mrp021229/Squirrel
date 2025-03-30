@@ -11,6 +11,8 @@ int main(int argc, char **argv) {
 
   std::string db_name = config["db"].as<std::string>();
   // client::PostgreSQLClient *test_client = new client::PostgreSQLClient;
+  std::string startup_cmd = config["startup_cmd"].as<std::string>();
+  
   client::DBClient *test_client = client::create_client(db_name, config);
   test_client->initialize(config);
   /*
