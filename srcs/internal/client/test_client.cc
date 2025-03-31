@@ -2,7 +2,7 @@
 #include <cstring>
 #include <iostream>
 #include <string>
-
+#include <unistd.h>
 #include "client.h"
 #include "yaml-cpp/yaml.h"
 
@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
   
   client::DBClient *test_client = client::create_client(db_name, config);
   test_client->initialize(config);
-  if (!database->check_alive()) {
+  if (!test_client->check_alive()) {
     system(startup_cmd.c_str());
     sleep(5);
   }
