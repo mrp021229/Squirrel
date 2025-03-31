@@ -16,7 +16,10 @@ int main(int argc, char **argv) {
   
   client::DBClient *test_client = client::create_client(db_name, config);
   test_client->initialize(config);
-  
+  if (!database->check_alive()) {
+    system(startup_cmd.c_str());
+    sleep(5);
+  }
   // if (test_client->connect()) {
   //   std::cout << "Success!" << std::endl;
   // } else {
