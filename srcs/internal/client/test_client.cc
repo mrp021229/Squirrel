@@ -17,17 +17,19 @@ int main(int argc, char **argv) {
   client::DBClient *test_client = client::create_client(db_name, config);
   test_client->initialize(config);
   
-  if (test_client.connect()) {
-    std::cout << "Success!" << std::endl;
-  } else {
-    std::cout << "Failed!" << std::endl;
-  }
+  // if (test_client->connect()) {
+  //   std::cout << "Success!" << std::endl;
+  // } else {
+  //   std::cout << "Failed!" << std::endl;
+  // }
   
 
   const char *query = "create table v0(v1 int ,v2 int);";
+  
   for (int i = 0; i < 0x100; ++i) {
     test_client->prepare_env();
     client::ExecutionStatus result = test_client->execute(query, strlen(query));
+    std::cout << "Iteration " << i << ": result = " << result << std::endl;
     assert(result == client::kNormal);
     test_client->clean_up_env();
   }
