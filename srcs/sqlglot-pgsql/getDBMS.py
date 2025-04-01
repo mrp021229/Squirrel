@@ -1,4 +1,4 @@
-def getDBMS(file_path):
+def getDBMS(file_path="/home/table_column_list.txt"):
     db_dict = {}
     current_table = None
     columns = []
