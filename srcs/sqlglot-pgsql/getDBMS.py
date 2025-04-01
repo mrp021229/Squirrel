@@ -1,45 +1,36 @@
-import psycopg2
-
-def getDBMS():
+def getDBMS(file_path):
     db_dict = {}
-    connection = psycopg2.connect(
-        host='localhost',  # Êı¾İ¿âÖ÷»ú
-        user='dobigthing',  # Êı¾İ¿âÓÃ»§Ãû
-        password='',  # Êı¾İ¿âÃÜÂë
-        dbname='postgres'  # Êı¾İ¿âÃû³Æ
-    )
+    current_table = None
+    columns = []
 
-    try:
-        cursor = connection.cursor()
-
-        # æŸ¥è?¢æ‰€æœ‰è¡¨å?
-        cursor.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';")
-        tables = cursor.fetchall()
-
-        if tables:
-            for table in tables:
-                table_name = table[0]
-
-                # æŸ¥è?¢è¡¨çš„åˆ—ä¿¡æ¯
-                cursor.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name = '{table_name}';")
-                columns = cursor.fetchall()
-
-                column_list = [column[0] for column in columns]
-                db_dict[table_name] = {'columns': column_list}
-
-    finally:
-        # å…³é—­è¿æ¥
-        cursor.close()
-        connection.close()
-
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+        
+        for line in lines:
+            line = line.strip()
+            
+            # åˆ¤æ–­è¡¨å
+            if line.startswith("Table:"):
+                if current_table:
+                    db_dict[current_table] = {'columns': columns, 'constraints': []}
+                current_table = line.split(":")[1].strip()
+                columns = []
+            
+            # åˆ¤æ–­åˆ—å
+            elif line.startswith("Column:"):
+                column_name = line.split(":")[1].strip()
+                columns.append(column_name)
+        
+        # å¤„ç†æœ€åä¸€ä¸ªè¡¨
+        if current_table:
+            db_dict[current_table] = {'columns': columns, 'constraints': []}
+    
     return db_dict
-
-
 if __name__ == "__main__":
-    print(getDBMS())
-    table_dict = {
-        'table1': {'columns': ['id', 'name', 'age', 'email'], 'constraints': []},
-        'table2': {'columns': ['a', 'b', 'c'], 'constraints': []},
-        'table3': {'columns': ['d', 'e'], 'constraints': []}
-    }
-    print(table_dict)
+    # æµ‹è¯•å‡½æ•°
+    file_path = 'test.txt'  # è¿™é‡Œæ›¿æ¢æˆä½ çš„æ–‡ä»¶è·¯å¾„
+    db_dict = getDBMS(file_path)
+
+    # æ‰“å°ç»“æœ
+    print(db_dict)
+

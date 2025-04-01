@@ -9,7 +9,7 @@ from sqlglot.expressions import table_name
 from sqlglot_manager import ExpressionSetManager
 import read_num
 # sqlglot.exp
-# 假设这是你提供的字典
+# 假�?�这�?你提供的字典
 table_dict = {
     'table1': {'columns': ['id', 'name', 'age', 'email', 'a'], 'constraints': []},
     'table2': {'columns': ['a', 'b', 'c'], 'constraints': []},
@@ -39,7 +39,7 @@ def getSumFuc():
     file_path = "pgsql_seed.pkl"
 
 
-    # 使用 sqlglot 解析 SQL 语句
+    # 使用 sqlglot 解析 SQL �?�?
     parsed = sqlglot.parse(sql)
     for node in parsed[0].walk():
         if isinstance(node, sqlglot.exp.Sum):
@@ -49,10 +49,10 @@ def getSumFuc():
 
 
 def is_aggregate_function(expression):
-    # 聚合函数的常见名称
+    # 聚合函数的常见名�?
     aggregate_functions = ["COUNT", "SUM", "AVG", "MIN", "MAX", "GROUP_CONCAT", "STD", "VARIANCE", "BIT_AND", "BIT_OR"]
 
-    # 检查表达式是否是函数调用，且函数名在聚合函数列表中
+    # 检查表达式�?否是函数调用，且函数名在聚合函数列表�?
     if isinstance(expression, sqlglot.expressions.Function) and expression.name.upper() in aggregate_functions:
         return True
     return False
@@ -94,19 +94,19 @@ def is_in_subquery(node, root):
 
 
 
-# 填充SQL模板
+# �?充SQL模板
 def get_random_table_column(tables):
-    # 随机选择一个表
+    # 随机选择一�?�?
     table_name = random.choice(list(tables.keys()))
 
-    # 如果表有 alias，随机选择一个 alias，否则使用表名
+    # 如果表有 alias，随机选择一�? alias，否则使用表�?
     aliases = tables[table_name]['alias']
     if aliases:
         chosen_table = random.choice(aliases)
     else:
         chosen_table = table_name
 
-    # 随机选择一个列名
+    # 随机选择一�?列名
     columns = tables[table_name]['columns']
     chosen_column = random.choice(columns)
 
@@ -116,20 +116,20 @@ def get_random_table_column(tables):
 def numbered_x(parsed):
     total_num = 0
     for node in parsed.walk():
-        if isinstance(node, sqlglot.exp.Identifier):  # 表名或列名
+        if isinstance(node, sqlglot.exp.Identifier):  # 表名或列�?
             node.set("this", "x" + str(total_num))
             total_num = total_num + 1
-        # elif isinstance(node, sqlglot.exp.Literal):  # 字符串或数字
+        # elif isinstance(node, sqlglot.exp.Literal):  # 字�?�串或数�?
         #     node.set("this", "x" + str(total_num))
         #     total_num = total_num + 1
-        elif isinstance(node, sqlglot.exp.Table):  # 表引用
+        elif isinstance(node, sqlglot.exp.Table):  # 表引�?
             node.set("this", "x" + str(total_num))
             total_num = total_num + 1
 
     return parsed
 
 
-sub_space = {}#该字典1维索引是填充后的subSQL 有极低概率出现填充后的subSQL在string层面重复的现象
+sub_space = {}#该字�?1维索引是�?充后的subSQL 有极低�?�率出现�?充后的subSQL在string层面重�?�的现象
 
 def fill_sql_template(parsed):
     table_dict = getDBMS.getDBMS()
@@ -144,7 +144,7 @@ def fill_sql_template(parsed):
 
     v_num = read_num.read_integer_from_file()
     # print(parsed)
-    # 去除跨数据库查询
+    # 去除跨数�?库查�?
     for table in parsed.find_all(sqlglot.exp.Table):
         table.set('db', None)
     sql_dict = {}
@@ -253,7 +253,7 @@ def fill_sql_template(parsed):
             identifier.set('this',identifier_name)
             identifier_names.remove(identifier_name)
         # print([expression])
-        if isinstance(expression, sqlglot.exp.Select): # 正确率可以提升
+        if isinstance(expression, sqlglot.exp.Select): # 正确率可以提�?
             select = expression
             # print([select])
             fill_sql_template(select)
@@ -402,7 +402,7 @@ def fill_sql_template(parsed):
 
     key = parsed.args
     # print(key)
-    new_node = getSumFuc()#当前为直接给有groupby子句的select填入聚合函数sum 后续应更正为检查是否有聚合函数 若无 则填入随机类型的聚合函数
+    new_node = getSumFuc()#当前为直接给有groupby子句的select�?入聚合函数sum 后续应更正为检查是否有聚合函数 若无 则填入随机类型的聚合函数
     if 'group' in key and key['group'] is not None:
         parsed.args['expressions'].append(new_node)
     new_node = []
@@ -454,25 +454,25 @@ subqueries = []
 
 def analyze_subqueries(parsed, depth):
     """
-    递归分析 SQL 语法树中的子查询，记录层次、父节点等信息。
+    递归分析 SQL �?法树�?的子查�??，�?�录层�?�、父节点等信�?�?
 
-    :param node: 当前处理的节点
-    :param depth: 当前节点的深度
-    :param parent: 父节点
-    :param result: 存储结果的列表
+    :param node: 当前处理的节�?
+    :param depth: 当前节点的深�?
+    :param parent: 父节�?
+    :param result: 存储结果的列�?
     :return: 子查询的分析结果
     """
     # if result is None:
     #     result = []
     for node in parsed.walk(bfs=True):
-        # 检查当前节点是否是子查询
+        # 检查当前节点是否是子查�?
         if isinstance(node, sqlglot.exp.Subquery) and node not in scoped_node:
             scoped_node.add(node)
             analyze_subqueries(node.this, depth + 1)
             # table_space = getTableSpace(node)
             subqueries.append({
-                "parent": parsed,  # 可以存储父节点的信息（比如表达式类型）
-                "query": node,  # 子查询的 SQL 表达式
+                "parent": parsed,  # �?以存储父节点的信�?（比如表达式类型�?
+                "query": node,  # 子查询的 SQL 表达�?
                 "table_space": None,
                 "depth": depth
             })
@@ -482,7 +482,7 @@ def analyze_subqueries(parsed, depth):
 
 def sort_subqueries(subqueries):
     """
-    按照 depth 对子查询结果排序。
+    按照 depth 对子查�?�结果排序�?
 
     :param subqueries: 子查询的结果列表
     :return: 按照 depth 排序后的结果列表
@@ -507,7 +507,7 @@ def fill_sql(sql):
     for subquery in sorted_subqueries:
         fill_sql_template(subquery['query'])
     fill_sql_template(parsed[0])
-    return parsed[0]
+    return parsed[0].sql(dialect='postgres')
 
 
 # # 输入SQL模板
@@ -515,19 +515,19 @@ def fill_sql(sql):
 # parsed = sqlglot.parse(template)
 #
 # print(parsed)
-# # 获取填充后的SQL语句
+# # 获取�?充后的SQL�?�?
 # filled_sql = fill_sql_template(parsed[0])
 # print(filled_sql)
 
 def get_sql():
     with open('mutation-pgsql.txt', 'r', encoding='utf-8') as file:
-        # 读取文件内容
+        # 读取文件内�??
         content = file.read()
 
-        # 按照分号分隔 SQL 语句
+        # 按照分号分隔 SQL �?�?
         sql_statements = content.split(';')
 
-        # 去除空白字符并去除空的 SQL 语句
+        # 去除空白字�?�并去除空的 SQL �?�?
         sql_statements = [stmt.strip() for stmt in sql_statements if stmt.strip()]
 
     # 打印 SQL 列表
@@ -535,10 +535,11 @@ def get_sql():
 
 
 def write(sql):
-    # 假设文件名
+    # 假�?�文件名
     output_file = "filledSQL.txt"
     with open(output_file, "a", encoding="utf-8") as f:
         f.write(sql + ";\n")
+
 
 
 if __name__ == "__main__":
@@ -548,14 +549,14 @@ if __name__ == "__main__":
     for sql in get_sql():
         try:
             filledQSL = fill_sql(sql)
-            write(filledQSL.sql())
+            write(filledQSL)
         except Exception as e:
             print("failed")
             print(sql)
         else:
             print("success")
     end_time = time.time()
-    print("运行时间:", end_time - start_time, "秒")
+    print("运�?�时�?:", end_time - start_time, "�?")
     exit(0)
     #
     # CREATE VIEW x AS SELECT 1 + 2 /* hello */ + 3 FROM (SELECT CAST(x.x AS CHAR CHARACTER SET utf8mb3) FROM x, x AS x LIMIT 1) AS x WHERE x = x
@@ -595,4 +596,4 @@ WHERE p.product_type = 'Electronics';
     print("result")
     fill_sql_template(parsed[0])
     print(parsed[0])
-# 运行时间: 1102.9334118366241 秒
+# 运�?�时�?: 1102.9334118366241 �?

@@ -1,0 +1,17 @@
+Table: employees
+  Column: employee_id
+  Column: first_name
+  Column: last_name
+  Column: hire_date
+  Column: department
+
+Table: departments
+  Column: department_id
+  Column: department_name
+  Column: manager_id
+
+Table: projects
+  Column: project_id
+  Column: project_name
+  Column: start_date
+  Column: end_date

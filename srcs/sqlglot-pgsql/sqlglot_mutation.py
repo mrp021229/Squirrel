@@ -154,6 +154,28 @@ class SQLRandomReplacer:
 
         return parsed_sql
 
+def get_mutated_sql(sql):
+    print("mmm")
+    print(sql)
+    file_path = "pgsql_seed.pkl"
+    manager.load_from_file(file_path)
+    parsed = sqlglot.parse(sql,dialect='postgres')
+    replacer = SQLRandomReplacer()
+
+    new_sql = copy.deepcopy(random.choice(parsed))
+    transformed_sql = replacer.mutation(new_sql)
+
+    try:
+        if transformed_sql is not None:
+            check_sql = sqlglot.parse_one(transformed_sql.sql(dialect='postgres'),read='postgres')
+    except Exception as e:
+        print("failed")
+        return None
+    else:
+        print("success")
+        return transformed_sql.sql(dialect='postgres')
+        
+    
 
 if __name__ == "__main__":
     start_time = time.time()

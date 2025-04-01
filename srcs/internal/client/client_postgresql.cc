@@ -84,13 +84,13 @@ ExecutionStatus PostgreSQLClient::execute(const char *query, size_t size) {
   // 获取当前数据库的所有表
   PGresult *table_list_res = PQexec(conn, 
     "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';");
-
+    printf("GETDATA!!\n");
 if (PQresultStatus(table_list_res) != PGRES_TUPLES_OK) {
   fprintf(stderr, "Error fetching table list: %s\n", PQerrorMessage(conn));
 } else {
   // 打开或创建文本文件用于保存表和列信息
   std::ofstream table_list_file;
-  table_list_file.open("/home/table_column_list.txt", std::ios::app); // 以追加模式打开文件
+  table_list_file.open("/home/table_column_list.txt", std::ios::trunc);  // 以覆盖模式打开文件
 
   if (table_list_file.is_open()) {
     // 获取当前时间戳，作为文件内容的标识
