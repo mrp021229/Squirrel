@@ -157,7 +157,7 @@ class SQLRandomReplacer:
 def get_mutated_sql(sql):
     print("mmm")
     print(sql)
-    file_path = "/houm/Squirrel/srcs/sqlglot-pgsql/pgsql_seed.pkl"
+    file_path = "/home/Squirrel/srcs/sqlglot-pgsql/pgsql_seed.pkl"
     manager.load_from_file(file_path)
     parsed = sqlglot.parse(sql,dialect='postgres')
     replacer = SQLRandomReplacer()
@@ -179,7 +179,7 @@ def get_mutated_sql(sql):
 
 if __name__ == "__main__":
     start_time = time.time()
-    file_path = "/houm/Squirrel/srcs/sqlglot-pgsql/pgsql_seed.pkl"
+    file_path = "/home/Squirrel/srcs/sqlglot-pgsql/pgsql_seed.pkl"
 
     manager.load_from_file(file_path)
 #from squirrel-pgsql

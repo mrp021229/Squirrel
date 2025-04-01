@@ -108,7 +108,7 @@ def test_manager():
     sql = """
         select a,sum(b) from a;
         """
-    file_path = "/houm/Squirrel/srcs/sqlglot-pgsql/mysql_seed.pkl"
+    file_path = "/home/Squirrel/srcs/sqlglot-pgsql/mysql_seed.pkl"
     new_manager = ExpressionSetManager()
     new_manager.load_from_file(file_path)
     print(new_manager)

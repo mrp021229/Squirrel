@@ -23,7 +23,7 @@ table_dict = {
 #     }
 #     return
 
-file_path = "/houm/Squirrel/srcs/sqlglot-pgsql/pgsql_seed.pkl"
+file_path = "/home/Squirrel/srcs/sqlglot-pgsql/pgsql_seed.pkl"
 new_manager = ExpressionSetManager()
 new_manager.load_from_file(file_path)
 
@@ -36,7 +36,7 @@ def getSumFuc():
     sql = """
             select a,sum(b) from a;
             """
-    file_path = "/houm/Squirrel/srcs/sqlglot-pgsql/pgsql_seed.pkl"
+    file_path = "/home/Squirrel/srcs/sqlglot-pgsql/pgsql_seed.pkl"
 
 
     # 浣跨敤 sqlglot 瑙ｆ瀽 SQL 锟�?锟�?
