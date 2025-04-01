@@ -3,28 +3,32 @@ def getDBMS(file_path):
     current_table = None
     columns = []
 
-    with open(file_path, 'r') as file:
-        lines = file.readlines()
-        
-        for line in lines:
-            line = line.strip()
+     try:
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
             
-            # 鍒ゆ柇琛ㄥ悕
-            if line.startswith("Table:"):
-                if current_table:
-                    db_dict[current_table] = {'columns': columns, 'constraints': []}
-                current_table = line.split(":")[1].strip()
-                columns = []
+            for line in lines:
+                line = line.strip()
+                
+                # 检查表名
+                if line.startswith("Table:"):
+                    if current_table:
+                        db_dict[current_table] = {'columns': columns, 'constraints': []}
+                    current_table = line.split(":")[1].strip()
+                    columns = []
+                
+                # 检查列名
+                elif line.startswith("Column:"):
+                    column_name = line.split(":")[1].strip()
+                    columns.append(column_name)
             
-            # 鍒ゆ柇鍒楀悕
-            elif line.startswith("Column:"):
-                column_name = line.split(":")[1].strip()
-                columns.append(column_name)
-        
-        # 澶勭悊鏈€鍚庝竴涓�琛�
-        if current_table:
-            db_dict[current_table] = {'columns': columns, 'constraints': []}
+            # 处理最后一个表
+            if current_table:
+                db_dict[current_table] = {'columns': columns, 'constraints': []}
     
+    except FileNotFoundError:
+        # 如果文件不存在，返回空字典
+        return {}
     return db_dict
 if __name__ == "__main__":
     # 娴嬭瘯鍑芥暟
