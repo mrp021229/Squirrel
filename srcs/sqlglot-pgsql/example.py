@@ -17,8 +17,8 @@ def fuzz_count(buf):
 
 
 def fuzz(buf, add_buf, max_size):
-    if isinstance(buf, bytes):
-        buf = buf.decode('utf-8')
+    
+    buf = buf.decode('utf-8')
     # 将多个SQL语句按照分号分隔
     sql_statements = buf.split(';')
     
