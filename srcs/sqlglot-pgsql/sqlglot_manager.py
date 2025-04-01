@@ -6,24 +6,24 @@ import pickle
 
 class ExpressionSetManager:
     def __init__(self):
-        # 用于存储节点的�?�器，键为父节点类型，值为节点集合
+        # 鐢ㄤ簬瀛樺偍鑺傜偣鐨勫�瑰櫒锛岄敭涓虹埗鑺傜偣绫诲瀷锛屽€间负鑺傜偣闆嗗悎
         self.parent_to_nodes = {}
 
     def add_node(self, node: Expression, parent_node: Expression):
         """
-        向集合中添加节点�?
-        如果对应父节点类型的集合不存�?，则创建一�?新集合�?
+        鍚戦泦鍚堜腑娣诲姞鑺傜偣銆�
+        濡傛灉瀵瑰簲鐖惰妭鐐圭被鍨嬬殑闆嗗悎涓嶅瓨鍦�锛屽垯鍒涘缓涓€涓�鏂伴泦鍚堛€�
         """
-        parent_type = type(parent_node).__name__  # 获取父节点类型名�?
+        parent_type = type(parent_node).__name__  # 鑾峰彇鐖惰妭鐐圭被鍨嬪悕绉�
         if parent_type not in self.parent_to_nodes:
             self.parent_to_nodes[parent_type] = set()
         self.parent_to_nodes[parent_type].add(node)
 
     def get_random_node(self, parent_node: Expression) -> Expression:
         """
-        随机返回与指定父节点类型相同的一�?节点�?
+        闅忔満杩斿洖涓庢寚瀹氱埗鑺傜偣绫诲瀷鐩稿悓鐨勪竴涓�鑺傜偣銆�
         """
-        parent_type = type(parent_node).__name__  # 获取父节点类型名�?
+        parent_type = type(parent_node).__name__  # 鑾峰彇鐖惰妭鐐圭被鍨嬪悕绉�
         if parent_type in self.parent_to_nodes and self.parent_to_nodes[parent_type]:
             return random.choice(list(self.parent_to_nodes[parent_type]))
         else:
@@ -31,10 +31,10 @@ class ExpressionSetManager:
 
     def get_random_node_v2(self, node: Expression) -> Expression:
         """
-        随机返回与指定父节点类型相同的一�?节点�?
+        闅忔満杩斿洖涓庢寚瀹氱埗鑺傜偣绫诲瀷鐩稿悓鐨勪竴涓�鑺傜偣銆�
         """
 
-        parent_type = type(node.parent).__name__  # 获取父节点类型名�?
+        parent_type = type(node.parent).__name__  # 鑾峰彇鐖惰妭鐐圭被鍨嬪悕绉�
         same_type_node = []
         if parent_type in self.parent_to_nodes and self.parent_to_nodes[parent_type]:
             for exp in self.parent_to_nodes[parent_type]:
@@ -49,7 +49,7 @@ class ExpressionSetManager:
 
     def save_to_file(self, file_path: str):
         """
-        将当前的 ExpressionSetManager 内�?�保存到�?地文件�?
+        灏嗗綋鍓嶇殑 ExpressionSetManager 鍐呭�逛繚瀛樺埌鏈�鍦版枃浠躲€�
         """
         try:
             with open(file_path, 'wb') as f:
@@ -60,7 +60,7 @@ class ExpressionSetManager:
 
     def load_from_file(self, file_path: str):
         """
-        从本地文件加载内容并初�?�化 ExpressionSetManager�?
+        浠庢湰鍦版枃浠跺姞杞藉唴瀹瑰苟鍒濆�嬪寲 ExpressionSetManager銆�
         """
         try:
             with open(file_path, 'rb') as f:
@@ -75,7 +75,7 @@ class ExpressionSetManager:
 
     def __str__(self):
         """
-        返回当前存储状态的字�?�串表示�?
+        杩斿洖褰撳墠瀛樺偍鐘舵€佺殑瀛楃�︿覆琛ㄧず銆�
         """
         return "\n".join(
             f"{parent_type}: {len(nodes)} nodes"
@@ -83,20 +83,20 @@ class ExpressionSetManager:
         )
 
 
-# 读取文件并解�? SQL �?�?
+# 璇诲彇鏂囦欢骞惰В鏋� SQL 璇�鍙�
 def process_sql_file(file_path: str, manager: ExpressionSetManager):
     try:
         with open(file_path, 'r',encoding='utf-8') as file:
             for line in file:
-                sql = line.strip()  # 去掉两�??的空格和换�?��??
+                sql = line.strip()  # 鍘绘帀涓ょ��鐨勭┖鏍煎拰鎹㈣�岀��
                 if sql.endswith(";"):
-                    sql = sql[:-1]  # 去掉�?尾的分号
+                    sql = sql[:-1]  # 鍘绘帀鏈�灏剧殑鍒嗗彿
                 if sql:
-                    # 使用 sqlglot 解析 SQL �?�?
+                    # 浣跨敤 sqlglot 瑙ｆ瀽 SQL 璇�鍙�
                     tree = sqlglot.parse_one(sql,read='postgres')
-                    # 遍历�?法树�?的节�?
+                    # 閬嶅巻璇�娉曟爲涓�鐨勮妭鐐�
                     for node in tree.walk():
-                        # 添加非根节点
+                        # 娣诲姞闈炴牴鑺傜偣
                         # if node != tree:
                         manager.add_node(node, node.parent)
         print("Finished processing SQL file.")
@@ -113,7 +113,7 @@ def test_manager():
     new_manager.load_from_file(file_path)
     print(new_manager)
 
-    # 使用 sqlglot 解析 SQL �?�?
+    # 浣跨敤 sqlglot 瑙ｆ瀽 SQL 璇�鍙�
     parsed = sqlglot.parse(sql,read='postgres')
     for node in parsed[0].walk():
         if isinstance(node, sqlglot.exp.Sum):
@@ -133,17 +133,17 @@ if __name__ == "__main__":
     # print(new_manager)
     # exit()
 
-    # 使用示例
+    # 浣跨敤绀轰緥
     seed_path = "pgsql_seed.txt"
     manager = ExpressionSetManager()
 
-    # 处理 SQL 文件，将节点存入管理�?
+    # 澶勭悊 SQL 鏂囦欢锛屽皢鑺傜偣瀛樺叆绠＄悊鍣�
     process_sql_file(seed_path, manager)
 
-    # 查看管理器中保存的节�?
-    print("管理器状�?:")
+    # 鏌ョ湅绠＄悊鍣ㄤ腑淇濆瓨鐨勮妭鐐�
+    print("绠＄悊鍣ㄧ姸鎬�:")
     print(manager)
-    # 保存到本地文�?
+    # 淇濆瓨鍒版湰鍦版枃浠�
     file_path = "pgsql_seed.pkl"
     manager.save_to_file(file_path)
     exit(0)

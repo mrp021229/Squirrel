@@ -18,33 +18,33 @@ def fuzz_count(buf):
 
 def fuzz(buf, add_buf, max_size):
 
-    # ½«¶à¸öSQLÓï¾ä°´ÕÕ·ÖºÅ·Ö¸ô
+    # å°†å¤šä¸ªSQLè¯­å¥æŒ‰ç…§åˆ†å·åˆ†éš”
     sql_statements = buf.split(';')
     
-    # ÓÃÀ´´æ´¢±äÒìºóµÄSQLÓï¾ä
+    # ç”¨æ¥å­˜å‚¨å˜å¼‚åçš„SQLè¯­å¥
     mutated_sql_statements = []
     
 
     for sql in sql_statements:
-        if sql.strip():  # Ö»´¦Àí·Ç¿ÕµÄSQLÓï¾ä
+        if sql.strip():  # åªå¤„ç†éç©ºçš„SQLè¯­å¥
             num = 0
             mutated_out = None
-            # ³¢ÊÔ±äÒì10´Î
+            # å°è¯•å˜å¼‚10æ¬¡
             while num <= 10 and mutated_out is None:
-                mutated_out = sqlglot_pgsql.mutation(sql.strip())  # ¶ÔÃ¿¸öSQLÓï¾ä½øĞĞ±äÒì
+                mutated_out = sqlglot_pgsql.mutation(sql.strip())  # å¯¹æ¯ä¸ªSQLè¯­å¥è¿›è¡Œå˜å¼‚
                 num = num + 1
             if mutated_out is not None:
-                mutated_sql_statements.append(mutated_out)  # Ìí¼Ó±äÒìºóµÄSQLÓï¾ä
-                # ½«Ô­Ê¼SQLºÍ±äÒìºóµÄSQLĞ´ÈëÎÄ¼ş
+                mutated_sql_statements.append(mutated_out)  # æ·»åŠ å˜å¼‚åçš„SQLè¯­å¥
+                # å°†åŸå§‹SQLå’Œå˜å¼‚åçš„SQLå†™å…¥æ–‡ä»¶
                 with open("/home/mutated_sql.txt", "a") as file:
                     file.write("sql: " + sql + "\n")
                     file.write("new_sql: " + mutated_out + "\n")
             else:
-                mutated_sql_statements.append(sql)  # Èç¹ûÃ»ÓĞ±äÒì³É¹¦£¬Ôò±£³ÖÔ­SQLÓï¾ä
+                mutated_sql_statements.append(sql)  # å¦‚æœæ²¡æœ‰å˜å¼‚æˆåŠŸï¼Œåˆ™ä¿æŒåŸSQLè¯­å¥
         else:
-            mutated_sql_statements.append(sql)  # ¶ÔÓÚ¿Õ×Ö·û´®£¨ÀıÈç·ÖºÅºóµÄ¿Õ°×£©£¬Ö±½Ó±£ÁôÔ­Öµ
+            mutated_sql_statements.append(sql)  # å¯¹äºç©ºå­—ç¬¦ä¸²ï¼ˆä¾‹å¦‚åˆ†å·åçš„ç©ºç™½ï¼‰ï¼Œç›´æ¥ä¿ç•™åŸå€¼
     
-    # ½«±äÒìºóµÄSQLÓï¾ä°´·ÖºÅÆ´½ÓÆğÀ´
+    # å°†å˜å¼‚åçš„SQLè¯­å¥æŒ‰åˆ†å·æ‹¼æ¥èµ·æ¥
     return '; '.join(mutated_sql_statements)
 
 if __name__ == "__main__":
