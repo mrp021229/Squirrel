@@ -17,7 +17,8 @@ def fuzz_count(buf):
 
 
 def fuzz(buf, add_buf, max_size):
-
+    if isinstance(buf, bytes):
+        buf = buf.decode('utf-8')
     # 将多个SQL语句按照分号分隔
     sql_statements = buf.split(';')
     
@@ -45,7 +46,8 @@ def fuzz(buf, add_buf, max_size):
             mutated_sql_statements.append(sql)  # 对于空字符串（例如分号后的空白），直接保留原值
     
     # 将变异后的SQL语句按分号拼接起来
-    return '; '.join(mutated_sql_statements)
+    mutated_sql = '; '.join(mutated_sql_statements)
+    return mutated_sql.encode('utf-8')
 
 if __name__ == "__main__":
     print("@#@#")
