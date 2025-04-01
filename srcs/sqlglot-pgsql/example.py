@@ -17,17 +17,35 @@ def fuzz_count(buf):
 
 
 def fuzz(buf, add_buf, max_size):
-    num=0
-    mutated_out = None
-    # try 10 times and get mutated 
-    while(num<=10 and mutated_out is None):
-        mutated_out = sqlglot_pgsql.mutation(buf)
-        num = num+1
-    if mutated_out is not None:
-        with open("/home/mutated_sql.txt", "a") as file:
-            file.write("sql: "+buf + "\n")
-            file.write("new_sql: "+mutated_out + "\n")  # 姣忔鍙樺紓缁撴灉鍚庡姞涓婃崲琛岀
-    return mutated_out
+
+    # 将多个SQL语句按照分号分隔
+    sql_statements = buf.split(';')
+    
+    # 用来存储变异后的SQL语句
+    mutated_sql_statements = []
+    
+
+    for sql in sql_statements:
+        if sql.strip():  # 只处理非空的SQL语句
+            num = 0
+            mutated_out = None
+            # 尝试变异10次
+            while num <= 10 and mutated_out is None:
+                mutated_out = sqlglot_pgsql.mutation(sql.strip())  # 对每个SQL语句进行变异
+                num = num + 1
+            if mutated_out is not None:
+                mutated_sql_statements.append(mutated_out)  # 添加变异后的SQL语句
+                # 将原始SQL和变异后的SQL写入文件
+                with open("/home/mutated_sql.txt", "a") as file:
+                    file.write("sql: " + sql + "\n")
+                    file.write("new_sql: " + mutated_out + "\n")
+            else:
+                mutated_sql_statements.append(sql)  # 如果没有变异成功，则保持原SQL语句
+        else:
+            mutated_sql_statements.append(sql)  # 对于空字符串（例如分号后的空白），直接保留原值
+    
+    # 将变异后的SQL语句按分号拼接起来
+    return '; '.join(mutated_sql_statements)
 
 if __name__ == "__main__":
     print("@#@#")

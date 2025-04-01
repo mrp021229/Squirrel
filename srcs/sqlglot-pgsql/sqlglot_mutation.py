@@ -7,26 +7,26 @@ import pickle
 import copy
 from sqlglot_manager import ExpressionSetManager
 
-# 2.11 todolist：
-# []插入和删除
+# 2.11 todolist�?
+# []插入和删�?
 # 改进manager实现按照经验对节点分布进行插入删除，以及变异后更新manager
 # 1w条的测试，主要测试fill
 
 manager = ExpressionSetManager()
 
 
-# 读取文件并解析 SQL 语句
+# 读取文件并解�? SQL �?�?
 def process_sql_file(file_path: str, manager: ExpressionSetManager):
     try:
         with open(file_path, 'r') as file:
             for line in file:
-                sql = line.strip()  # 去掉两端的空格和换行符
+                sql = line.strip()  # 去掉两�??的空格和换�?��??
                 if sql.endswith(";"):
-                    sql = sql[:-1]  # 去掉末尾的分号
+                    sql = sql[:-1]  # 去掉�?尾的分号
                 if sql:
-                    # 使用 sqlglot 解析 SQL 语句
+                    # 使用 sqlglot 解析 SQL �?�?
                     tree = sqlglot.parse_one(sql,read='postgres')
-                    # 遍历语法树中的节点
+                    # 遍历�?法树�?的节�?
                     for node in tree.walk():
                         # 添加非根节点
                         if node != tree:
@@ -39,15 +39,15 @@ def process_sql_file(file_path: str, manager: ExpressionSetManager):
 class SQLRandomReplacer:
     def __init__(self):
         """
-        初始化替换器
-        :param random_node_generator: 一个函数，接受当前节点并返回一个新的随机节点
+        初�?�化替换�?
+        :param random_node_generator: 一�?函数，接受当前节点并返回一�?新的随机节点
         """
 
     def check_func(self, tree):
         for node in tree.find_all(sqlglot.expressions.Select):
-            # 忽略嵌套的查询，仅检查顶层查询的 SELECT
-            if node.parent is None:  # 只处理顶层查询
-                # 检查 SELECT 中是否有聚合函数
+            # 忽略嵌�?�的查�??，仅检查顶层查询的 SELECT
+            if node.parent is None:  # �?处理顶层查�??
+                # 检�? SELECT �?�?否有聚合函数
                 for child in node.find_all(sqlglot.expressions.Sum):
                     if child.parent == node:
                         return True
@@ -59,8 +59,8 @@ class SQLRandomReplacer:
 
     def replace_nodes(self, parsed_sql):
         """
-        遍历并替换语法树中的每个子节点
-        :param parsed_sql: 已解析的 SQL 表达式
+        遍历并替换�??法树�?的每�?子节�?
+        :param parsed_sql: 已解析的 SQL 表达�?
         """
         mutation_num = 0
         root = 0
@@ -79,7 +79,7 @@ class SQLRandomReplacer:
                     print(parsed_sql)
                     continue
 
-            # 跳过根节点（可选）
+            # 跳过根节点（�?选）
             if node.parent is None:
                 # print(2)
                 continue
@@ -89,7 +89,7 @@ class SQLRandomReplacer:
                 # print(3)
                 new_node = manager.get_random_node(node.parent)
                 if node.key == new_node.key:
-                    # 执行替换操作
+                    # 执�?�替换操�?
                     if new_node is not None:
                         node.replace(new_node)
                         mutation_num = mutation_num + 1
@@ -157,7 +157,7 @@ class SQLRandomReplacer:
 def get_mutated_sql(sql):
     print("mmm")
     print(sql)
-    file_path = "pgsql_seed.pkl"
+    file_path = "/houm/Squirrel/srcs/sqlglot-pgsql/pgsql_seed.pkl"
     manager.load_from_file(file_path)
     parsed = sqlglot.parse(sql,dialect='postgres')
     replacer = SQLRandomReplacer()
@@ -179,7 +179,7 @@ def get_mutated_sql(sql):
 
 if __name__ == "__main__":
     start_time = time.time()
-    file_path = "pgsql_seed.pkl"
+    file_path = "/houm/Squirrel/srcs/sqlglot-pgsql/pgsql_seed.pkl"
 
     manager.load_from_file(file_path)
 #from squirrel-pgsql
@@ -240,7 +240,7 @@ if __name__ == "__main__":
     print(parsed[0].args)
     replacer = SQLRandomReplacer()
     num = 0
-    # 假设文件名
+    # 假�?�文件名
     output_file = "mutation-pgsql.txt"
     with open(output_file, "a", encoding="utf-8") as f:
         for i in range(10000):
@@ -269,8 +269,8 @@ if __name__ == "__main__":
     print("success num:")
     print(num)
     end_time = time.time()
-    print("运行时间:", end_time - start_time, "秒")
+    print("运�?�时�?:", end_time - start_time, "�?")
 # 1w test
 # success num:
 # 9997
-# 运行时间: 167.36811637878418 秒
+# 运�?�时�?: 167.36811637878418 �?
