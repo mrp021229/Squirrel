@@ -3,7 +3,7 @@ def getDBMS(file_path):
     current_table = None
     columns = []
 
-     try:
+    try:
         with open(file_path, 'r') as file:
             lines = file.readlines()
             
