@@ -551,9 +551,11 @@ if __name__ == "__main__":
             filledQSL = fill_sql(sql)
             write(filledQSL)
         except Exception as e:
+            pass
             # print("failed")
             # print(sql)
         else:
+            pass
             # print("success")
     end_time = time.time()
     # print("杩愶�??锟芥椂锟�??:", end_time - start_time, "锟�?")

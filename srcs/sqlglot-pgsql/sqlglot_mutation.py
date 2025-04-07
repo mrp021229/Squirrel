@@ -33,6 +33,7 @@ def process_sql_file(file_path: str, manager: ExpressionSetManager):
                             manager.add_node(node, node.parent)
         # print("Finished processing SQL file.")
     except Exception as e:
+        pass
         # print(f"Error processing SQL file: {e}")
 
 
@@ -150,6 +151,7 @@ class SQLRandomReplacer:
             except Exception as e:
                 return None
             else:
+                pass
                 # print("correct")
 
         return parsed_sql
@@ -256,6 +258,7 @@ if __name__ == "__main__":
                     check_sql = sqlglot.parse_one(transformed_sql.sql(dialect='postgres'),read='postgres')
                 # print("@")
             except Exception as e:
+                pass
                 # print("failed")
                 # print(repr(transformed_sql))
             else:

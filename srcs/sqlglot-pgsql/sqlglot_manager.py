@@ -48,6 +48,7 @@ class ExpressionSetManager:
                 pickle.dump(self.parent_to_nodes, f)
             # print(f"Successfully saved to {file_path}")
         except Exception as e:
+            pass
             # print(f"Failed to save to {file_path}: {e}")
 
     def load_from_file(self, file_path: str):
@@ -91,6 +92,7 @@ def process_sql_file(file_path: str, manager: ExpressionSetManager):
                         manager.add_node(node, node.parent)
         # print("Finished processing SQL file.")
     except Exception as e:
+        pass
         # print(f"Error processing SQL file: {e}")
 
 
