@@ -6,11 +6,11 @@ import sys
 
 def mutation(sql):
     mutated_sql = sqlglot_mutation.get_mutated_sql(sql)
-    print("mutation")
-    print(mutated_sql)
+    # print("mutation")
+    # print(mutated_sql)
     filled_sql = sqlglot_fill.fill_sql(mutated_sql)
-    print("fill")
-    print(filled_sql)
+    # print("fill")
+    # print(filled_sql)
     return filled_sql
 
 if __name__ == "__main__":

@@ -28,9 +28,9 @@ def getDBMS(file_path="/home/table_column_list.txt"):
     
     except FileNotFoundError:
         # 如果文件不存�?，返回空字典
-        print("FileNotFound")
+        # print("FileNotFound")
         return {}
-    print(db_dict)
+    # print(db_dict)
     return db_dict
 if __name__ == "__main__":
     # 娴�??�?鍑芥�?
@@ -38,5 +38,5 @@ if __name__ == "__main__":
     db_dict = getDBMS(file_path)
 
     # 鎵撳嵃缁撴灉
-    print(db_dict)
+    # print(db_dict)
 

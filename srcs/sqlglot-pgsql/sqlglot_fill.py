@@ -9,7 +9,7 @@ from sqlglot.expressions import table_name
 from sqlglot_manager import ExpressionSetManager
 import read_num
 # sqlglot.exp
-# 鍋囷拷?锟借繖锟�?浣犳彁渚涚殑瀛楀吀
+# 鍋囷�??锟借繖锟�?浣犳彁渚涚殑瀛�?�吀
 table_dict = {
     'table1': {'columns': ['id', 'name', 'age', 'email', 'a'], 'constraints': []},
     'table2': {'columns': ['a', 'b', 'c'], 'constraints': []},
@@ -39,7 +39,7 @@ def getSumFuc():
     file_path = "/home/Squirrel/srcs/sqlglot-pgsql/pgsql_seed.pkl"
 
 
-    # 浣跨敤 sqlglot 瑙ｆ瀽 SQL 锟�?锟�?
+    # 浣跨�? sqlglot 瑙ｆ�? SQL 锟�?锟�?
     parsed = sqlglot.parse(sql)
     for node in parsed[0].walk():
         if isinstance(node, sqlglot.exp.Sum):
@@ -52,7 +52,7 @@ def is_aggregate_function(expression):
     # 鑱氬悎鍑芥暟鐨勫父瑙佸悕锟�?
     aggregate_functions = ["COUNT", "SUM", "AVG", "MIN", "MAX", "GROUP_CONCAT", "STD", "VARIANCE", "BIT_AND", "BIT_OR"]
 
-    # 妫€鏌ヨ〃杈惧紡锟�?鍚︽槸鍑芥暟璋冪敤锛屼笖鍑芥暟鍚嶅湪鑱氬悎鍑芥暟鍒楄〃锟�?
+    # �?�?鏌ヨ〃杈惧紡锟�?鍚︽槸鍑芥暟璋冪敤锛屼笖鍑芥暟鍚嶅湪鑱氬悎鍑芥暟鍒�?�〃锟�??
     if isinstance(expression, sqlglot.expressions.Function) and expression.name.upper() in aggregate_functions:
         return True
     return False
@@ -78,7 +78,7 @@ def get_sub_space(parsed, sql_dict):
             random_key = random.choice(list(sql_dict.keys()))
             return sql_dict[random_key]['columns'], random.choice(sql_dict[random_key]['alias'])
         else:
-            print("warning!")
+            # print("warning!")
     # print(columns)
     return columns
 
@@ -94,19 +94,19 @@ def is_in_subquery(node, root):
 
 
 
-# 锟�?鍏匰QL妯℃澘
+# 锟�?鍏匰QL�?℃澘
 def get_random_table_column(tables):
-    # 闅忔満閫夋嫨涓€锟�?锟�?
+    # 闅忔満�?夋�?�涓�?锟�?锟�?
     table_name = random.choice(list(tables.keys()))
 
-    # 濡傛灉琛ㄦ湁 alias锛岄殢鏈洪€夋嫨涓€锟�? alias锛屽惁鍒欎娇鐢ㄨ〃锟�?
+    # 濡傛灉琛ㄦ湁 alias锛岄殢鏈�?�?夋�?�涓�?锟�? alias锛屽惁鍒欎娇�?ㄨ〃锟�??
     aliases = tables[table_name]['alias']
     if aliases:
         chosen_table = random.choice(aliases)
     else:
         chosen_table = table_name
 
-    # 闅忔満閫夋嫨涓€锟�?鍒楀悕
+    # 闅忔満�?夋�?�涓�?锟�?鍒�?��?
     columns = tables[table_name]['columns']
     chosen_column = random.choice(columns)
 
@@ -119,32 +119,32 @@ def numbered_x(parsed):
         if isinstance(node, sqlglot.exp.Identifier):  # 琛ㄥ悕鎴栧垪锟�?
             node.set("this", "x" + str(total_num))
             total_num = total_num + 1
-        # elif isinstance(node, sqlglot.exp.Literal):  # 瀛楋拷?锟戒覆鎴栨暟锟�?
+        # elif isinstance(node, sqlglot.exp.Literal):  # 瀛�?�拷?锟戒覆鎴栨暟锟�?
         #     node.set("this", "x" + str(total_num))
         #     total_num = total_num + 1
-        elif isinstance(node, sqlglot.exp.Table):  # 琛ㄥ紩锟�?
+        elif isinstance(node, sqlglot.exp.Table):  # 琛ㄥ紩锟�??
             node.set("this", "x" + str(total_num))
             total_num = total_num + 1
 
     return parsed
 
 
-sub_space = {}#璇ュ瓧锟�?1缁寸储寮曟槸锟�?鍏呭悗鐨剆ubSQL 鏈夋瀬浣庯拷?锟界巼鍑虹幇锟�?鍏呭悗鐨剆ubSQL鍦╯tring灞傞潰閲嶏拷?锟界殑鐜拌薄
+sub_space = {}#璇ュ瓧锟�??1缁�?�储�?曟槸锟�?鍏呭悗鐨剆ubSQL 鏈�?��?浣庯�??锟界巼鍑虹幇锟�?鍏呭悗鐨剆ubSQL鍦╯tring灞傞潰閲嶏拷?锟界殑鐜拌薄
 
 def fill_sql_template(parsed):
     table_dict = getDBMS.getDBMS()
 
-    # 闅忔満閫夋嫨鍒楀悕
+    # 闅忔満�?夋�?�鍒楀�?
     def get_random_column(table_name):
         return random.choice(table_dict[table_name]['columns'])
 
-    # 闅忔満閫夋嫨琛ㄥ悕
+    # 闅忔満�?夋�?�琛ㄥ悕
     def get_random_table():
         return random.choice(list(table_dict.keys()))
 
     v_num = read_num.read_integer_from_file()
     # print(parsed)
-    # 鍘婚櫎璺ㄦ暟锟�?搴撴煡锟�?
+    # 鍘�?�櫎璺ㄦ暟锟�??搴撴煡锟�??
     for table in parsed.find_all(sqlglot.exp.Table):
         table.set('db', None)
     sql_dict = {}
@@ -253,7 +253,7 @@ def fill_sql_template(parsed):
             identifier.set('this',identifier_name)
             identifier_names.remove(identifier_name)
         # print([expression])
-        if isinstance(expression, sqlglot.exp.Select): # 姝ｇ‘鐜囧彲浠ユ彁锟�?
+        if isinstance(expression, sqlglot.exp.Select): # 姝ｇ‘鐜囧彲浠ユ彁锟�??
             select = expression
             # print([select])
             fill_sql_template(select)
@@ -402,7 +402,7 @@ def fill_sql_template(parsed):
 
     key = parsed.args
     # print(key)
-    new_node = getSumFuc()#褰撳墠涓虹洿鎺ョ粰鏈塯roupby瀛愬彞鐨剆elect锟�?鍏ヨ仛鍚堝嚱鏁皊um 鍚庣画搴旀洿姝ｄ负妫€鏌ユ槸鍚︽湁鑱氬悎鍑芥暟 鑻ユ棤 鍒欏～鍏ラ殢鏈虹被鍨嬬殑鑱氬悎鍑芥暟
+    new_node = getSumFuc()#褰撳墠涓虹洿鎺ョ粰鏈塯roupby瀛愬彞鐨剆elect锟�?鍏ヨ仛鍚堝嚱鏁皊um 鍚庣画搴旀洿�?�ｄ负妫�?鏌ユ槸鍚︽湁鑱氬悎鍑芥暟 鑻ユ�? 鍒欏～鍏ラ�?�鏈虹�??鍨�??殑鑱�?悎鍑芥暟
     if 'group' in key and key['group'] is not None:
         parsed.args['expressions'].append(new_node)
     new_node = []
@@ -454,25 +454,25 @@ subqueries = []
 
 def analyze_subqueries(parsed, depth):
     """
-    閫掑綊鍒嗘瀽 SQL 锟�?娉曟爲锟�?鐨勫瓙鏌ワ拷??锛岋拷?锟藉綍灞傦拷?锟姐€佺埗鑺傜偣绛変俊锟�?锟�?
+    �?掑綊鍒嗘�? SQL 锟�?娉曟爲锟�??鐨勫瓙鏌�?�???锛岋�??锟藉綍灞傦拷?锟�?�€佺埗鑺傜偣绛変俊锟�?锟�?
 
-    :param node: 褰撳墠澶勭悊鐨勮妭锟�?
-    :param depth: 褰撳墠鑺傜偣鐨勬繁锟�?
-    :param parent: 鐖惰妭锟�?
-    :param result: 瀛樺偍缁撴灉鐨勫垪锟�?
+    :param node: 褰撳墠澶�?悊鐨�?�?锟�?
+    :param depth: 褰撳墠鑺傜偣鐨勬繁锟�??
+    :param parent: 鐖惰�?锟�?
+    :param result: 瀛樺偍缁撴灉鐨勫�?锟�?
     :return: 瀛愭煡璇㈢殑鍒嗘瀽缁撴灉
     """
     # if result is None:
     #     result = []
     for node in parsed.walk(bfs=True):
-        # 妫€鏌ュ綋鍓嶈妭鐐规槸鍚︽槸瀛愭煡锟�?
+        # �?�?鏌ュ綋鍓嶈妭鐐�?�槸鍚︽槸瀛愭煡锟�??
         if isinstance(node, sqlglot.exp.Subquery) and node not in scoped_node:
             scoped_node.add(node)
             analyze_subqueries(node.this, depth + 1)
             # table_space = getTableSpace(node)
             subqueries.append({
-                "parent": parsed,  # 锟�?浠ュ瓨鍌ㄧ埗鑺傜偣鐨勪俊锟�?锛堟瘮濡傝〃杈惧紡绫诲瀷锟�?
-                "query": node,  # 瀛愭煡璇㈢殑 SQL 琛ㄨ揪锟�?
+                "parent": parsed,  # 锟�?浠ュ瓨鍌ㄧ埗鑺傜偣鐨�?俊锟�??锛堟�?濡傝〃杈惧紡�?诲瀷锟�??
+                "query": node,  # 瀛愭煡璇㈢殑 SQL 琛ㄨ�?锟�?
                 "table_space": None,
                 "depth": depth
             })
@@ -482,10 +482,10 @@ def analyze_subqueries(parsed, depth):
 
 def sort_subqueries(subqueries):
     """
-    鎸夌収 depth 瀵瑰瓙鏌ワ拷?锟界粨鏋滄帓搴忥拷?
+    鎸�?�収 depth 瀵瑰瓙鏌�?�??锟界粨鏋滄帓搴忥�??
 
-    :param subqueries: 瀛愭煡璇㈢殑缁撴灉鍒楄〃
-    :return: 鎸夌収 depth 鎺掑簭鍚庣殑缁撴灉鍒楄〃
+    :param subqueries: 瀛愭煡璇㈢殑缁撴灉鍒楄�?
+    :return: 鎸�?�収 depth 鎺掑�?鍚庣殑缁撴灉鍒�?��?
     """
     return sorted(subqueries, key=lambda x: x["depth"], reverse=True)
 
@@ -510,32 +510,32 @@ def fill_sql(sql):
     return parsed[0].sql(dialect='postgres')
 
 
-# # 杈撳叆SQL妯℃澘
+# # 杈撳叆SQL�?℃澘
 # template = "SELECT x0, SUM(x4) as b FROM x1 join A LEFT JOIN x2 on x1.a=x2.b WHERE x6.x5 IS NULL group by x9"
 # parsed = sqlglot.parse(template)
 #
 # print(parsed)
-# # 鑾峰彇锟�?鍏呭悗鐨凷QL锟�?锟�?
+# # 鑾峰彇锟�??鍏呭悗鐨凷QL锟�?锟�?
 # filled_sql = fill_sql_template(parsed[0])
 # print(filled_sql)
 
 def get_sql():
     with open('mutation-pgsql.txt', 'r', encoding='utf-8') as file:
-        # 璇诲彇鏂囦欢鍐咃拷??
+        # 璇�?�彇鏂囦欢鍐咃拷??
         content = file.read()
 
-        # 鎸夌収鍒嗗彿鍒嗛殧 SQL 锟�?锟�?
+        # 鎸�?�収鍒嗗彿鍒嗛�?? SQL 锟�?锟�?
         sql_statements = content.split(';')
 
-        # 鍘婚櫎绌虹櫧瀛楋拷?锟藉苟鍘婚櫎绌虹殑 SQL 锟�?锟�?
+        # 鍘�?�櫎绌虹櫧瀛�?�拷?锟藉苟鍘婚櫎绌虹�? SQL 锟�?锟�?
         sql_statements = [stmt.strip() for stmt in sql_statements if stmt.strip()]
 
-    # 鎵撳嵃 SQL 鍒楄〃
+    # 鎵撳�? SQL 鍒�?��?
     return sql_statements
 
 
 def write(sql):
-    # 鍋囷拷?锟芥枃浠跺悕
+    # 鍋囷�??锟芥枃浠跺悕
     output_file = "filledSQL.txt"
     with open(output_file, "a", encoding="utf-8") as f:
         f.write(sql + ";\n")
@@ -551,12 +551,12 @@ if __name__ == "__main__":
             filledQSL = fill_sql(sql)
             write(filledQSL)
         except Exception as e:
-            print("failed")
-            print(sql)
+            # print("failed")
+            # print(sql)
         else:
-            print("success")
+            # print("success")
     end_time = time.time()
-    print("杩愶拷?锟芥椂锟�?:", end_time - start_time, "锟�?")
+    # print("杩愶�??锟芥椂锟�??:", end_time - start_time, "锟�?")
     exit(0)
     #
     # CREATE VIEW x AS SELECT 1 + 2 /* hello */ + 3 FROM (SELECT CAST(x.x AS CHAR CHARACTER SET utf8mb3) FROM x, x AS x LIMIT 1) AS x WHERE x = x
@@ -593,7 +593,7 @@ WHERE p.product_type = 'Electronics';
     # print(sorted_subqueries[0]['query'])
     for subquery in sorted_subqueries:
         fill_sql_template(subquery['query'].this)
-    print("result")
+    # print("result")
     fill_sql_template(parsed[0])
-    print(parsed[0])
-# 杩愶拷?锟芥椂锟�?: 1102.9334118366241 锟�?
+    # print(parsed[0])
+# 杩愶�??锟芥椂锟�??: 1102.9334118366241 锟�?
