@@ -120,9 +120,9 @@ class SQLRandomReplacer:
 
                             if key not in node_key:
                                 # node.args[key] = std_node.args[key]
-                                print([node])
+                                # print([node])
                                 node.set(key, std_node.args[key])
-                                print([node])
+                                # print([node])
                                 # print(node.sql())
                                 mutation_num = mutation_num -1
                     if random.random() < 0.2:
@@ -155,7 +155,7 @@ class SQLRandomReplacer:
         return parsed_sql
 
 def get_mutated_sql(sql):
-    print("mmm")
+    # print("mmm")
     print(sql)
     file_path = "/home/Squirrel/srcs/sqlglot-pgsql/pgsql_seed.pkl"
     manager.load_from_file(file_path)

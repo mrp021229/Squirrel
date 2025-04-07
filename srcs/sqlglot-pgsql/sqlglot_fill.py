@@ -500,9 +500,9 @@ def fill_sql(sql):
     analyze_subqueries(parsed[0], 1)
     # 鎵撳嵃缁撴灉
     sorted_subqueries = sort_subqueries(subqueries)
-    for subquery in sorted_subqueries:
-        print(f"Query: {subquery['query']}, table_space: {subquery['table_space']}, "
-              f"depth: {subquery['depth']}")
+    # for subquery in sorted_subqueries:
+    #     print(f"Query: {subquery['query']}, table_space: {subquery['table_space']}, "
+    #           f"depth: {subquery['depth']}")
     # print(sorted_subqueries[0]['query'])
     for subquery in sorted_subqueries:
         fill_sql_template(subquery['query'])
