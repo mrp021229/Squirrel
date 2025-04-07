@@ -78,6 +78,7 @@ def get_sub_space(parsed, sql_dict):
             random_key = random.choice(list(sql_dict.keys()))
             return sql_dict[random_key]['columns'], random.choice(sql_dict[random_key]['alias'])
         else:
+            pass
             # print("warning!")
     # print(columns)
     return columns
