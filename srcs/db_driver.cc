@@ -1,6 +1,7 @@
 #ifdef __ANDROID__
 #include "android-ashmem.h"
 #endif
+#include <fstream>
 #include <assert.h>
 #include <errno.h>
 #include <fcntl.h>
