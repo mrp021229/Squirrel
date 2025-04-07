@@ -10,19 +10,13 @@ class ExpressionSetManager:
         self.parent_to_nodes = {}
 
     def add_node(self, node: Expression, parent_node: Expression):
-        """
-        鍚戦泦鍚堜腑娣�?��?�鑺傜偣銆�
-        濡傛灉瀵瑰簲鐖惰妭鐐圭�?鍨�??殑闆嗗悎涓嶅瓨鍦�锛屽垯鍒涘缓涓�?涓�鏂伴泦鍚堛€�?
-        """
         parent_type = type(parent_node).__name__  # 鑾峰彇鐖惰妭鐐圭�?鍨�??悕绉�?
         if parent_type not in self.parent_to_nodes:
             self.parent_to_nodes[parent_type] = set()
         self.parent_to_nodes[parent_type].add(node)
 
     def get_random_node(self, parent_node: Expression) -> Expression:
-        """
-        闅忔満杩斿洖涓庢寚瀹氱埗鑺傜偣�?诲瀷鐩稿悓鐨勪竴涓�鑺傜偣銆�
-        """
+        
         parent_type = type(parent_node).__name__  # 鑾峰彇鐖惰妭鐐圭�?鍨�??悕绉�?
         if parent_type in self.parent_to_nodes and self.parent_to_nodes[parent_type]:
             return random.choice(list(self.parent_to_nodes[parent_type]))
@@ -31,7 +25,6 @@ class ExpressionSetManager:
 
     def get_random_node_v2(self, node: Expression) -> Expression:
         """
-        闅忔満杩斿洖涓庢寚瀹氱埗鑺傜偣�?诲瀷鐩稿悓鐨勪竴涓�鑺傜偣銆�
         """
 
         parent_type = type(node.parent).__name__  # 鑾峰彇鐖惰妭鐐圭�?鍨�??悕绉�?
@@ -49,7 +42,6 @@ class ExpressionSetManager:
 
     def save_to_file(self, file_path: str):
         """
-        灏嗗綋鍓嶇殑 ExpressionSetManager 鍐呭�逛繚瀛樺埌鏈�鍦版枃浠躲�?�?
         """
         try:
             with open(file_path, 'wb') as f:
@@ -60,7 +52,6 @@ class ExpressionSetManager:
 
     def load_from_file(self, file_path: str):
         """
-        浠庢湰鍦版枃浠跺姞杞藉唴瀹瑰苟鍒濆��?�? ExpressionSetManager銆�
         """
         try:
             with open(file_path, 'rb') as f:
@@ -75,7 +66,6 @@ class ExpressionSetManager:
 
     def __str__(self):
         """
-        杩斿洖褰撳�?�瀛樺偍鐘舵€佺殑瀛�?��︿�?�琛ㄧず銆�
         """
         return "\n".join(
             f"{parent_type}: {len(nodes)} nodes"
