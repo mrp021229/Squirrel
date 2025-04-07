@@ -14,6 +14,7 @@ def write_integer_to_file(integer, filename="/home/Squirrel/srcs/sqlglot-pgsql/n
         with open(filename, "w") as file:
             file.write(str(integer))  # 灏嗘暣鏁拌浆涓哄瓧绗︿�?�骞跺啓鍏ユ枃浠�?
     except Exception as e:
+        pass
         # print(f"鍐欏叆鏂囦�?�鏃跺彂鐢熼敊璇�?: {e}")
 if __name__ == "__main__":
     write_integer_to_file(12)
