@@ -29,8 +29,9 @@ RUN git clone https://github.com/mrp021229/Squirrel.git && \
     cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -Wno-dev -DMYSQL=ON && \
     cmake --build build -j && \
     cd AFLplusplus/ && LLVM_CONFIG=llvm-config-14 make -j20
+    
 
-RUN git clone --branch mysql-8.4 --single-branch https://github.com/mysql/mysql-server.git mysql
+RUN git clone --branch mysql-8.0.36 --depth 1 https://github.com/mysql/mysql-server.git mysql
 RUN sudo apt-get -y install apt-transport-https curl software-properties-common gnutls-dev
 RUN mkdir bld && cd bld/ && \
     CC=/home/Squirrel/AFLplusplus/afl-clang-fast CXX=/home/Squirrel/AFLplusplus/afl-clang-fast++ \
