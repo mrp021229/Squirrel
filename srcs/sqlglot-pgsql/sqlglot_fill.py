@@ -454,13 +454,6 @@ subqueries = []
 
 def analyze_subqueries(parsed, depth):
     """
-    �?掑綊鍒嗘�? SQL 锟�?娉曟爲锟�??鐨勫瓙鏌�?�???锛岋�??锟藉綍灞傦拷?锟�?�€佺埗鑺傜偣绛変俊锟�?锟�?
-
-    :param node: 褰撳墠澶�?悊鐨�?�?锟�?
-    :param depth: 褰撳墠鑺傜偣鐨勬繁锟�??
-    :param parent: 鐖惰�?锟�?
-    :param result: 瀛樺偍缁撴灉鐨勫�?锟�?
-    :return: 瀛愭煡璇㈢殑鍒嗘瀽缁撴灉
     """
     # if result is None:
     #     result = []
@@ -482,10 +475,6 @@ def analyze_subqueries(parsed, depth):
 
 def sort_subqueries(subqueries):
     """
-    鎸�?�収 depth 瀵瑰瓙鏌�?�??锟界粨鏋滄帓搴忥�??
-
-    :param subqueries: 瀛愭煡璇㈢殑缁撴灉鍒楄�?
-    :return: 鎸�?�収 depth 鎺掑�?鍚庣殑缁撴灉鍒�?��?
     """
     return sorted(subqueries, key=lambda x: x["depth"], reverse=True)
 

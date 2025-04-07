@@ -40,8 +40,6 @@ def process_sql_file(file_path: str, manager: ExpressionSetManager):
 class SQLRandomReplacer:
     def __init__(self):
         """
-        初�?�化替换�??
-        :param random_node_generator: 一�??函数，接受当前节点并返回一�??新的随机节点
         """
 
     def check_func(self, tree):
@@ -60,8 +58,6 @@ class SQLRandomReplacer:
 
     def replace_nodes(self, parsed_sql):
         """
-        遍历并替�?�???法树�??的每�??子节�??
-        :param parsed_sql: 已解析的 SQL 表达�??
         """
         mutation_num = 0
         root = 0
