@@ -2,7 +2,7 @@ from ubuntu:22.04
 LABEL maintainer="Squirrel"
 
 
-ENV https_proxy=http://:192.168.1.54:7897
+ENV https_proxy=http://192.168.1.54:7897
 ENV http_proxy=http://192.168.1.54:7897
 ENV all_proxy=socks5://192.168.1.54:7897
 # common config
