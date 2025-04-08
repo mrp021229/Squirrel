@@ -204,13 +204,13 @@ int main(int argc, char *argv[]) {
     // database->prepare_env(cnt);
     if(cnt > 50){
       cnt=0;
-      database->prepare_env(cnt);
+      database->prepare_env();
     }
     eles{
       cnt++;
     }
     client::ExecutionStatus status = database->execute((const char *)buf, len);
-    afl_log << "execute finish" <<std::endl;
+    // afl_log << "execute finish" <<std::endl;
     __afl_area_ptr[0] = 1;
     /* report the test case is done and wait for the next */
 
