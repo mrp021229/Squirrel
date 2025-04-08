@@ -19,18 +19,7 @@ def fuzz_count(buf):
 
 
 def fuzz(buf, add_buf, max_size):
-    with open("/home/mutated_test.txt", "a") as f:
-        f.write("========== NEW TEST ==========\n")
-        f.write("repr(buf):\n" + repr(buf) + "\n")
-        f.write("hex(buf):\n" + buf.hex() + "\n")
-        try:
-            f.write("decoded(utf-8):\n" + buf.decode('utf-8') + "\n")
-        except:
-            f.write("utf-8 decode failed\n")
-
     buf = buf.decode('utf-8')
-    
-    
     sql_statements = buf.split(';')
     
     
@@ -43,7 +32,12 @@ def fuzz(buf, add_buf, max_size):
             mutated_out = None
             
             while num <= 10 and mutated_out is None:
-                mutated_out = sqlglot_pgsql.mutation(sql.strip())  
+                try:
+                    mutated_out = sqlglot_pgsql.mutation(sql.strip())  
+                except Exception as e:
+                    mutated_out = None
+                else:
+                    pass
                 num = num + 1
             if mutated_out is not None:
                 mutated_sql_statements.append(mutated_out)  
@@ -59,10 +53,9 @@ def fuzz(buf, add_buf, max_size):
     
     mutated_sql = '; '.join(mutated_sql_statements)
     mutated_sql = mutated_sql.replace('\ufffd', '[INV]')
-    print(mutated_sql)
     mutated_sql = mutated_sql.encode('utf-8', errors='ignore')
-    print(mutated_sql)
     buf = mutated_sql
+    buf = bytearray(buf)
     return buf
 
 if __name__ == "__main__":

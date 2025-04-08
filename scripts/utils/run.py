@@ -42,7 +42,7 @@ def run(database, input_dir, output_dir=None, config_file=None, fuzzer=None):
     return
 
   if not output_dir:
-    output_dir = "/tmp/fuzz"
+    output_dir = "/home/output"
 
   if not config_file:
     config_file = get_config_path(database)
