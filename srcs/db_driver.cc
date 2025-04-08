@@ -201,9 +201,10 @@ int main(int argc, char *argv[]) {
     // afl_log << "afl-begin"<<std::endl;
     std::string query((const char *)buf, len);
     // afl_log << "buf: "<<buf<<std::endl;
-    database->prepare_env(cnt);
+    // database->prepare_env(cnt);
     if(cnt > 50){
       cnt=0;
+      database->prepare_env(cnt);
     }
     eles{
       cnt++;

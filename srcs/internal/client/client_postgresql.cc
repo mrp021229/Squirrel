@@ -47,12 +47,9 @@ void PostgreSQLClient::initialize(YAML::Node config) {
   std::cerr << "Sock path: " << sock_path_ << std::endl;
 }
 
-void PostgreSQLClient::prepare_env(int cnt) {
+void PostgreSQLClient::prepare_env() {
   PGconn *conn = create_connection(db_name_);
-  if(cnt>40){
-    reset_database(conn);
-  }
-  
+  reset_database(conn);
   PQfinish(conn);
 }
 
