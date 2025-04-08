@@ -42,17 +42,17 @@ RUN git clone --branch mysql-8.0.0 --depth 1 https://github.com/mysql/mysql-serv
 RUN sudo apt-get -y install apt-transport-https curl software-properties-common gnutls-dev && \
     mkdir -p /home/boost && \
     curl -L --retry 5 --retry-delay 5 \
-      -o /home/boost_1_87_0.tar.gz \
-      https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.gz && \
-    tar -xzf /home/boost_1_87_0.tar.gz -C /home/boost && \
-    rm /home/boost_1_87_0.tar.gz
+      -o /home/boost_1_60_0.tar.gz \
+      https://archives.boost.io/release/1.60.0/source/boost_1_60_0.tar.gz && \
+    tar -xzf /home/boost_1_60_0.tar.gz -C /home/boost && \
+    rm /home/boost_1_60_0.tar.gz
 
 
 
 # 构建 MySQL，使用下载好的 Boost
 RUN mkdir bld && cd bld/ && \
     CC=/home/Squirrel/AFLplusplus/afl-clang-fast CXX=/home/Squirrel/AFLplusplus/afl-clang-fast++ \
-    cmake ../mysql/ -DDOWNLOAD_BOOST=0 -DWITH_BOOST=/home/boost/boost_1_87_0 \
+    cmake ../mysql/ -DDOWNLOAD_BOOST=0 -DWITH_BOOST=/home/boost/boost_1_60_0 \
     -DWITH_DEBUG=1 -DCPACK_MONOLITHIC_INSTALL=1 -DWITH_UNIT_TESTS=OFF
 
 
