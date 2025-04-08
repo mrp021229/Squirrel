@@ -62,7 +62,8 @@ def fuzz(buf, add_buf, max_size):
     print(mutated_sql)
     mutated_sql = mutated_sql.encode('utf-8', errors='ignore')
     print(mutated_sql)
-    return mutated_sql
+    buf = mutated_sql
+    return buf
 
 if __name__ == "__main__":
     print("@#@#")
