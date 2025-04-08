@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import sqlglot
 import sqlglot_manager
 import sqlglot_mutation

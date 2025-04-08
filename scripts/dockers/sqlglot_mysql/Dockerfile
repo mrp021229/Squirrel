@@ -4,8 +4,8 @@ LABEL maintainer="Squirrel"
 
 
 # common config
-RUN apt-get update
-RUN apt-get -y install make cmake build-essential vim sudo git \
+RUN apt-get update && \
+    apt-get -y install make cmake build-essential vim sudo git \
     clang libmysqlclient-dev ninja-build pkg-config clang-format \
     libpq-dev libyaml-cpp-dev lld llvm bison python3-fire
 

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import random
 import sqlglot_pgsql
 def init(seed):
@@ -17,45 +19,44 @@ def fuzz_count(buf):
 
 
 def fuzz(buf, add_buf, max_size):
-    with open("/home/mutated_test.txt", "a") as test:
-        test.write("buf:\n")
-        test.write(buf)
-        test.write("\nadd_buf: \n")
-        test.write(add_buf)
-        test.write("\nmax_size: \n")
-        test.write(max_size)
-    print(buf)
-    print(add_buf)
-    print(max_size)
+    with open("/home/mutated_test.txt", "a") as f:
+    f.write("========== NEW TEST ==========\n")
+    f.write("repr(buf):\n" + repr(buf) + "\n")
+    f.write("hex(buf):\n" + buf.hex() + "\n")
+    try:
+        f.write("decoded(utf-8):\n" + buf.decode('utf-8') + "\n")
+    except:
+        f.write("utf-8 decode failed\n")
+
     buf = buf.decode('utf-8')
     
-    # 将�?�个SQL�?句按照分号分�?
+    
     sql_statements = buf.split(';')
     
-    # 用来存储变异后的SQL�?�?
+    
     mutated_sql_statements = []
     
 
     for sql in sql_statements:
-        if sql.strip():  # �?处理非空的SQL�?�?
+        if sql.strip():  
             num = 0
             mutated_out = None
-            # 尝试变异10�?
+            
             while num <= 10 and mutated_out is None:
-                mutated_out = sqlglot_pgsql.mutation(sql.strip())  # 对每个SQL�?句进行变�?
+                mutated_out = sqlglot_pgsql.mutation(sql.strip())  
                 num = num + 1
             if mutated_out is not None:
-                mutated_sql_statements.append(mutated_out)  # 添加变异后的SQL�?�?
+                mutated_sql_statements.append(mutated_out)  
                 # 将原始SQL和变异后的SQL写入文件
                 with open("/home/mutated_sql.txt", "a") as file:
                     file.write("sql: " + sql + "\n")
                     file.write("new_sql: " + mutated_out + "\n")
             else:
-                mutated_sql_statements.append(sql)  # 如果没有变异成功，则保持原SQL�?�?
+                mutated_sql_statements.append(sql)  
         else:
-            mutated_sql_statements.append(sql)  # 对于空字符串（例如分号后的空白），直接保留原�?
+            mutated_sql_statements.append(sql)  
     
-    # 将变异后的SQL�?句按分号拼接起来
+    
     mutated_sql = '; '.join(mutated_sql_statements)
     print(mutated_sql)
     mutated_sql = mutated_sql.encode('utf-8')

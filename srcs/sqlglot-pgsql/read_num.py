@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 def read_integer_from_file(filename="/home/Squirrel/srcs/sqlglot-pgsql/num.txt"):
     try:
         with open(filename, "r") as file:

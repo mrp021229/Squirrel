@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 def getDBMS(file_path="/home/table_column_list.txt"):
     db_dict = {}
     current_table = None
