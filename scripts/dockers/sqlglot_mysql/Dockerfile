@@ -55,9 +55,11 @@ RUN mkdir bld && cd bld/ && \
     cmake ../mysql/ -DDOWNLOAD_BOOST=0 -DWITH_BOOST=/home/boost/boost_1_60_0 \
     -DWITH_DEBUG=1 -DCPACK_MONOLITHIC_INSTALL=1 -DWITH_UNIT_TESTS=OFF
 
+# 添加屏蔽警告参数并关闭将警告视为错误（Werror）
+RUN cd bld && cmake -DCMAKE_CXX_FLAGS="-Wno-deprecated-copy -Wno-error -w" -DCMAKE_C_FLAGS="-Wno-error -w" .
 
-# RUN cd bld/ && make -j && sudo cmake --install . --prefix /usr/local/mysql/
-RUN cd bld && make -j CXXFLAGS="-w" CFLAGS="-w" && sudo cmake --install . --prefix /usr/local/mysql/
+# 编译并安装
+RUN cd bld && make -j && sudo cmake --install . --prefix /usr/local/mysql/
 
 
 RUN sudo chown dobigthing:dobigthing /usr/local/mysql/ -R && \
