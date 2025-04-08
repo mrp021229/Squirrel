@@ -56,7 +56,8 @@ RUN mkdir bld && cd bld/ && \
     -DWITH_DEBUG=1 -DCPACK_MONOLITHIC_INSTALL=1 -DWITH_UNIT_TESTS=OFF
 
 
-RUN cd bld/ && make -j && sudo cmake --install . --prefix /usr/local/mysql/
+# RUN cd bld/ && make -j && sudo cmake --install . --prefix /usr/local/mysql/
+RUN cd bld/ && cmake .. -DCMAKE_CXX_FLAGS="-w" && make -j && sudo cmake --install . --prefix /usr/local/mysql/
 
 RUN sudo chown dobigthing:dobigthing /usr/local/mysql/ -R && \
     cd /usr/local/mysql/ && mkdir mysql-files && chmod 750 mysql-files && \
