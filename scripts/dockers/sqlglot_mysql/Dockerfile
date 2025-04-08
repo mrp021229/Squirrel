@@ -43,9 +43,10 @@ RUN sudo apt-get -y install apt-transport-https curl software-properties-common 
     mkdir -p /home/boost && \
     curl -L --retry 5 --retry-delay 5 \
       -o /home/boost_1_60_0.tar.gz \
-      https://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.tar.gz && \
+      https://mirrors.tuna.tsinghua.edu.cn/boost/boost_1_60_0.tar.gz && \
     tar -xzf /home/boost_1_60_0.tar.gz -C /home/boost && \
     rm /home/boost_1_60_0.tar.gz
+
 
 # 构建 MySQL，使用下载好的 Boost
 RUN mkdir bld && cd bld/ && \
