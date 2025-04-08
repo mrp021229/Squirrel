@@ -20,13 +20,13 @@ def fuzz_count(buf):
 
 def fuzz(buf, add_buf, max_size):
     with open("/home/mutated_test.txt", "a") as f:
-    f.write("========== NEW TEST ==========\n")
-    f.write("repr(buf):\n" + repr(buf) + "\n")
-    f.write("hex(buf):\n" + buf.hex() + "\n")
-    try:
-        f.write("decoded(utf-8):\n" + buf.decode('utf-8') + "\n")
-    except:
-        f.write("utf-8 decode failed\n")
+        f.write("========== NEW TEST ==========\n")
+        f.write("repr(buf):\n" + repr(buf) + "\n")
+        f.write("hex(buf):\n" + buf.hex() + "\n")
+        try:
+            f.write("decoded(utf-8):\n" + buf.decode('utf-8') + "\n")
+        except:
+            f.write("utf-8 decode failed\n")
 
     buf = buf.decode('utf-8')
     
