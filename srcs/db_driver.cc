@@ -192,14 +192,15 @@ int main(int argc, char *argv[]) {
     system(startup_cmd.c_str());
     sleep(5);
   }
-  int cnt=0;
+  
   __afl_start_forkserver();
-  std::ofstream afl_log;
-  afl_log.open("/home/afl_log.txt", std::ios::trunc);
+  int cnt=0;
+  // std::ofstream afl_log;
+  // afl_log.open("/home/afl_log.txt", std::ios::trunc);
   while ((len = __afl_next_testcase(buf, kMaxInputSize)) > 0) {
-    afl_log << "afl-begin"<<std::endl;
+    // afl_log << "afl-begin"<<std::endl;
     std::string query((const char *)buf, len);
-    afl_log << "buf: "<<buf<<std::endl;
+    // afl_log << "buf: "<<buf<<std::endl;
     database->prepare_env(cnt);
     if(cnt > 50){
       cnt=0;
