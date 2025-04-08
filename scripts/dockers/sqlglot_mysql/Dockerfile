@@ -21,7 +21,7 @@ RUN chmod +w /etc/sudoers && \
 
 USER dobigthing
 WORKDIR /home
-ARG CACHEBUST =1
+ARG CACHEBUST=1
 ENV https_proxy=http://127.0.0.1:7890
 ENV http_proxy=http://127.0.0.1:7890
 RUN git clone https://github.com/mrp021229/Squirrel.git && \
