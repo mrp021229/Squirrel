@@ -18,9 +18,9 @@ def fuzz_count(buf):
 
 def fuzz(buf, add_buf, max_size):
     with open("/home/mutated_test.txt", "a") as test:
-        file.write("buf: "+buf+"\n")
-        file.write("add_buf: "+add_buf+"\n")
-        file.write("max_size: "+max_size+"\n")
+        test.write("buf: "+buf+"\n")
+        test.write("add_buf: "+add_buf+"\n")
+        test.write("max_size: "+max_size+"\n")
     print("buf: "+buf)
     print("add_buf"+add_buf)
     print("max_size"+max_size)
