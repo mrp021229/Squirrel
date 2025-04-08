@@ -17,7 +17,9 @@ def fuzz_count(buf):
 
 
 def fuzz(buf, add_buf, max_size):
-    
+    print(buf)
+    print(add_buf)
+    print(max_size)
     buf = buf.decode('utf-8')
     
     # 将�?�个SQL�?句按照分号分�?
@@ -48,9 +50,9 @@ def fuzz(buf, add_buf, max_size):
     
     # 将变异后的SQL�?句按分号拼接起来
     mutated_sql = '; '.join(mutated_sql_statements)
-    # print(mutated_sql)
+    print(mutated_sql)
     mutated_sql = mutated_sql.encode('utf-8')
-    # print(mutated_sql)
+    print(mutated_sql)
     return mutated_sql
 
 if __name__ == "__main__":
