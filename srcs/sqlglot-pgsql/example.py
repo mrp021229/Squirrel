@@ -18,12 +18,15 @@ def fuzz_count(buf):
 
 def fuzz(buf, add_buf, max_size):
     with open("/home/mutated_test.txt", "a") as test:
-        test.write("buf: "+buf+"\n")
-        test.write("add_buf: "+add_buf+"\n")
-        test.write("max_size: "+max_size+"\n")
-    print("buf: "+buf)
-    print("add_buf"+add_buf)
-    print("max_size"+max_size)
+        test.write("buf:\n")
+        test.write(buf)
+        test.write("\nadd_buf: \n")
+        test.write(add_buf)
+        test.write("\nmax_size: \n")
+        test.write(max_size)
+    print(buf)
+    print(add_buf)
+    print(max_size)
     buf = buf.decode('utf-8')
     
     # 将�?�个SQL�?句按照分号分�?
