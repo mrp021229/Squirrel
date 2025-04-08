@@ -206,7 +206,7 @@ int main(int argc, char *argv[]) {
       cnt=0;
       database->prepare_env();
     }
-    eles{
+    else{
       cnt++;
     }
     client::ExecutionStatus status = database->execute((const char *)buf, len);
