@@ -41,10 +41,10 @@ def fuzz(buf, add_buf, max_size):
                 num = num + 1
             if mutated_out is not None:
                 mutated_sql_statements.append(mutated_out)  
-                # 将原始SQL和变异后的SQL写入文件
-                with open("/home/mutated_sql.txt", "a") as file:
-                    file.write("sql: " + sql + "\n")
-                    file.write("new_sql: " + mutated_out + "\n")
+                # # 将原始SQL和变异后的SQL写入文件
+                # with open("/home/mutated_sql.txt", "a") as file:
+                #     file.write("sql: " + sql + "\n")
+                #     file.write("new_sql: " + mutated_out + "\n")
             else:
                 mutated_sql_statements.append(sql)  
         else:

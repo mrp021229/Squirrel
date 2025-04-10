@@ -9,10 +9,6 @@ import pickle
 import copy
 from sqlglot_manager import ExpressionSetManager
 
-# 2.11 todolist�??
-# []插入和删�??
-# 改进manager实现按照经验对节点分布进行插入删除，以及变异后更新manager
-# 1w条的测试，主要测试fill
 
 manager = ExpressionSetManager()
 

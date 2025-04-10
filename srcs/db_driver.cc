@@ -195,24 +195,23 @@ int main(int argc, char *argv[]) {
   
   __afl_start_forkserver();
   int cnt=0;
-  // std::ofstream afl_log;
-  // afl_log.open("/home/afl_log.txt", std::ios::trunc);
+  
   while ((len = __afl_next_testcase(buf, kMaxInputSize)) > 0) {
-    // afl_log << "afl-begin"<<std::endl;
-    std::string query((const char *)buf, len);
-    // afl_log << "buf: "<<buf<<std::endl;
-    // database->prepare_env(cnt);
-    if(cnt > 50){
-      cnt=0;
-      database->prepare_env();
-    }
-    else{
-      cnt++;
-    }
+    
+    std::string query((const char *)buf, len);\
+
+    // if(cnt > 50){
+    //   cnt=0;
+    //   database->prepare_env();
+    // }
+    // else{
+    //   cnt++;
+    // }
+    database->prepare_env();
     client::ExecutionStatus status = database->execute((const char *)buf, len);
-    // afl_log << "execute finish" <<std::endl;
+    
     __afl_area_ptr[0] = 1;
-    /* report the test case is done and wait for the next */
+    
 
     if (status == client::kServerCrash) {
       while (!database->check_alive()) {
