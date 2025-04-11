@@ -50,12 +50,25 @@ RUN sudo apt-get -y install apt-transport-https curl software-properties-common 
 
 
 
+# # 构建 MySQL，使用下载好的 Boost
+# RUN mkdir bld && cd bld/ && \
+#     CC=/home/Squirrel/AFLplusplus/afl-clang-fast CXX=/home/Squirrel/AFLplusplus/afl-clang-fast++ \
+#     cmake ../mysql/ -DDOWNLOAD_BOOST=0 -DWITH_BOOST=/home/boost/boost_1_73_0 \
+#     -DWITH_DEBUG=1 -DCPACK_MONOLITHIC_INSTALL=1 -DWITH_UNIT_TESTS=OFF
+
+
 # 构建 MySQL，使用下载好的 Boost
 RUN mkdir bld && cd bld/ && \
     CC=/home/Squirrel/AFLplusplus/afl-clang-fast CXX=/home/Squirrel/AFLplusplus/afl-clang-fast++ \
-    cmake ../mysql/ -DDOWNLOAD_BOOST=0 -DWITH_BOOST=/home/boost/boost_1_73_0 \
-    -DWITH_DEBUG=1 -DCPACK_MONOLITHIC_INSTALL=1 -DWITH_UNIT_TESTS=OFF
-
+    cmake ../mysql/ \
+        -DDOWNLOAD_BOOST=0 \
+        -DWITH_BOOST=/home/boost/boost_1_73_0 \
+        -DWITH_DEBUG=1 \
+        -DCPACK_MONOLITHIC_INSTALL=1 \
+        -DWITH_UNIT_TESTS=OFF \
+        -DWITH_SSL=system \
+        -DOPENSSL_INCLUDE_DIR=/usr/include \
+        -DOPENSSL_LIBRARIES=/usr/lib/x86_64-linux-gnu
 # 添加屏蔽警告参数并关闭将警告视为错误（Werror）
 # RUN cd bld && cmake -DCMAKE_CXX_FLAGS="-Wno-deprecated-copy -Wno-error -w" -DCMAKE_C_FLAGS="-Wno-error -w" .
 
