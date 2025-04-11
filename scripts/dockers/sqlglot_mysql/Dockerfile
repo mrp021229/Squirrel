@@ -43,7 +43,7 @@ RUN sudo apt-get -y install apt-transport-https curl software-properties-common 
     mkdir -p /home/boost && \
     curl -L --retry 5 --retry-delay 5 \
       -o /home/boost_1_73_0.tar.gz \
-      https://archives.boost.io/release/1.60.0/source/boost_1_73_0.tar.gz && \
+      https://archives.boost.io/release/1.73.0/source/boost_1_73_0.tar.gz && \
     tar -xzf /home/boost_1_73_0.tar.gz -C /home/boost && \
     rm /home/boost_1_73_0.tar.gz
 
