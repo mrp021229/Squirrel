@@ -8,6 +8,7 @@ RUN apt-get update && \
     apt-get -y install make cmake build-essential vim sudo git \
     clang libmysqlclient-dev ninja-build pkg-config clang-format \
     libpq-dev libyaml-cpp-dev lld llvm bison python3-fire
+RUN apt-get update && apt-get install -y libssl-dev
 
 RUN mkdir -p /home && \
     groupadd dobigthing && \
