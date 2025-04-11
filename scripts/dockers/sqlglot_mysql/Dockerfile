@@ -8,7 +8,7 @@ RUN apt-get update && \
     apt-get -y install make cmake build-essential vim sudo git \
     clang libmysqlclient-dev ninja-build pkg-config clang-format \
     libpq-dev libyaml-cpp-dev lld llvm bison python3-fire
-RUN apt-get update && apt-get install -y libssl-dev
+# RUN apt-get update && apt-get install -y libssl-dev
 
 RUN mkdir -p /home && \
     groupadd dobigthing && \
@@ -56,8 +56,18 @@ RUN sudo apt-get -y install apt-transport-https curl software-properties-common 
 #     cmake ../mysql/ -DDOWNLOAD_BOOST=0 -DWITH_BOOST=/home/boost/boost_1_73_0 \
 #     -DWITH_DEBUG=1 -DCPACK_MONOLITHIC_INSTALL=1 -DWITH_UNIT_TESTS=OFF
 
+# 安装 OpenSSL 1.1.1 到 /usr/local/openssl-1.1.1（不会更改 WORKDIR）
+RUN apt-get update && apt-get install -y build-essential wget tar libz-dev && \
+    wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz && \
+    tar -xf openssl-1.1.1w.tar.gz && \
+    cd openssl-1.1.1w && \
+    ./config --prefix=/usr/local/openssl-1.1.1 shared zlib && \
+    make -j$(nproc) && make install && \
+    rm -rf openssl-1.1.1w*
 
-# 构建 MySQL，使用下载好的 Boost
+# 设置动态库搜索路径（防止运行时找不到）
+ENV LD_LIBRARY_PATH="/usr/local/openssl-1.1.1/lib:$LD_LIBRARY_PATH"
+# 构建 MySQL（引用 OpenSSL 1.1.1）
 RUN mkdir bld && cd bld/ && \
     CC=/home/Squirrel/AFLplusplus/afl-clang-fast CXX=/home/Squirrel/AFLplusplus/afl-clang-fast++ \
     cmake ../mysql/ \
@@ -67,8 +77,8 @@ RUN mkdir bld && cd bld/ && \
         -DCPACK_MONOLITHIC_INSTALL=1 \
         -DWITH_UNIT_TESTS=OFF \
         -DWITH_SSL=system \
-        -DOPENSSL_INCLUDE_DIR=/usr/include \
-        -DOPENSSL_LIBRARIES=/usr/lib/x86_64-linux-gnu
+        -DOPENSSL_INCLUDE_DIR=/usr/local/openssl-1.1.1/include \
+        -DOPENSSL_LIBRARIES=/usr/local/openssl-1.1.1/lib
 # 添加屏蔽警告参数并关闭将警告视为错误（Werror）
 # RUN cd bld && cmake -DCMAKE_CXX_FLAGS="-Wno-deprecated-copy -Wno-error -w" -DCMAKE_C_FLAGS="-Wno-error -w" .
 
