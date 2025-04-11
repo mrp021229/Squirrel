@@ -19,7 +19,19 @@ RUN	echo "dobigthing:dobigthing" | chpasswd && usermod -a -G sudo dobigthing
 RUN chmod +w /etc/sudoers && \
     echo "%dobigthing   ALL=(ALL:ALL)NOPASSWD:ALL" >> /etc/sudoers && \
     chmod -w /etc/sudoers
+USER root
 
+# 安装 OpenSSL 1.1.1（保持工作目录不变）
+RUN apt-get update && apt-get install -y build-essential wget tar libz-dev && \
+    wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz && \
+    tar -xf openssl-1.1.1w.tar.gz && \
+    cd openssl-1.1.1w && \
+    ./config --prefix=/usr/local/openssl-1.1.1 shared zlib && \
+    make -j$(nproc) && make install && \
+    rm -rf openssl-1.1.1w*
+
+# 设置动态库搜索路径
+ENV LD_LIBRARY_PATH="/usr/local/openssl-1.1.1/lib:$LD_LIBRARY_PATH"
 USER dobigthing
 WORKDIR /home
 ARG CACHEBUST=1
@@ -57,16 +69,16 @@ RUN sudo apt-get -y install apt-transport-https curl software-properties-common 
 #     -DWITH_DEBUG=1 -DCPACK_MONOLITHIC_INSTALL=1 -DWITH_UNIT_TESTS=OFF
 
 # 安装 OpenSSL 1.1.1 到 /usr/local/openssl-1.1.1（不会更改 WORKDIR）
-RUN apt-get update && apt-get install -y build-essential wget tar libz-dev && \
-    wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz && \
-    tar -xf openssl-1.1.1w.tar.gz && \
-    cd openssl-1.1.1w && \
-    ./config --prefix=/usr/local/openssl-1.1.1 shared zlib && \
-    make -j$(nproc) && make install && \
-    rm -rf openssl-1.1.1w*
+# RUN apt-get update && apt-get install -y build-essential wget tar libz-dev && \
+#     wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz && \
+#     tar -xf openssl-1.1.1w.tar.gz && \
+#     cd openssl-1.1.1w && \
+#     ./config --prefix=/usr/local/openssl-1.1.1 shared zlib && \
+#     make -j$(nproc) && make install && \
+#     rm -rf openssl-1.1.1w*
 
-# 设置动态库搜索路径（防止运行时找不到）
-ENV LD_LIBRARY_PATH="/usr/local/openssl-1.1.1/lib:$LD_LIBRARY_PATH"
+# # 设置动态库搜索路径（防止运行时找不到）
+# ENV LD_LIBRARY_PATH="/usr/local/openssl-1.1.1/lib:$LD_LIBRARY_PATH"
 # 构建 MySQL（引用 OpenSSL 1.1.1）
 RUN mkdir bld && cd bld/ && \
     CC=/home/Squirrel/AFLplusplus/afl-clang-fast CXX=/home/Squirrel/AFLplusplus/afl-clang-fast++ \
