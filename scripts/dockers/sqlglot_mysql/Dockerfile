@@ -93,7 +93,8 @@ RUN mkdir bld && cd bld/ && \
         -DOPENSSL_INCLUDE_DIR=/usr/local/openssl-1.1.1/include \
         -DOPENSSL_LIBRARIES=/usr/local/openssl-1.1.1/lib \
         -DCMAKE_C_FLAGS="-I/usr/local/openssl-1.1.1/include -L/usr/local/openssl-1.1.1/lib" \
-        -DCMAKE_CXX_FLAGS="-I/usr/local/openssl-1.1.1/include -L/usr/local/openssl-1.1.1/lib"
+        -DCMAKE_CXX_FLAGS="-I/usr/local/openssl-1.1.1/include -L/usr/local/openssl-1.1.1/lib" \
+        -DCMAKE_EXE_LINKER_FLAGS="-L/usr/local/openssl-1.1.1/lib -lssl -lcrypto"
 
 # 添加屏蔽警告参数并关闭将警告视为错误（Werror）
 # RUN cd bld && cmake -DCMAKE_CXX_FLAGS="-Wno-deprecated-copy -Wno-error -w" -DCMAKE_C_FLAGS="-Wno-error -w" .
