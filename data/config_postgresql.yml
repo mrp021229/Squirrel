@@ -2,7 +2,7 @@
 required: ["init_lib", "data_lib", "db", "passwd", "user_name", "host", "db_name", "startup_cmd"]
 should_exist: ["init_lib", "data_lib"]
 init_lib: /home/Squirrel/data/fuzz_root/pqsql_init_lib
-data_lib: /home/Squirrel/data/fuzz_root/pqsql_data_lib
+data_lib: /home/Squirrel/data/fuzz_root/global_data_lib_pqsql
 db: postgresql
 passwd: ''
 user_name: dobigthing

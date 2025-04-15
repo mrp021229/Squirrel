@@ -2,6 +2,7 @@
 
 import random
 import sqlglot_pgsql
+import sqlglot
 def init(seed):
     pass
 

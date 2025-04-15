@@ -81,7 +81,8 @@ RUN sudo apt-get -y install apt-transport-https curl software-properties-common 
 # ENV LD_LIBRARY_PATH="/usr/local/openssl-1.1.1/lib:$LD_LIBRARY_PATH"
 # 构建 MySQL（引用 OpenSSL 1.1.1）
 RUN mkdir bld && cd bld/ && \
-    CC=/home/Squirrel/AFLplusplus/afl-clang-fast CXX=/home/Squirrel/AFLplusplus/afl-clang-fast++ \
+    CC=/home/Squirrel/AFLplusplus/afl-clang-fast \
+    CXX=/home/Squirrel/AFLplusplus/afl-clang-fast++ \
     cmake ../mysql/ \
         -DDOWNLOAD_BOOST=0 \
         -DWITH_BOOST=/home/boost/boost_1_73_0 \
@@ -90,7 +91,10 @@ RUN mkdir bld && cd bld/ && \
         -DWITH_UNIT_TESTS=OFF \
         -DWITH_SSL=system \
         -DOPENSSL_INCLUDE_DIR=/usr/local/openssl-1.1.1/include \
-        -DOPENSSL_LIBRARIES=/usr/local/openssl-1.1.1/lib
+        -DOPENSSL_LIBRARIES=/usr/local/openssl-1.1.1/lib \
+        -DCMAKE_C_FLAGS="-I/usr/local/openssl-1.1.1/include -L/usr/local/openssl-1.1.1/lib" \
+        -DCMAKE_CXX_FLAGS="-I/usr/local/openssl-1.1.1/include -L/usr/local/openssl-1.1.1/lib"
+
 # 添加屏蔽警告参数并关闭将警告视为错误（Werror）
 # RUN cd bld && cmake -DCMAKE_CXX_FLAGS="-Wno-deprecated-copy -Wno-error -w" -DCMAKE_C_FLAGS="-Wno-error -w" .
 
