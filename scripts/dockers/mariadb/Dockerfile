@@ -17,13 +17,27 @@ RUN chmod +w /etc/sudoers && \
     echo "%dobigthing   ALL=(ALL:ALL)NOPASSWD:ALL" >> /etc/sudoers && \
     chmod -w /etc/sudoers
 
-# install mariadb-server
-RUN apt-get -y install apt-transport-https curl software-properties-common gnutls-dev
-RUN curl -o /etc/apt/trusted.gpg.d/mariadb_release_signing_key.asc \
-    'https://mariadb.org/mariadb_release_signing_key.asc'
-RUN echo "deb https://ftp.osuosl.org/pub/mariadb/repo/10.10/ubuntu jammy main" >> /etc/apt/sources.list
-RUN echo "deb-src https://ftp.osuosl.org/pub/mariadb/repo/10.10/ubuntu jammy main" >> /etc/apt/sources.list
+# # install mariadb-server
+# RUN apt-get -y install apt-transport-https curl software-properties-common gnutls-dev
+# RUN curl -o /etc/apt/trusted.gpg.d/mariadb_release_signing_key.asc \
+#     'https://mariadb.org/mariadb_release_signing_key.asc'
+# RUN echo "deb https://ftp.osuosl.org/pub/mariadb/repo/10.10/ubuntu jammy main" >> /etc/apt/sources.list
+# RUN echo "deb-src https://ftp.osuosl.org/pub/mariadb/repo/10.10/ubuntu jammy main" >> /etc/apt/sources.list
+# RUN apt-get update && apt-get -y build-dep mariadb
+
+# 安装必要工具
+RUN apt-get update && apt-get -y install \
+    apt-transport-https \
+    curl \
+    software-properties-common \
+    gnutls-dev
+
+# 自动添加 MariaDB 源和密钥
+RUN curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
+
+# 安装 mariadb 的构建依赖
 RUN apt-get update && apt-get -y build-dep mariadb
+
 
 USER dobigthing
 WORKDIR /home
