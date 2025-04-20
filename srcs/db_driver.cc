@@ -200,13 +200,7 @@ int main(int argc, char *argv[]) {
     
     std::string query((const char *)buf, len);\
 
-    // if(cnt > 50){
-    //   cnt=0;
-    //   database->prepare_env();
-    // }
-    // else{
-    //   cnt++;
-    // }
+    
     database->prepare_env();
     client::ExecutionStatus status = database->execute((const char *)buf, len);
     
