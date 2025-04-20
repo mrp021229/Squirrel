@@ -36,7 +36,9 @@ RUN apt-get update && apt-get -y install \
 RUN curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
 
 # 安装 mariadb 的构建依赖
-RUN apt-get update && apt-get -y build-dep mariadb
+# 启用源码源
+RUN sed -i 's/^# deb-src/deb-src/' /etc/apt/sources.list && apt-get update && apt-get -y build-dep mariadb
+
 
 
 USER dobigthing
