@@ -2,8 +2,8 @@ from ubuntu:22.04
 LABEL maintainer="Squirrel"
 
 # common config
-RUN apt-get update
-RUN apt-get -y install make cmake build-essential vim sudo git \
+RUN apt-get update && \
+    apt-get -y install make cmake build-essential vim sudo git \
     clang libmysqlclient-dev ninja-build pkg-config clang-format \
     libpq-dev libyaml-cpp-dev lld python3-fire
 
@@ -28,7 +28,7 @@ RUN apt-get update && apt-get -y build-dep mariadb
 USER dobigthing
 WORKDIR /home
 
-RUN git clone https://github.com/Dobigthing666/Squirrel.git && \
+RUN git clone -b original https://github.com/mrp021229/Squirrel.git && \
     cd Squirrel && git submodule update --init && \
     cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && \
     cmake --build build -j && \
