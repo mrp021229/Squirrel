@@ -195,7 +195,7 @@ int main(int argc, char *argv[]) {
 
   //count correct
   std::ofstream log_file("/home/output/fuzz_results.csv", std::ios::app); // ×·¼ÓÐ´
-  log_file << "time,Syntax_correct_rate,Semantic_correct_rate\n"
+  log_file << "time,Syntax_correct_rate,Semantic_correct_rate\n";
 
   __afl_start_forkserver();
   //count correct
