@@ -192,10 +192,18 @@ int main(int argc, char *argv[]) {
     system(startup_cmd.c_str());
     sleep(5);
   }
-  
+
+  //count correct
+  std::ofstream log_file("/home/output/fuzz_results.csv", std::ios::app); // ×·¼ÓÐ´
+  log_file << "time,Syntax_correct_rate,Semantic_correct_rate\n"
+
   __afl_start_forkserver();
-  int cnt=0;
-  
+  //count correct
+  int SyntaxError=0;
+  int SemanticError=0;
+  int total=0;
+  auto start_time = std::chrono::steady_clock::now();
+
   while ((len = __afl_next_testcase(buf, kMaxInputSize)) > 0) {
     
     std::string query((const char *)buf, len);\
@@ -203,6 +211,27 @@ int main(int argc, char *argv[]) {
     
     database->prepare_env();
     client::ExecutionStatus status = database->execute((const char *)buf, len);
+
+    if(status==client::kSyntaxError) SyntaxError++;
+    else if(status==client::kSemanticError) SemanticError++;
+    total++;
+    
+
+    
+    //count correct
+    auto now = std::chrono::steady_clock::now();
+    auto time = std::chrono::duration_cast<std::chrono::seconds>(now - start_time).count();
+    if(time>=5.0){
+      double SyntaxCorrect = (total-SyntaxError)/total;
+      double SemanticCorrect = (total-SyntaxError-SemanticError)/total;
+      log_file << time << "," << SyntaxCorrect << "," << SemanticCorrect << "\n";
+      log.flush();
+      total=0;
+      SyntaxError=0;
+      SemanticError=0;
+    }
+    
+    
     
     __afl_area_ptr[0] = 1;
     

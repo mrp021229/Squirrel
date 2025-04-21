@@ -40,4 +40,4 @@ RUN AFL_DEBUG=1 __AFL_SHM_ID=1234 /usr/local/pgsql/bin/postgres 2>&1 | grep "__a
 #WORKDIR /home/Squirrel/build
 #ENTRYPOINT ./test_client /home/Squirrel/data/config_postgresql.yml
 WORKDIR /home/Squirrel/scripts/utils
-ENTRYPOINT AFL_MAP_SIZE=$(cat /tmp/mapsize) python3 run.py postgresql ../../data/fuzz_root/pqsql_input/
+# ENTRYPOINT AFL_MAP_SIZE=$(cat /tmp/mapsize) python3 run.py postgresql ../../data/fuzz_root/pqsql_input/
