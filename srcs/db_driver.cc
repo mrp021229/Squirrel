@@ -226,7 +226,7 @@ int main(int argc, char *argv[]) {
     if(tim-tips>=5.0){
       double SyntaxCorrect = (total-SyntaxError)*1.0/total;
       double SemanticCorrect = (total-SyntaxError-SemanticError)*1.0/total;
-      log_file << tim << "," << SyntaxCorrect << "," << SemanticCorrect << total << SyntaxError << SemanticError  << "\n";
+      log_file << tim << "," << SyntaxCorrect << "," << SemanticCorrect << "," << total << "," << SyntaxError << "," << SemanticError  << "\n";
       log_file.flush();
       total=0;
       SyntaxError=0;
