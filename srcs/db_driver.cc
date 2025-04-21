@@ -225,7 +225,7 @@ int main(int argc, char *argv[]) {
       double SyntaxCorrect = (total-SyntaxError)/total;
       double SemanticCorrect = (total-SyntaxError-SemanticError)/total;
       log_file << time << "," << SyntaxCorrect << "," << SemanticCorrect << "\n";
-      log.flush();
+      log_file.flush();
       total=0;
       SyntaxError=0;
       SemanticError=0;
