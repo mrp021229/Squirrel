@@ -203,7 +203,8 @@ int main(int argc, char *argv[]) {
   int SemanticError=0;
   int total=0;
   auto start_time = std::chrono::steady_clock::now();
-  auto tips = start_time;
+  auto now = std::chrono::steady_clock::now();
+  auto tips = std::chrono::duration_cast<std::chrono::seconds>(now - start_time).count();
   while ((len = __afl_next_testcase(buf, kMaxInputSize)) > 0) {
     
     std::string query((const char *)buf, len);\
@@ -220,17 +221,19 @@ int main(int argc, char *argv[]) {
     
     //count correct
     auto now = std::chrono::steady_clock::now();
-    auto time = std::chrono::duration_cast<std::chrono::seconds>(now - start_time).count();
-    tips = time;
-    if(time-tips>=5.0){
+    auto tim = std::chrono::duration_cast<std::chrono::seconds>(now - start_time).count();
+    
+    if(tim-tips>=5.0){
       double SyntaxCorrect = (total-SyntaxError)*1.0/total;
       double SemanticCorrect = (total-SyntaxError-SemanticError)*1.0/total;
-      log_file << time << "," << SyntaxCorrect << "," << SemanticCorrect << total << SyntaxError << SemanticError  << "\n";
+      log_file << tim << "," << SyntaxCorrect << "," << SemanticCorrect << total << SyntaxError << SemanticError  << "\n";
       log_file.flush();
       total=0;
       SyntaxError=0;
       SemanticError=0;
+      tips = tim;
     }
+    
     
     
     
