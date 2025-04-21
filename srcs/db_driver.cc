@@ -195,7 +195,7 @@ int main(int argc, char *argv[]) {
 
   //count correct
   std::ofstream log_file("/home/output/fuzz_results.csv", std::ios::app); // ×·¼ÓÐ´
-  log_file << "time,Syntax_correct_rate,Semantic_correct_rate\n";
+  log_file << "time,Syntax_correct_rate,Semantic_correct_rate,total,syntax,semantic\n";
 
   __afl_start_forkserver();
   //count correct
@@ -203,7 +203,7 @@ int main(int argc, char *argv[]) {
   int SemanticError=0;
   int total=0;
   auto start_time = std::chrono::steady_clock::now();
-
+  auto tips = start_time;
   while ((len = __afl_next_testcase(buf, kMaxInputSize)) > 0) {
     
     std::string query((const char *)buf, len);\
@@ -221,10 +221,11 @@ int main(int argc, char *argv[]) {
     //count correct
     auto now = std::chrono::steady_clock::now();
     auto time = std::chrono::duration_cast<std::chrono::seconds>(now - start_time).count();
-    if(time>=5.0){
-      double SyntaxCorrect = (total-SyntaxError)/total;
-      double SemanticCorrect = (total-SyntaxError-SemanticError)/total;
-      log_file << time << "," << SyntaxCorrect << "," << SemanticCorrect << "\n";
+    tips = time;
+    if(time-tips>=5.0){
+      double SyntaxCorrect = (total-SyntaxError)*1.0/total;
+      double SemanticCorrect = (total-SyntaxError-SemanticError)*1.0/total;
+      log_file << time << "," << SyntaxCorrect << "," << SemanticCorrect << total << SyntaxError << SemanticError  << "\n";
       log_file.flush();
       total=0;
       SyntaxError=0;
