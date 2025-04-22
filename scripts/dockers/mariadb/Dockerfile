@@ -2,11 +2,13 @@ from ubuntu:22.04
 LABEL maintainer="Squirrel"
 
 # common config
-RUN apt-get update
-RUN apt-get -y install make cmake build-essential vim sudo git \
+RUN apt-get update && \
+    apt-get -y install make cmake build-essential vim sudo git \
     clang libmysqlclient-dev ninja-build pkg-config clang-format \
     libpq-dev libyaml-cpp-dev lld python3-fire
 
+
+    
 RUN mkdir -p /home && \
     groupadd dobigthing && \
     useradd -l -K UMASK=0000 -d /home -g dobigthing dobigthing && \
@@ -21,14 +23,30 @@ RUN chmod +w /etc/sudoers && \
 RUN apt-get -y install apt-transport-https curl software-properties-common gnutls-dev
 RUN curl -o /etc/apt/trusted.gpg.d/mariadb_release_signing_key.asc \
     'https://mariadb.org/mariadb_release_signing_key.asc'
-RUN echo "deb https://ftp.osuosl.org/pub/mariadb/repo/10.10/ubuntu jammy main" >> /etc/apt/sources.list
-RUN echo "deb-src https://ftp.osuosl.org/pub/mariadb/repo/10.10/ubuntu jammy main" >> /etc/apt/sources.list
+RUN echo "deb https://ftp.osuosl.org/pub/mariadb/repo/10.11/ubuntu jammy main" >> /etc/apt/sources.list
+RUN echo "deb-src https://ftp.osuosl.org/pub/mariadb/repo/10.11/ubuntu jammy main" >> /etc/apt/sources.list
 RUN apt-get update && apt-get -y build-dep mariadb
+
+# # 安装必要工具
+# RUN apt-get update && apt-get -y install \
+#     apt-transport-https \
+#     curl \
+#     software-properties-common \
+#     gnutls-dev
+
+# # 自动添加 MariaDB 源和密钥
+# RUN curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
+
+# # 安装 mariadb 的构建依赖
+# # 启用源码源
+# RUN sed -i 's/^# deb-src/deb-src/' /etc/apt/sources.list && apt-get update && apt-get -y build-dep mariadb
+
+
 
 USER dobigthing
 WORKDIR /home
-
-RUN git clone https://github.com/Dobigthing666/Squirrel.git && \
+ARG CACHEBUST=1
+RUN git clone -b original https://github.com/mrp021229/Squirrel.git && \
     cd Squirrel && git submodule update --init && \
     cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && \
     cmake --build build -j && \

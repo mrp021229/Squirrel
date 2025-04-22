@@ -9,6 +9,20 @@ RUN apt-get update && \
     clang libmysqlclient-dev ninja-build pkg-config clang-format \
     libpq-dev libyaml-cpp-dev lld llvm bison python3-fire
 
+
+# 更新 apt 并安装 Python3 和 pip
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip && \
+    apt-get clean
+
+# 安装 sqlglot 库
+RUN pip3 install sqlglot
+
+# 安装Python依赖
+RUN pip3 install --upgrade pip
+RUN pip3 install psycopg2-binary chardet
+
+
 # 更新 apt 并安装 Python3 和 pip
 RUN apt-get update && \
     apt-get install -y python3 python3-pip && \
