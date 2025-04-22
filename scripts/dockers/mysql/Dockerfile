@@ -35,7 +35,7 @@ ENV LD_LIBRARY_PATH="/usr/local/openssl-1.1.1/lib:$LD_LIBRARY_PATH"
 USER dobigthing
 WORKDIR /home
 ARG CACHEBUST=1
-RUN git clone https://github.com/mrp021229/Squirrel.git && \
+RUN git clone -b original https://github.com/mrp021229/Squirrel.git && \
     cd Squirrel && git submodule update --init && \
     cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -Wno-dev -DMYSQL=ON && \
     cmake --build build -j && \
