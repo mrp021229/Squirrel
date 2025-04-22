@@ -9,6 +9,9 @@
 #include <string>
 #include <string_view>
 
+#include <fstream>   // 
+#include <ctime>     // 
+
 #include "mysql.h"
 #include "mysqld_error.h"
 
