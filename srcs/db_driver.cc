@@ -15,7 +15,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-
+#include <chrono>
 #include <iostream>
 
 #include "absl/strings/str_format.h"
@@ -192,24 +192,82 @@ int main(int argc, char *argv[]) {
     system(startup_cmd.c_str());
     sleep(5);
   }
-  
+
+  //count correct
+  std::ofstream log_file("/home/output/fuzz_results.csv", std::ios::app); // ×·¼ÓÐ´
+  log_file << "time,Syntax_correct_rate,Semantic_correct_rate,total,syntax,semantic,Timeout,Normal,ServerCrash,ExecuteError,ConnectFailed\n";
+
   __afl_start_forkserver();
+  //count correct
+  // kConnectFailed,
+  // kExecuteError,
+  // kServerCrash,
+  // kNormal,
+  // kTimeout,
+  // kSyntaxError,
+  // kSemanticError
+  int SyntaxError=0;
+  int SemanticError=0;
+  int Timeout=0;
+  int Normal=0;
+  int ServerCrash=0;
+  int ExecuteError=0;
+  int ConnectFailed=0;
+  int total=0;
+  auto start_time = std::chrono::steady_clock::now();
+  auto now = std::chrono::steady_clock::now();
+  auto tips = std::chrono::duration_cast<std::chrono::seconds>(now - start_time).count();
+  
   int cnt=0;
   
   while ((len = __afl_next_testcase(buf, kMaxInputSize)) > 0) {
     
     std::string query((const char *)buf, len);\
 
-    // if(cnt > 50){
-    //   cnt=0;
-    //   database->prepare_env();
-    // }
-    // else{
-    //   cnt++;
-    // }
-    database->prepare_env();
+    if(cnt > 100){
+      cnt=0;
+      database->prepare_env();
+    }
+    else{
+      cnt++;
+    }
+    // database->prepare_env();
     client::ExecutionStatus status = database->execute((const char *)buf, len);
     
+    if(status==client::kSyntaxError) SyntaxError++;
+    else if(status==client::kSemanticError) SemanticError++;
+
+    if(status==client::kTimeout) Timeout++;
+    if(status==client::kNormal) Normal++;
+    if(status==client::kServerCrash) ServerCrash++;
+    if(status==client::kExecuteError) ExecuteError++;
+    if(status==client::kConnectFailed) ConnectFailed++;
+    total++;
+    
+
+    
+    //count correct
+    auto now = std::chrono::steady_clock::now();
+    auto tim = std::chrono::duration_cast<std::chrono::seconds>(now - start_time).count();
+    
+    if(tim-tips>=5.0){
+      double SyntaxCorrect = (total-SyntaxError)*1.0/total;
+      double SemanticCorrect = (total-SyntaxError-SemanticError)*1.0/total;
+      log_file << tim << "," << SyntaxCorrect << "," << SemanticCorrect << "," << total << "," << SyntaxError << "," << SemanticError  << "," << Timeout  << "," << Normal  << "," << ServerCrash  << "," << ExecuteError  << "," << ConnectFailed  <<"\n";
+      log_file.flush();
+      total=0;
+      SyntaxError=0;
+      SemanticError=0;
+      Timeout=0;
+      Normal=0;
+      ServerCrash=0;
+      ExecuteError=0;
+      ConnectFailed=0;
+      tips = tim;
+    }
+
+
+
     __afl_area_ptr[0] = 1;
     
 
