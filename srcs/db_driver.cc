@@ -227,6 +227,9 @@ int main(int argc, char *argv[]) {
     if(cnt > 100){
       cnt=0;
       database->prepare_env();
+      // 清空文件内容
+      std::ofstream ofs("/home/table_column_list.txt", std::ofstream::out | std::ofstream::trunc);
+      ofs.close();
     }
     else{
       cnt++;
