@@ -1,0 +1,1 @@
+create view v2 AS select * from v0;
