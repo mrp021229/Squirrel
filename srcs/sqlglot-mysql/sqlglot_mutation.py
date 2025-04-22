@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import random
 import time
 
@@ -20,15 +22,12 @@ def process_sql_file(file_path: str, manager: ExpressionSetManager):
     try:
         with open(file_path, 'r') as file:
             for line in file:
-                sql = line.strip()  # 去掉两�??的空格和换�?��??
+                sql = line.strip()  # 
                 if sql.endswith(";"):
-                    sql = sql[:-1]  # 去掉�?尾的分号
+                    sql = sql[:-1]  # 
                 if sql:
-                    # 使用 sqlglot 解析 SQL �?�?
                     tree = sqlglot.parse_one(sql,read='mysql')
-                    # 遍历�?法树�?的节�?
                     for node in tree.walk():
-                        # 添加非根节点
                         if node != tree:
                             manager.add_node(node, node.parent)
         print("Finished processing SQL file.")
@@ -39,8 +38,6 @@ def process_sql_file(file_path: str, manager: ExpressionSetManager):
 class SQLRandomReplacer:
     def __init__(self):
         """
-        初�?�化替换�?
-        :param random_node_generator: 一�?函数，接受当前节点并返回一�?新的随机节点
         """
 
     def check_func(self, tree):
@@ -59,8 +56,7 @@ class SQLRandomReplacer:
 
     def replace_nodes(self, parsed_sql):
         """
-        遍历并替换�??法树�?的每�?子节�?
-        :param parsed_sql: 已解析的 SQL 表达�?
+        
         """
         mutation_num = 0
         root = 0
@@ -226,7 +222,7 @@ if __name__ == "__main__":
     print("success num:")
     print(num)
     end_time = time.time()
-    print("运�?�时�?:", end_time - start_time, "�?")
+    
 # 1w test
 # success num:
 # 9997
