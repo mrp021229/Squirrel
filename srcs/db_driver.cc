@@ -195,12 +195,24 @@ int main(int argc, char *argv[]) {
 
   //count correct
   std::ofstream log_file("/home/output/fuzz_results.csv", std::ios::app); // ×·¼ÓÐ´
-  log_file << "time,Syntax_correct_rate,Semantic_correct_rate,total,syntax,semantic\n";
+  log_file << "time,Syntax_correct_rate,Semantic_correct_rate,total,syntax,semantic,Timeout,Normal,ServerCrash,ExecuteError,ConnectFailed\n";
 
   __afl_start_forkserver();
   //count correct
+  // kConnectFailed,
+  // kExecuteError,
+  // kServerCrash,
+  // kNormal,
+  // kTimeout,
+  // kSyntaxError,
+  // kSemanticError
   int SyntaxError=0;
   int SemanticError=0;
+  int Timeout=0;
+  int Normal=0;
+  int ServerCrash=0;
+  int ExecuteError=0;
+  int ConnectFailed=0;
   int total=0;
   auto start_time = std::chrono::steady_clock::now();
   auto now = std::chrono::steady_clock::now();
@@ -215,6 +227,12 @@ int main(int argc, char *argv[]) {
 
     if(status==client::kSyntaxError) SyntaxError++;
     else if(status==client::kSemanticError) SemanticError++;
+
+    if(status==client::kTimeout) Timeout++;
+    if(status==client::kNormal) Normal++;
+    if(status==client::kServerCrash) ServerCrash++;
+    if(status==client::kExecuteError) ExecuteError++;
+    if(status==client::kConnectFailed) ConnectFailed++;
     total++;
     
 
@@ -226,11 +244,16 @@ int main(int argc, char *argv[]) {
     if(tim-tips>=5.0){
       double SyntaxCorrect = (total-SyntaxError)*1.0/total;
       double SemanticCorrect = (total-SyntaxError-SemanticError)*1.0/total;
-      log_file << tim << "," << SyntaxCorrect << "," << SemanticCorrect << "," << total << "," << SyntaxError << "," << SemanticError  << "\n";
+      log_file << tim << "," << SyntaxCorrect << "," << SemanticCorrect << "," << total << "," << SyntaxError << "," << SemanticError  << "," << Timeout  << "," << Normal  << "," << ServerCrash  << "," << ExecuteError  << "," << ConnectFailed  <<"\n";
       log_file.flush();
       total=0;
       SyntaxError=0;
       SemanticError=0;
+      Timeout=0;
+      Normal=0;
+      ServerCrash=0;
+      ExecuteError=0;
+      ConnectFailed=0;
       tips = tim;
     }
     
