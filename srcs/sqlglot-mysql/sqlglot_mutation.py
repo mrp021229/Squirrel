@@ -30,9 +30,10 @@ def process_sql_file(file_path: str, manager: ExpressionSetManager):
                     for node in tree.walk():
                         if node != tree:
                             manager.add_node(node, node.parent)
-        print("Finished processing SQL file.")
+        # print("Finished processing SQL file.")
     except Exception as e:
-        print(f"Error processing SQL file: {e}")
+        pass
+        # print(f"Error processing SQL file: {e}")
 
 
 class SQLRandomReplacer:
@@ -68,11 +69,11 @@ class SQLRandomReplacer:
             # 插入替换
             if node.key == 'select':
                 new_node = self.insert_delete(node)
-                print("INSERT OR DELETE")
+                # print("INSERT OR DELETE")
                 if new_node is not None:
                     node.replace(new_node)
                     mutation_num = mutation_num + 1
-                    print(parsed_sql)
+                    # print(parsed_sql)
                     continue
 
             # 跳过根节点（�?选）
@@ -89,7 +90,7 @@ class SQLRandomReplacer:
                     if new_node is not None:
                         node.replace(new_node)
                         mutation_num = mutation_num + 1
-                        print(parsed_sql)
+                        # print(parsed_sql)
                         break
 
         return parsed_sql
@@ -116,9 +117,9 @@ class SQLRandomReplacer:
 
                             if key not in node_key:
                                 # node.args[key] = std_node.args[key]
-                                print([node])
+                                # print([node])
                                 node.set(key, std_node.args[key])
-                                print([node])
+                                # print([node])
                                 # print(node.sql())
                                 mutation_num = mutation_num -1
                     if random.random() < 0.2:
@@ -139,14 +140,15 @@ class SQLRandomReplacer:
                     mutation_num = mutation_num - 1
 
             try:
-                print(parsed_sql.sql(dialect='mysql'))
+                # print(parsed_sql.sql(dialect='mysql'))
                 current_sql = str(parsed_sql.sql(dialect='mysql'))+';'
-                print(current_sql)
+                # print(current_sql)
                 check_sql = sqlglot.parse(current_sql,read='mysql')
             except Exception as e:
                 return None
             else:
-                print("correct")
+                pass
+                # print("correct")
 
         return parsed_sql
 

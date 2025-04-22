@@ -51,7 +51,7 @@ def fuzz(buf, add_buf, max_size):
         else:
             mutated_sql_statements.append(sql)  
     
-    print(mutated_sql_statements)
+    # print(mutated_sql_statements)
     mutated_sql = '; '.join(mutated_sql_statements)
     # mutated_sql = mutated_sql.replace('\ufffd', '[INV]')
     mutated_sql = mutated_sql.encode('utf-8', errors='ignore')
