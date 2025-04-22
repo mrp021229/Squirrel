@@ -18,6 +18,8 @@ def get_mutator_so_path(database):
 def get_mutator_py_path(database):
   if database == "mariadb":
     database = "mysql"
+  if database == "postgresql":
+    database = "pgsql"
   return f"{ROOTPATH}/srcs/sqlglot-{database}"
 
 def get_config_path(database):

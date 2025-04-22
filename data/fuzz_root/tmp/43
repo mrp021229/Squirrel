@@ -1,0 +1,1 @@
+select v1 from v0 union select v2 from v0;

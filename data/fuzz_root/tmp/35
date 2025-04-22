@@ -1,0 +1,1 @@
+alter table v0 RENAME TO v2;

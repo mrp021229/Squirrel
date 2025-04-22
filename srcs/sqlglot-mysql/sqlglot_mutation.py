@@ -155,7 +155,7 @@ def get_mutated_sql(sql):
     # print(sql)/home/Squirrel/srcs/sqlglot-pgsql/pg
     file_path = "/home/Squirrel/srcs/sqlglot-mysql/mysql_seed.pkl"
     manager.load_from_file(file_path)
-    parsed = sqlglot.parse(sql,dialect='postgres')
+    parsed = sqlglot.parse(sql,dialect='mysql')
     replacer = SQLRandomReplacer()
 
     new_sql = copy.deepcopy(random.choice(parsed))
@@ -163,13 +163,13 @@ def get_mutated_sql(sql):
 
     try:
         if transformed_sql is not None:
-            check_sql = sqlglot.parse_one(transformed_sql.sql(dialect='postgres'),read='postgres')
+            check_sql = sqlglot.parse_one(transformed_sql.sql(dialect='mysql'),read='mysql')
     except Exception as e:
         # print("failed")
         return None
     else:
         # print("success")
-        return transformed_sql.sql(dialect='postgres')
+        return transformed_sql.sql(dialect='mysql')
 
 if __name__ == "__main__":
     start_time = time.time()

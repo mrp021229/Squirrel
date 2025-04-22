@@ -67,4 +67,5 @@ if __name__ == "__main__":
     print("@#@#")
     sql = "select a from b where c = 3;select c from a;"
     tmp=strToBytearray(sql)
+    print(repr)
     print(fuzz(tmp,None,None))
