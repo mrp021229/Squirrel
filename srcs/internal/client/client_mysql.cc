@@ -9,6 +9,9 @@
 #include <string>
 #include <string_view>
 
+#include <fstream>   // 
+#include <ctime>     // 
+
 #include "mysql.h"
 #include "mysqld_error.h"
 
@@ -54,6 +57,54 @@ ExecutionStatus MySQLClient::execute(const char *query, size_t size) {
     return kServerCrash;
   }
   ExecutionStatus server_status = clean_up_connection(*connection);
+// ? 获取数据库中所有表和列信息
+MYSQL_RES *tables_res = mysql_list_tables(&(*connection), nullptr);
+if (!tables_res) {
+  std::cerr << "Error fetching table list: " << mysql_error(&(*connection)) << std::endl;
+} else {
+  std::ofstream table_list_file;
+  table_list_file.open("/home/table_column_list.txt", std::ios::trunc);
+
+  if (table_list_file.is_open()) {
+    std::time_t current_time = std::time(nullptr);
+    table_list_file << "Table and Column list for database: " << database_name 
+                    << " at " << std::ctime(&current_time) << std::endl;
+
+    MYSQL_ROW table_row;
+    while ((table_row = mysql_fetch_row(tables_res))) {
+      const char *table_name = table_row[0];
+      table_list_file << "Table: " << table_name << std::endl;
+
+      std::string column_query = "SHOW COLUMNS FROM `" + std::string(table_name) + "`;";
+      if (mysql_query(&(*connection), column_query.c_str()) == 0) {
+        MYSQL_RES *columns_res = mysql_store_result(&(*connection));
+        if (columns_res) {
+          MYSQL_ROW col_row;
+          while ((col_row = mysql_fetch_row(columns_res))) {
+            const char *column_name = col_row[0];
+            table_list_file << "  Column: " << column_name << std::endl;
+          }
+          mysql_free_result(columns_res);
+        } else {
+          std::cerr << "Error fetching columns for table " << table_name 
+                    << ": " << mysql_error(&(*connection)) << std::endl;
+        }
+      } else {
+        std::cerr << "Error executing column query for table " << table_name 
+                  << ": " << mysql_error(&(*connection)) << std::endl;
+      }
+
+      table_list_file << std::endl;
+    }
+
+    table_list_file.close();
+  } else {
+    std::cerr << "Error opening file to save table and column list\n";
+  }
+
+  mysql_free_result(tables_res);
+}
+
   mysql_close(&(*connection));
   return server_status;
 }

@@ -16,7 +16,7 @@ def get_mutator_so_path(database):
     database = "mysql"
   return f"{ROOTPATH}/build/lib{database}_mutator.so"
 def get_mutator_py_path(database):
-  return f"{ROOTPATH}/srcs/sqlglot-pgsql"
+  return f"{ROOTPATH}/srcs/sqlglot-{database}"
 
 def get_config_path(database):
   return f"{ROOTPATH}/data/config_{database}.yml"
@@ -26,7 +26,7 @@ def set_env(database):
   os.environ["AFL_CUSTOM_MUTATOR_ONLY"] = "1"
   os.environ["AFL_DISABLE_TRIM"] = "1"
   os.environ["AFL_FAST_CAL"] = "1"
-  os.environ["AFL_CUSTOM_MUTATOR_LIBRARY"] = get_mutator_so_path(database)
+  # os.environ["AFL_CUSTOM_MUTATOR_LIBRARY"] = get_mutator_so_path(database)
 
 
 
