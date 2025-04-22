@@ -16,6 +16,8 @@ def get_mutator_so_path(database):
     database = "mysql"
   return f"{ROOTPATH}/build/lib{database}_mutator.so"
 def get_mutator_py_path(database):
+  if database == "mariadb":
+    database = "mysql"
   return f"{ROOTPATH}/srcs/sqlglot-{database}"
 
 def get_config_path(database):
