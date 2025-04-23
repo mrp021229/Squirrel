@@ -222,6 +222,12 @@ int main(int argc, char *argv[]) {
   
   while ((len = __afl_next_testcase(buf, kMaxInputSize)) > 0) {
     
+    // Check for dummy tag "0"
+  if (len == 1 && buf[0] == '0') {
+    __afl_end_testcase(client::kNormal);  // Or another non-crashing status
+    continue;
+  }
+    
     std::string query((const char *)buf, len);\
 
     if(cnt > 100){
