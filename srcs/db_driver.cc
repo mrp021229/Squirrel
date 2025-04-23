@@ -161,6 +161,7 @@ static void __afl_end_testcase(client::ExecutionStatus status) {
 }
 
 int main(int argc, char *argv[]) {
+  printf("Start!!!\n");
   const char *config_file_path = getenv(kConfigEnv);
   if (!config_file_path) {
     std::cerr << absl::StrFormat(
