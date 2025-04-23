@@ -6,7 +6,15 @@ import sqlglot
 
 
 def init(seed):
-    pass
+    config_path = os.environ.get("SQUIRREL_CONFIG")
+    print("getConfig", config_path)
+    subprocess.Popen(
+        ["/home/Squirrel/build/test_client", config_path],
+        stdout=subprocess.DEVNULL,   # 或者你想收集输出可以用 subprocess.PIPE
+        stderr=subprocess.DEVNULL,
+        start_new_session=True       # 可选：防止子进程收到 Ctrl+C 信号
+    )
+    return
 
 
 def deinit():

@@ -5,7 +5,6 @@
 #include <unistd.h>
 #include "client.h"
 #include "yaml-cpp/yaml.h"
-
 int main(int argc, char **argv) {
   
   YAML::Node config = YAML::LoadFile(std::string(argv[1]));
@@ -26,10 +25,12 @@ int main(int argc, char **argv) {
   //   std::cout << "Failed!" << std::endl;
   // }
   
-
+  sleep(300)
+  test_client->clean_up_env();
+  return 0;
   const char *query = "create table v0(v1 int ,v2 int);";
   
-  for (int i = 0; i < 0x100; ++i) {
+  for (int i = 0; i < 10; ++i) {
     test_client->prepare_env();
     client::ExecutionStatus result = test_client->execute(query, strlen(query));
     std::cout << "Iteration " << i << ": result = " << result << std::endl;
