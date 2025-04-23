@@ -106,10 +106,12 @@ if(MYSQL OR POSTGRESQL)
   add_executable(db_driver srcs/db_driver.cc srcs/db_factory.cc )
   target_link_libraries(db_driver all_client ${YAML_CPP_LIBRARIES}
                       absl::strings absl::str_format)
+  target_link_libraries(db_driver PRIVATE mysql_impl)
   target_include_directories(db_driver PRIVATE 
                       srcs/internal/client
                       srcs/internal/mysql
                       srcs)
+                      
   add_executable(test_client srcs/internal/client/test_client.cc)
   target_link_libraries(test_client all_client ${YAML_CPP_LIBRARIES})
   target_include_directories(test_client PUBLIC srcs/internal/client)
