@@ -230,7 +230,7 @@ int main(int argc, char *argv[]) {
     
     std::string query((const char *)buf, len);\
 
-    if(cnt > 100){
+    if(cnt > 2000){
       cnt=0;
       database->prepare_env();
       // 清空文件内容
