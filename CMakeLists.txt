@@ -108,7 +108,8 @@ if(MYSQL OR POSTGRESQL)
                       absl::strings absl::str_format)
   target_include_directories(db_driver PRIVATE 
                       srcs/internal/client
-                      srcs/internal/mysql)
+                      srcs/internal/mysql
+                      srcs)
   add_executable(test_client srcs/internal/client/test_client.cc)
   target_link_libraries(test_client all_client ${YAML_CPP_LIBRARIES})
   target_include_directories(test_client PUBLIC srcs/internal/client)
