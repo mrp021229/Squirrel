@@ -115,6 +115,7 @@ if(MYSQL OR POSTGRESQL)
   target_include_directories(all_client PUBLIC srcs/internal/client)
   target_link_libraries(all_client PUBLIC ${LINK_CLIENT})
   target_compile_definitions(all_client PRIVATE ${CLIENT_DEFINITION})
+  target_compile_definitions(db_driver PRIVATE __SQUIRREL_MYSQL__)
 endif()
 
 add_library(config_validator OBJECT srcs/utils/config_validate.cc)
