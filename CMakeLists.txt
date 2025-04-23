@@ -105,8 +105,9 @@ endforeach()
 if(MYSQL OR POSTGRESQL)
   add_executable(db_driver srcs/db_driver.cc srcs/db_factory.cc )
   target_link_libraries(db_driver all_client ${YAML_CPP_LIBRARIES}
-                      absl::strings absl::str_format)
-  target_link_libraries(db_driver PRIVATE mysql_impl)
+                      absl::strings absl::str_format
+                      mysql_impl)
+  
   target_include_directories(db_driver PRIVATE 
                       srcs/internal/client
                       srcs/internal/mysql
