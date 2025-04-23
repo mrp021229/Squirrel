@@ -17,7 +17,7 @@
 #include <unistd.h>
 #include <chrono>
 #include <iostream>
-
+#include "db.h"
 #include "absl/strings/str_format.h"
 #include "client.h"
 #include "config.h"
@@ -173,6 +173,7 @@ int main(int argc, char *argv[]) {
   YAML::Node config = YAML::LoadFile(config_file_path);
   std::string db_name = config["db"].as<std::string>();
   std::string startup_cmd = config["startup_cmd"].as<std::string>();
+  DataBase* db = create_database(config);
   client::DBClient *database = client::create_client(db_name, config);
   database->initialize(config);
 
