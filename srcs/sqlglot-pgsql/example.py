@@ -29,28 +29,30 @@ def fuzz(buf, add_buf, max_size):
 
     for sql in sql_statements:
         if sql.strip():  
-            num = 0
+
             mutated_out = None
             
-            while num <= 10 and mutated_out is None:
-                try:
-                    mutated_out = sqlglot_pgsql.mutation(sql.strip())  
-                except Exception as e:
-                    mutated_out = None
-                else:
-                    pass
-                num = num + 1
+
+            try:
+                mutated_out = sqlglot_pgsql.mutation(sql.strip())
+
+            except Exception as e:
+                mutated_out = None
+            else:
+                pass
+            if mutated_out is None:
+                print("SDSD")
             if mutated_out is not None:
-                mutated_sql_statements.append(mutated_out)  
-                # # 灏嗗師濮婼QL鍜屽彉寮傚悗鐨凷QL鍐欏叆鏂囦欢
+                mutated_sql_statements.append(mutated_out)
+                print("SDFSDFsdf")
+                # # 将原始SQL和变异后的SQL写入文件
                 # with open("/home/mutated_sql.txt", "a") as file:
                 #     file.write("sql: " + sql + "\n")
                 #     file.write("new_sql: " + mutated_out + "\n")
             else:
-                mutated_sql_statements.append(sql)  
-        else:
-            mutated_sql_statements.append(sql)  
-    
+                return None
+
+    print("SD")
     
     mutated_sql = '; '.join(mutated_sql_statements)
     mutated_sql = mutated_sql.replace('\ufffd', '[INV]')
@@ -58,7 +60,16 @@ def fuzz(buf, add_buf, max_size):
     buf = mutated_sql
     buf = bytearray(buf)
     return buf
-
+def strToBytearray(sql):
+    byte = sql.encode('utf-8')
+    byteArray = bytearray(byte)
+    return byteArray
 if __name__ == "__main__":
     print("@#@#")
-    print(fuzz("create table v0(v1 INT, v2 INT);",None,None))
+    sql = "select a from b where c = 3;"
+    tmp = strToBytearray(sql)
+    tnt = fuzz(tmp,None,None)
+    if tnt is None:
+        print("is None")
+    else:
+        print(repr(tnt))
