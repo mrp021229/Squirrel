@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
   //   std::cout << "Failed!" << std::endl;
   // }
   
-  sleep(300)
+  sleep(300);
   test_client->clean_up_env();
   return 0;
   const char *query = "create table v0(v1 int ,v2 int);";
