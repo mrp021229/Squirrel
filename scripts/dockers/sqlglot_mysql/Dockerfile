@@ -52,13 +52,13 @@ COPY ./mysql /home/mysql
 # RUN git clone --branch mysql-8.0.27 --depth 1 https://github.com/mysql/mysql-server.git mysql
 
 # ∞≤◊∞“¿¿µ + œ¬‘ÿ Boost
+COPY boost_1_73_0.tar.gz /home/
+
 RUN sudo apt-get -y install apt-transport-https curl software-properties-common gnutls-dev && \
     mkdir -p /home/boost && \
-    curl -L --retry 5 --retry-delay 5 \
-      -o /home/boost_1_73_0.tar.gz \
-      https://archives.boost.io/release/1.73.0/source/boost_1_73_0.tar.gz && \
     tar -xzf /home/boost_1_73_0.tar.gz -C /home/boost && \
     rm /home/boost_1_73_0.tar.gz
+
 
 ARG CACHEBUST=1
 RUN git clone https://github.com/mrp021229/Squirrel.git && \
