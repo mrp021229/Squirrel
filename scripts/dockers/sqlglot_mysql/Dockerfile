@@ -48,7 +48,8 @@ ENV LD_LIBRARY_PATH="/usr/local/openssl-1.1.1/lib:$LD_LIBRARY_PATH"
 USER dobigthing
 WORKDIR /home
 
-RUN git clone --branch mysql-8.0.27 --depth 1 https://github.com/mysql/mysql-server.git mysql
+COPY ./mysql /mysql
+# RUN git clone --branch mysql-8.0.27 --depth 1 https://github.com/mysql/mysql-server.git mysql
 
 # ∞≤◊∞“¿¿µ + œ¬‘ÿ Boost
 RUN sudo apt-get -y install apt-transport-https curl software-properties-common gnutls-dev && \
