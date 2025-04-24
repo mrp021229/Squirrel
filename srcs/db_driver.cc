@@ -174,7 +174,7 @@ int main(int argc, char *argv[]) {
   YAML::Node config = YAML::LoadFile(config_file_path);
   std::string db_name = config["db"].as<std::string>();
   std::string startup_cmd = config["startup_cmd"].as<std::string>();
-  char buffer[16];  // 假设最多 15 字符 + '\0'
+  // char buffer[16];  // 假设最多 15 字符 + '\0'
   // auto *db = create_database(config);
 
 
@@ -251,16 +251,7 @@ int main(int argc, char *argv[]) {
     
     std::string query((const char *)buf, len);\
 
-    if(cnt > 2000){
-      cnt=0;
-      database->prepare_env();
-      // 清空文件内容
-      std::ofstream ofs("/home/table_column_list.txt", std::ofstream::out | std::ofstream::trunc);
-      ofs.close();
-    }
-    else{
-      cnt++;
-    }
+    
     // database->prepare_env();
     client::ExecutionStatus status = database->execute((const char *)buf, len);
     
@@ -307,7 +298,18 @@ int main(int argc, char *argv[]) {
         sleep(5);
       }
     }
-    database->clean_up_env();
+    
+    if(cnt > 2000){
+      cnt=0;
+      database->clean_up_env();
+      database->prepare_env();
+      // 清空文件内容
+      std::ofstream ofs("/home/table_column_list.txt", std::ofstream::out | std::ofstream::trunc);
+      ofs.close();
+    }
+    else{
+      cnt++;
+    }
     __afl_end_testcase(status);
   }
   assert(false && "Crash on parent?");

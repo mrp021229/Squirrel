@@ -1,0 +1,1 @@
+insert into x(v3) values(1),(2);

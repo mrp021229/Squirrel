@@ -1,0 +1,1 @@
+select v1, v2 from v0;

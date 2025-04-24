@@ -1,0 +1,1 @@
+insert into v0(v1, v2) values(1, 2);

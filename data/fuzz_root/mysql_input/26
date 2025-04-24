@@ -1,0 +1,1 @@
+INSERT INTO v0 ( v1 ) VALUES ( '' ) , ( NULL ) , ( 'X' ) , ( NULL ) ;

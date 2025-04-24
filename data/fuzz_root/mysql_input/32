@@ -1,0 +1,1 @@
+create index x on v0(v2, v3);

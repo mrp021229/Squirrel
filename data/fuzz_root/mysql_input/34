@@ -1,0 +1,1 @@
+UPDATE v0 SET v3 = NULL ;

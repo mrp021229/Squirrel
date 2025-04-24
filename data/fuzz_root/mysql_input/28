@@ -1,0 +1,1 @@
+INSERT INTO v0 VALUES ( 0 , 0 , 0 ) , ( 0 , 0 , 0 ) ;

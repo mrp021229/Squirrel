@@ -1,0 +1,1 @@
+CREATE TABLE v0 ( v1 INT , v2 INT , v3 INT CONSTRAINT xx CHECK ( v3 ) ) ;
