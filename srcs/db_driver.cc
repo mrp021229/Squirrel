@@ -174,8 +174,8 @@ int main(int argc, char *argv[]) {
   YAML::Node config = YAML::LoadFile(config_file_path);
   std::string db_name = config["db"].as<std::string>();
   std::string startup_cmd = config["startup_cmd"].as<std::string>();
-  // char buffer[16];  // 假设最多 15 字符 + '\0'
-
+  char buffer[16];  // 假设最多 15 字符 + '\0'
+  auto *db = create_database(config);
   // std::ifstream in("/home/database.txt");
   // in.getline(buffer, sizeof(buffer));
   // in.close();
@@ -184,7 +184,7 @@ int main(int argc, char *argv[]) {
   //     std::ofstream out("/home/database.txt");
   //     out << "0";
   //     out.close();
-  //     auto *db = create_database(config);
+      
   // }
   
   client::DBClient *database = client::create_client(db_name, config);
