@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+intclude <string>
 #include <sys/mman.h>
 #include <sys/shm.h>
 #include <sys/types.h>
@@ -173,7 +174,19 @@ int main(int argc, char *argv[]) {
   YAML::Node config = YAML::LoadFile(config_file_path);
   std::string db_name = config["db"].as<std::string>();
   std::string startup_cmd = config["startup_cmd"].as<std::string>();
-  auto *db = create_database(config);
+  // char buffer[16];  // ¼ÙÉè×î¶à 15 ×Ö·û + '\0'
+
+  // std::ifstream in("/home/database.txt");
+  // in.getline(buffer, sizeof(buffer));
+  // in.close();
+
+  // if (strcmp(buffer, "1") == 0) {
+  //     std::ofstream out("/home/database.txt");
+  //     out << "0";
+  //     out.close();
+  //     auto *db = create_database(config);
+  // }
+  
   client::DBClient *database = client::create_client(db_name, config);
   database->initialize(config);
 
@@ -221,7 +234,7 @@ int main(int argc, char *argv[]) {
   auto tips = std::chrono::duration_cast<std::chrono::seconds>(now - start_time).count();
   
   int cnt=0;
-  
+  database->prepare_env();
   while ((len = __afl_next_testcase(buf, kMaxInputSize)) > 0) {
     
     // Check for dummy tag "0"

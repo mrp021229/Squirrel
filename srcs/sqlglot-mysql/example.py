@@ -7,15 +7,14 @@ import sqlglot
 
 
 def init(seed):
-    config_path = os.environ.get("SQUIRREL_CONFIG")
-    print("getConfig", config_path)
-    subprocess.Popen(
-        ["/home/Squirrel/build/test_client", config_path],
-        stdout=subprocess.DEVNULL,   # 或者你想收集输出可以用 subprocess.PIPE
-        stderr=subprocess.DEVNULL,
-        start_new_session=True       # 可选：防止子进程收到 Ctrl+C 信号
-    )
-    return
+    pass
+    # try:
+    #     with open("/home/database.txt", "w") as f:
+    #         f.write("1")
+    #     print("[mutator] init: wrote 1 to /home/database.txt")
+    # except Exception as e:
+    #     print(f"[mutator] init: failed to write to file - {e}")
+    # return 0
 
 
 def deinit():
