@@ -175,7 +175,9 @@ int main(int argc, char *argv[]) {
   std::string db_name = config["db"].as<std::string>();
   std::string startup_cmd = config["startup_cmd"].as<std::string>();
   char buffer[16];  // ¼ÙÉè×î¶à 15 ×Ö·û + '\0'
-  auto *db = create_database(config);
+  // auto *db = create_database(config);
+
+
   // std::ifstream in("/home/database.txt");
   // in.getline(buffer, sizeof(buffer));
   // in.close();
@@ -205,7 +207,11 @@ int main(int argc, char *argv[]) {
   __afl_map_shm();
   if (!database->check_alive()) {
     system(startup_cmd.c_str());
+    printf("checkalive!!\n")
     sleep(5);
+  }
+  else{
+    printf("already,live\n")
   }
 
   //count correct
