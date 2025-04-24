@@ -103,16 +103,10 @@ foreach(dbms IN LISTS DBMS)
 endforeach()
 
 if(MYSQL OR POSTGRESQL)
-  add_executable(db_driver srcs/db_driver.cc srcs/db_factory.cc )
-  target_link_libraries(db_driver all_client ${YAML_CPP_LIBRARIES}
-                      absl::strings absl::str_format
-                      mysql_impl)
-  
-  target_include_directories(db_driver PRIVATE 
-                      srcs/internal/client
-                      srcs/internal/mysql
-                      srcs)
-                      
+  add_executable(db_driver srcs/db_driver.cc)
+  target_link_libraries(db_driver ${YAML_CPP_LIBRARIES} all_client
+                        absl::strings absl::str_format)
+
   add_executable(test_client srcs/internal/client/test_client.cc)
   target_link_libraries(test_client all_client ${YAML_CPP_LIBRARIES})
   target_include_directories(test_client PUBLIC srcs/internal/client)
@@ -121,9 +115,6 @@ if(MYSQL OR POSTGRESQL)
   target_include_directories(all_client PUBLIC srcs/internal/client)
   target_link_libraries(all_client PUBLIC ${LINK_CLIENT})
   target_compile_definitions(all_client PRIVATE ${CLIENT_DEFINITION})
-  target_include_directories(db_driver PRIVATE srcs/internal/client)
-  target_compile_definitions(db_driver PRIVATE ${CLIENT_DEFINITION})
-  target_compile_definitions(db_driver PRIVATE __SQUIRREL_MYSQL__)
 endif()
 
 add_library(config_validator OBJECT srcs/utils/config_validate.cc)
