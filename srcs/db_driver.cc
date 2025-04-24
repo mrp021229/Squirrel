@@ -207,11 +207,11 @@ int main(int argc, char *argv[]) {
   __afl_map_shm();
   if (!database->check_alive()) {
     system(startup_cmd.c_str());
-    printf("checkalive!!\n")
+    printf("checkalive!!\n");
     sleep(5);
   }
   else{
-    printf("already,live\n")
+    printf("already,live\n");
   }
 
   //count correct
