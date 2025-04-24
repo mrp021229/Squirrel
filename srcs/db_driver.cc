@@ -18,7 +18,7 @@
 #include <unistd.h>
 #include <chrono>
 #include <iostream>
-#include "db.h"
+
 #include "absl/strings/str_format.h"
 #include "client.h"
 #include "config.h"
