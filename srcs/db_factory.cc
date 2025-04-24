@@ -12,7 +12,7 @@
 #include "postgresql.h"
 #endif
 
-#include "db.h"
+// #include "db.h"
 
 DataBase* create_database(YAML::Node config) {
   const std::string db_name = config["db"].as<std::string>();
