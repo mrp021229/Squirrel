@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-intclude <string>
+
 #include <sys/mman.h>
 #include <sys/shm.h>
 #include <sys/types.h>
