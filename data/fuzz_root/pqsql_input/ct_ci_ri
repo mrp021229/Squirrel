@@ -1,3 +1,2 @@
-create table v0(v1 INT, v2 INT);
-create index v3 on v0(v1);
-
+CREATE TABLE v0 (v1 INT, v2 INT);
+CREATE INDEX v3 ON v0(v1);

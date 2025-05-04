@@ -1,2 +1,2 @@
-CREATE TABLE v0 ( v1 varchar(80)) ;
-INSERT INTO v0 ( v1 ) VALUES ( '' ) , ( NULL ) , ( 'X' ) , ( NULL ) ;
+CREATE TABLE v0 (v1 VARCHAR(80));
+INSERT INTO v0 (v1) VALUES (''), (NULL), ('X'), (NULL);

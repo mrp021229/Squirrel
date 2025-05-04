@@ -1,4 +1,4 @@
-CREATE TABLE v0 ( v1 INT , v2 INT NOT NULL , v3 INT , v4 INT NOT NULL ) ;
-INSERT INTO v0 VALUES ( 0 , 0 , 0 ) , ( 0 , 0 , 0 ) ;
-select a from b where c = 3;
-drop table v0;
+CREATE TABLE v0 (v1 INT, v2 INT NOT NULL, v3 INT, v4 INT NOT NULL);
+INSERT INTO v0 VALUES (0, 0, 0), (0, 0, 0);
+SELECT a FROM b WHERE c = 3;
+DROP TABLE v0;

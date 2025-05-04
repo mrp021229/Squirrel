@@ -1,2 +1,2 @@
-create table v0(v1 INT, v2 INT);
-select v1, v2 from v0;
+CREATE TABLE v0 (v1 INT, v2 INT);
+SELECT v1, v2 FROM v0;

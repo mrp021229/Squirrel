@@ -1,3 +1,2 @@
-create table v0(v1 int, v2 int, v3 char);
-select v1 from v0 union select v2 from v0;
-
+CREATE TABLE v0 (v1 INT, v2 INT, v3 CHAR);
+SELECT v1 FROM v0 UNION SELECT v2 FROM v0;
