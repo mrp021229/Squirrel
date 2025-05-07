@@ -36,13 +36,13 @@ def fuzz(buf, add_buf, max_size):
     log_path = "/home/output/fuzz_log.txt"
     os.makedirs(os.path.dirname(log_path), exist_ok=True)
 
-    # 在程序开始写入原始输入
+    #
     with open(log_path, "a", encoding="utf-8") as log_file:
         log_file.write("[Original buf]:")
         try:
             log_file.write(buf.decode('utf-8') + "\n")
         except UnicodeDecodeError:
-            log_file.write("[Decode Error: 原始输入不是有效的 UTF-8 编码]\n")
+            log_file.write("[Decode Error:UTF-8]\n")
 
 
     buf = buf.decode('utf-8')
@@ -80,13 +80,13 @@ def fuzz(buf, add_buf, max_size):
     buf = mutated_sql
     buf = bytearray(buf)
 
-    # 在程序结尾写入变异后的输出
+    #
     with open(log_path, "a", encoding="utf-8") as log_file:
         log_file.write("[Mutated buf]:")
         try:
             log_file.write(buf.decode('utf-8') + "\n")
         except UnicodeDecodeError:
-            log_file.write("[Decode Error: 变异结果不是有效的 UTF-8 编码]\n")
+            log_file.write("[Decode Error:UTF-8]\n")
     if len(buf) == 0:
         return bytearray(b'0')
     return buf
