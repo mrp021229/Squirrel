@@ -5,9 +5,18 @@ import sqlglot_manager
 import sqlglot_mutation
 import sqlglot_fill
 import sys
+import os
 
 def mutation(sql):
+    log_path = "/home/output/fuzz_log.txt"
+    os.makedirs(os.path.dirname(log_path), exist_ok=True)
     mutated_sql = sqlglot_mutation.get_mutated_sql(sql)
+    with open(log_path, "a", encoding="utf-8") as log_file:
+        log_file.write("[Mutated SQL Before Fill]")
+        try:
+            log_file.write(mutated_sql + "\n")
+        except Exception as e:
+            log_file.write(f"[Error writing mutated SQL: {e}]\n")
     # print("mutation")
     # print(mutated_sql)
     filled_sql = sqlglot_fill.fill_sql(mutated_sql)

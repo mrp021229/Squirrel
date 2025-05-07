@@ -1,1 +1,0 @@
-CREATE TRIGGER v5 BEFORE INSERT ON v0 FOR EACH ROW insert into v3 values (1,1);
