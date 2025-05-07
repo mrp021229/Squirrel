@@ -73,12 +73,13 @@ if (!tables_res) {
     MYSQL_ROW table_row;
     while ((table_row = mysql_fetch_row(tables_res))) {
       const char *table_name = table_row[0];
-      table_list_file << "Table: " << table_name << std::endl;
+      //table_list_file << "Table: " << table_name << std::endl;
 
       std::string column_query = "SHOW COLUMNS FROM `" + std::string(table_name) + "`;";
       if (mysql_query(&(*connection), column_query.c_str()) == 0) {
         MYSQL_RES *columns_res = mysql_store_result(&(*connection));
         if (columns_res) {
+          table_list_file << "Table: " << table_name << std::endl;
           MYSQL_ROW col_row;
           while ((col_row = mysql_fetch_row(columns_res))) {
             const char *column_name = col_row[0];

@@ -38,4 +38,4 @@ int main(int argc, char **argv) {
     test_client->clean_up_env();
   }
 }
-// /home/Squirrel/build/test_client /home/Squirrel/data/config_mysql.yml
+// /home/Squirrel/build/test_client /home/Squirrel/data/config_mariadb.yml
