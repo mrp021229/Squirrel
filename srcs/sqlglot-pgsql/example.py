@@ -16,7 +16,7 @@ def queue_new_entry(filename_new_queue, filename_orig_queue):
 
 
 def fuzz_count(buf):
-    return 10
+    return 2
 
 
 def fuzz(buf, add_buf, max_size):
