@@ -56,7 +56,7 @@ def fuzz(buf, add_buf, max_size):
             mutated_out = None
 
             try:
-                mutated_out = sqlglot_mysql.mutation(sql.strip())
+                mutated_out = sqlglot_pgsql.mutation(sql.strip())
 
             except Exception as e:
                 mutated_out = None
