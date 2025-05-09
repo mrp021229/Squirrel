@@ -2,7 +2,7 @@
 import os
 import subprocess
 import random
-import sqlglot_mysql
+import sqlglot_pgsql
 import sqlglot
 
 
