@@ -15,7 +15,8 @@ RUN apt-get update && apt-get install -y \
     libsasl2-modules-gssapi-mit \
     libkrb5-dev \
     libnuma-dev \
-    libc6-dev
+    libc6-dev \
+    libreadline-dev
 
 
 # 更新 apt 并安装 Python3 和 pip
