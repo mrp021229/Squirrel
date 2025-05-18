@@ -9,6 +9,15 @@ RUN apt-get update && \
     clang libmysqlclient-dev ninja-build pkg-config clang-format \
     libpq-dev libyaml-cpp-dev lld llvm bison python3-fire
 
+# percona special need
+RUN apt-get update && apt-get install -y \
+    libsasl2-dev \
+    libsasl2-modules-gssapi-mit \
+    libkrb5-dev \
+    libnuma-dev \
+    libc6-dev
+
+
 # 更新 apt 并安装 Python3 和 pip
 RUN apt-get update && \
     apt-get install -y python3 python3-pip && \
@@ -90,6 +99,7 @@ RUN mkdir bld && cd bld/ && \
         -DCPACK_MONOLITHIC_INSTALL=1 \
         -DWITH_UNIT_TESTS=OFF \
         -DWITH_SSL=system \
+        -DWITH_AUTHENTICATION_LDAP=OFF \
         -DOPENSSL_INCLUDE_DIR=/usr/local/openssl-1.1.1/include \
         -DOPENSSL_LIBRARIES=/usr/local/openssl-1.1.1/lib \
         -DCMAKE_C_FLAGS="-I/usr/local/openssl-1.1.1/include -L/usr/local/openssl-1.1.1/lib" \
