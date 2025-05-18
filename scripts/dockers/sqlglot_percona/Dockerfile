@@ -16,7 +16,8 @@ RUN apt-get update && apt-get install -y \
     libkrb5-dev \
     libnuma-dev \
     libc6-dev \
-    libreadline-dev
+    libreadline-dev \
+    libcurl4-openssl-dev
 
 
 # 更新 apt 并安装 Python3 和 pip
