@@ -99,9 +99,6 @@ RUN mkdir bld && cd bld/ && \
     cmake ../mysql/ \
         -DDOWNLOAD_BOOST=0 \
         -DWITH_BOOST=/home/boost/boost_1_73_0 \
-        -DWITH_DEBUG=1 \
-        -DCMAKE_C_FLAGS="-I/usr/local/openssl-1.1.1/include -L/usr/local/openssl-1.1.1/lib -Wno-error -w -g3" \
-        -DCMAKE_CXX_FLAGS="-I/usr/local/openssl-1.1.1/include -L/usr/local/openssl-1.1.1/lib -Wno-error -w -g3" \
         -DCPACK_MONOLITHIC_INSTALL=1 \
         -DWITH_UNIT_TESTS=OFF \
         -DWITH_SSL=system \
