@@ -29,17 +29,15 @@ def get_config_path(database):
 
 
 def set_env(database):
-  os.environ["AFL_CUSTOM_MUTATOR_ONLY"] = "1"
+  if database == "afl_percona":
+    database = "percona"
+  else :
+    os.environ["AFL_CUSTOM_MUTATOR_ONLY"] = "1"
+    os.environ["PYTHONPATH"] = get_mutator_py_path(database)
+    os.environ["AFL_PYTHON_MODULE"] = "example"
   os.environ["AFL_DISABLE_TRIM"] = "1"
   os.environ["AFL_FAST_CAL"] = "1"
   # os.environ["AFL_CUSTOM_MUTATOR_LIBRARY"] = get_mutator_so_path(database)
-
-
-
-
-  os.environ["PYTHONPATH"] = get_mutator_py_path(database)
-  os.environ["AFL_PYTHON_MODULE"] = "example"
-
   os.environ["SQUIRREL_CONFIG"] = get_config_path(database)
 
 
