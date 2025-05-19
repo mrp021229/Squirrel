@@ -7,7 +7,7 @@ import fire
 import uuid
 from pathlib import Path
 
-DBMS = ["sqlite", "mysql", "mariadb", "postgresql", "percona", "percona"]
+DBMS = ["sqlite", "mysql", "mariadb", "postgresql", "percona", "afl_percona"]
 ROOTPATH = Path(os.path.dirname(os.path.realpath(__file__))).parent.parent
 
 
