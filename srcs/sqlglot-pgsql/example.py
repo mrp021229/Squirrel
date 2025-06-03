@@ -5,9 +5,18 @@ import random
 import sqlglot_pgsql
 import sqlglot
 
+import sqlglot
+import sqlglot_mutation
+import sqlglot_fill
+from sqlglot_manager import ExpressionSetManager
+expression_manager = None
 
 def init(seed):
-    pass
+    global expression_manager
+    expression_manager = ExpressionSetManager()
+    expression_manager.load_from_file("/home/Squirrel/srcs/sqlglot-pgsql/pgsql_seed.pkl")  # 替换为实际路径
+    sqlglot_mutation.set_expression_manager(expression_manager)  # 注入给子模块
+    sqlglot_fill.set_expression_manager(expression_manager)
     # try:
     #     with open("/home/database.txt", "w") as f:
     #         f.write("1")

@@ -25,9 +25,11 @@ table_dict = {
 #     }
 #     return
 
-file_path = "/home/Squirrel/srcs/sqlglot-pgsql/pgsql_seed.pkl"
-new_manager = ExpressionSetManager()
-new_manager.load_from_file(file_path)
+new_manager = None
+
+def set_expression_manager(mgr):
+    global new_manager
+    new_manager = mgr
 
 def getSameNode(node):
 

@@ -10,9 +10,11 @@ import copy
 from sqlglot_manager import ExpressionSetManager
 
 
-manager = ExpressionSetManager()
+manager = None
 
-
+def set_expression_manager(mgr):
+    global manager
+    manager = mgr
 # 读取文件并解�?? SQL �??�??
 def process_sql_file(file_path: str, manager: ExpressionSetManager):
     try:
@@ -153,8 +155,8 @@ class SQLRandomReplacer:
 def get_mutated_sql(sql):
     # print("mmm")
     # print(sql)
-    file_path = "/home/Squirrel/srcs/sqlglot-pgsql/pgsql_seed.pkl"
-    manager.load_from_file(file_path)
+    if manager is None:
+        raise RuntimeError("ExpressionSetManager not initialized")
     parsed = sqlglot.parse(sql,dialect='postgres')
     replacer = SQLRandomReplacer()
 

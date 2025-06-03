@@ -9,72 +9,79 @@ import pickle
 
 class ExpressionSetManager:
     def __init__(self):
-        # 閻?銊ょ艾鐎涙ê鍋嶉懞鍌滃仯閻ㄥ嫬锟界懓娅掗敍宀勬暛娑撹櫣鍩楅懞鍌滃仯缁?璇茬�烽敍灞解偓闂磋礋閼哄倻鍋ｉ梿鍡楁値
+        
         self.parent_to_nodes = {}
 
-    def add_node(self, node: Expression, parent_node: Expression):
-        parent_type = type(parent_node).__name__  # 閼惧嘲褰囬悥鎯板Ν閻愬湱琚?閸ㄥ??鎮曠粔锟?
-        if parent_type not in self.parent_to_nodes:
-            self.parent_to_nodes[parent_type] = set()
-        self.parent_to_nodes[parent_type].add(node)
-
-    def get_random_node(self, parent_node: Expression) -> Expression:
+    def add_node(self, node: 'Expression', parent_node: 'Expression'):
         
-        parent_type = type(parent_node).__name__  # 閼惧嘲褰囬悥鎯板Ν閻愬湱琚?閸ㄥ??鎮曠粔锟?
-        if parent_type in self.parent_to_nodes and self.parent_to_nodes[parent_type]:
-            return random.choice(list(self.parent_to_nodes[parent_type]))
+        parent_type = type(parent_node).__name__
+        node_type = type(node).__name__
+
+        if parent_type not in self.parent_to_nodes:
+            self.parent_to_nodes[parent_type] = {}
+
+        if node_type not in self.parent_to_nodes[parent_type]:
+            self.parent_to_nodes[parent_type][node_type] = set()
+
+        self.parent_to_nodes[parent_type][node_type].add(node)
+
+    def get_random_node(self, parent_node: 'Expression') -> 'Expression':
+        
+        parent_type = type(parent_node).__name__
+        node_type = type(parent_node).__name__  # 由于未修改方法签名，默认按 parent_node 类型返回同类型节点
+
+        if (parent_type in self.parent_to_nodes and
+            node_type in self.parent_to_nodes[parent_type] and
+            self.parent_to_nodes[parent_type][node_type]):
+
+            return random.choice(list(self.parent_to_nodes[parent_type][node_type]))
         else:
-            raise ValueError(f"No nodes available for parent type: {parent_type}")
+            raise ValueError(f"No nodes available for parent type: {parent_type} and node type: {node_type}")
 
-    def get_random_node_v2(self, node: Expression) -> Expression:
-        """
-        """
+    def get_random_node_v2(self, node: 'Expression') -> 'Expression':
+        
+        parent_type = type(node.parent).__name__
+        node_type = type(node).__name__
 
-        parent_type = type(node.parent).__name__  # 閼惧嘲褰囬悥鎯板Ν閻愬湱琚?閸ㄥ??鎮曠粔锟?
-        same_type_node = []
-        if parent_type in self.parent_to_nodes and self.parent_to_nodes[parent_type]:
-            for exp in self.parent_to_nodes[parent_type]:
-                if exp.key == node.key:
-                    same_type_node.append(exp)
-            if len(same_type_node) == 0:
-                return None
-            return random.choice(list(same_type_node))
+
+
+        if (parent_type in self.parent_to_nodes and
+            node_type in self.parent_to_nodes[parent_type] and
+            self.parent_to_nodes[parent_type][node_type]):
+
+            return random.choice(list(self.parent_to_nodes[parent_type][node_type]))
         else:
             return None
-            raise ValueError(f"No nodes available for parent type: {parent_type}")
 
     def save_to_file(self, file_path: str):
-        """
-        """
+        
         try:
             with open(file_path, 'wb') as f:
                 pickle.dump(self.parent_to_nodes, f)
-            # print(f"Successfully saved to {file_path}")
+            print(f"Successfully saved to {file_path}")
         except Exception as e:
-            pass
-            # print(f"Failed to save to {file_path}: {e}")
+            print(f"Failed to save to {file_path}: {e}")
 
     def load_from_file(self, file_path: str):
-        """
-        """
+        
         try:
             with open(file_path, 'rb') as f:
                 self.parent_to_nodes = pickle.load(f)
-            # print(f"Successfully loaded from {file_path}")
+            print(f"Successfully loaded from {file_path}")
         except FileNotFoundError:
-            # print(f"File not found: {file_path}. Starting with an empty manager.")
+            print(f"File not found: {file_path}. Starting with an empty manager.")
             self.parent_to_nodes = {}
         except Exception as e:
-            # print(f"Failed to load from {file_path}: {e}")
+            print(f"Failed to load from {file_path}: {e}")
             self.parent_to_nodes = {}
 
     def __str__(self):
-        """
-        """
-        return "\n".join(
-            f"{parent_type}: {len(nodes)} nodes"
-            for parent_type, nodes in self.parent_to_nodes.items()
-        )
+        
+        lines = []
+        for parent_type, node_dict in self.parent_to_nodes.items():
+            for node_type, nodes in node_dict.items():
+                lines.append(f"{parent_type} -> {node_type}: {len(nodes)} nodes")
+        return "\n".join(lines)
 
 
 # 鐠囪?插絿閺傚洣娆㈤獮鎯靶掗弸锟? SQL 鐠囷拷閸欙拷
