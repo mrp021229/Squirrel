@@ -14,9 +14,11 @@ from sqlglot_manager import ExpressionSetManager
 # 改进manager实现按照经验对节点分布进行插入删除，以及变异后更新manager
 # 1w条的测试，主要测试fill
 
-manager = ExpressionSetManager()
+manager = None
 
-
+def set_expression_manager(mgr):
+    global manager
+    manager = mgr
 # 读取文件并解�? SQL �?�?
 def process_sql_file(file_path: str, manager: ExpressionSetManager):
     try:
@@ -155,8 +157,9 @@ class SQLRandomReplacer:
 def get_mutated_sql(sql):
     # print("mmm")
     # print(sql)/home/Squirrel/srcs/sqlglot-pgsql/pg
-    file_path = "/home/Squirrel/srcs/sqlglot-mysql/mysql_seed.pkl"
-    manager.load_from_file(file_path)
+    if manager is None:
+        raise RuntimeError("ExpressionSetManager not initialized")
+
     parsed = sqlglot.parse(sql,dialect='mysql')
     replacer = SQLRandomReplacer()
 

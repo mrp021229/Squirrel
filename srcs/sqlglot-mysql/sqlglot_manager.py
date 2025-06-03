@@ -1,56 +1,67 @@
 # -*- coding: utf-8 -*-
-
 import random
 import sqlglot
 from sqlglot.expressions import Expression
 import pickle
 
 
+
 class ExpressionSetManager:
     def __init__(self):
-        # ç”¨äºå­˜å‚¨èŠ‚ç‚¹çš„ï¿½?ï¿½å™¨ï¼Œé”®ä¸ºçˆ¶èŠ‚ç‚¹ç±»å‹ï¼Œå€¼ä¸ºèŠ‚ç‚¹é›†åˆ
+        # Ë«²ã×Öµä£¬µÚÒ»²ã¼üÎª¸¸½ÚµãÀàĞÍ£¬µÚ¶ş²ã¼üÎª½ÚµãÀàĞÍ£¬ÖµÎª½Úµã¼¯ºÏ
         self.parent_to_nodes = {}
 
-    def add_node(self, node: Expression, parent_node: Expression):
+    def add_node(self, node: 'Expression', parent_node: 'Expression'):
         """
-        
+        Ïò¼¯ºÏÖĞÌí¼Ó½Úµã¡£
+        Èç¹û¶ÔÓ¦µÄ¸¸½ÚµãÀàĞÍºÍ½ÚµãÀàĞÍµÄ¼¯ºÏ²»´æÔÚ£¬Ôò´´½¨Ò»¸öĞÂ¼¯ºÏ¡£
         """
-        parent_type = type(parent_node).__name__  # è·å–çˆ¶èŠ‚ç‚¹ç±»å‹åï¿½?
+        parent_type = type(parent_node).__name__
+        node_type = type(node).__name__
+
         if parent_type not in self.parent_to_nodes:
-            self.parent_to_nodes[parent_type] = set()
-        self.parent_to_nodes[parent_type].add(node)
+            self.parent_to_nodes[parent_type] = {}
 
-    def get_random_node(self, parent_node: Expression) -> Expression:
+        if node_type not in self.parent_to_nodes[parent_type]:
+            self.parent_to_nodes[parent_type][node_type] = set()
+
+        self.parent_to_nodes[parent_type][node_type].add(node)
+
+    def get_random_node(self, parent_node: 'Expression') -> 'Expression':
         """
-        
+        Ëæ»ú·µ»ØÓëÖ¸¶¨¸¸½ÚµãÀàĞÍºÍ½ÚµãÀàĞÍÏàÍ¬µÄÒ»¸ö½Úµã¡£
         """
-        parent_type = type(parent_node).__name__  # è·å–çˆ¶èŠ‚ç‚¹ç±»å‹åï¿½?
-        if parent_type in self.parent_to_nodes and self.parent_to_nodes[parent_type]:
-            return random.choice(list(self.parent_to_nodes[parent_type]))
+        parent_type = type(parent_node).__name__
+        node_type = type(parent_node).__name__  # ÓÉÓÚÎ´ĞŞ¸Ä·½·¨Ç©Ãû£¬Ä¬ÈÏ°´ parent_node ÀàĞÍ·µ»ØÍ¬ÀàĞÍ½Úµã
+
+        if (parent_type in self.parent_to_nodes and
+            node_type in self.parent_to_nodes[parent_type] and
+            self.parent_to_nodes[parent_type][node_type]):
+
+            return random.choice(list(self.parent_to_nodes[parent_type][node_type]))
         else:
-            raise ValueError(f"No nodes available for parent type: {parent_type}")
+            raise ValueError(f"No nodes available for parent type: {parent_type} and node type: {node_type}")
 
-    def get_random_node_v2(self, node: Expression) -> Expression:
+    def get_random_node_v2(self, node: 'Expression') -> 'Expression':
         """
-       
+        Ëæ»ú·µ»ØÓëÖ¸¶¨¸¸½ÚµãÀàĞÍºÍ½ÚµãÀàĞÍÏàÍ¬£¬ÇÒ key ÏàÍ¬µÄÒ»¸ö½Úµã¡£
         """
+        parent_type = type(node.parent).__name__
+        node_type = type(node).__name__
 
-        parent_type = type(node.parent).__name__  # è·å–çˆ¶èŠ‚ç‚¹ç±»å‹åï¿½?
-        same_type_node = []
-        if parent_type in self.parent_to_nodes and self.parent_to_nodes[parent_type]:
-            for exp in self.parent_to_nodes[parent_type]:
-                if exp.key == node.key:
-                    same_type_node.append(exp)
-            if len(same_type_node) == 0:
-                return None
-            return random.choice(list(same_type_node))
+
+
+        if (parent_type in self.parent_to_nodes and
+            node_type in self.parent_to_nodes[parent_type] and
+            self.parent_to_nodes[parent_type][node_type]):
+
+            return random.choice(list(self.parent_to_nodes[parent_type][node_type]))
         else:
             return None
-            raise ValueError(f"No nodes available for parent type: {parent_type}")
 
     def save_to_file(self, file_path: str):
         """
-        
+        ½«µ±Ç°µÄ ExpressionSetManager ÄÚÈİ±£´æµ½±¾µØÎÄ¼ş¡£
         """
         try:
             with open(file_path, 'wb') as f:
@@ -61,7 +72,7 @@ class ExpressionSetManager:
 
     def load_from_file(self, file_path: str):
         """
-        
+        ´Ó±¾µØÎÄ¼ş¼ÓÔØÄÚÈİ²¢³õÊ¼»¯ ExpressionSetManager¡£
         """
         try:
             with open(file_path, 'rb') as f:
@@ -76,29 +87,31 @@ class ExpressionSetManager:
 
     def __str__(self):
         """
-        
+        ·µ»Øµ±Ç°´æ´¢×´Ì¬µÄ×Ö·û´®±íÊ¾¡£
         """
-        return "\n".join(
-            f"{parent_type}: {len(nodes)} nodes"
-            for parent_type, nodes in self.parent_to_nodes.items()
-        )
+        lines = []
+        for parent_type, node_dict in self.parent_to_nodes.items():
+            for node_type, nodes in node_dict.items():
+                lines.append(f"{parent_type} -> {node_type}: {len(nodes)} nodes")
+        return "\n".join(lines)
 
 
-# è¯»å–æ–‡ä»¶å¹¶è§£ï¿½? SQL ï¿½?ï¿½?
+
+# ¶ÁÈ¡ÎÄ¼ş²¢½âÎö SQL Óï¾ä
 def process_sql_file(file_path: str, manager: ExpressionSetManager):
     try:
         with open(file_path, 'r',encoding='utf-8') as file:
             for line in file:
-                sql = line.strip()  # å»æ‰ä¸¤ï¿½??çš„ç©ºæ ¼å’Œæ¢ï¿½?ï¿½ï¿½??
+                sql = line.strip()  # È¥µôÁ½¶ËµÄ¿Õ¸ñºÍ»»ĞĞ·û
                 if sql.endswith(";"):
-                    sql = sql[:-1]  # å»æ‰ï¿½?å°¾çš„åˆ†å·
+                    sql = sql[:-1]  # È¥µôÄ©Î²µÄ·ÖºÅ
                 if sql:
                     try:
-                        # ä½¿ç”¨ sqlglot è§£æ SQL ï¿½?ï¿½?
+                        # Ê¹ÓÃ sqlglot ½âÎö SQL Óï¾ä
                         tree = sqlglot.parse_one(sql,read='mysql')
-                        # éå†ï¿½?æ³•æ ‘ï¿½?çš„èŠ‚ï¿½?
+                        # ±éÀúÓï·¨Ê÷ÖĞµÄ½Úµã
                         for node in tree.walk():
-                            # æ·»åŠ éæ ¹èŠ‚ç‚¹
+                            # Ìí¼Ó·Ç¸ù½Úµã
                             # if node != tree:
                             manager.add_node(node, node.parent)
                     except Exception as e:
@@ -117,7 +130,7 @@ def test_manager():
     new_manager.load_from_file(file_path)
     print(new_manager)
 
-    # ä½¿ç”¨ sqlglot è§£æ SQL ï¿½?ï¿½?
+    # Ê¹ÓÃ sqlglot ½âÎö SQL Óï¾ä
     parsed = sqlglot.parse(sql,read='mysql')
     for node in parsed[0].walk():
         if isinstance(node, sqlglot.exp.Sum):
@@ -137,17 +150,17 @@ if __name__ == "__main__":
     # print(new_manager)
     # exit()
 
-    # ä½¿ç”¨ç¤ºä¾‹
+    # Ê¹ÓÃÊ¾Àı
     seed_path = "mysql_seed.txt"
     manager = ExpressionSetManager()
 
-    # å¤„ç† SQL æ–‡ä»¶ï¼Œå°†èŠ‚ç‚¹å­˜å…¥ç®¡ç†ï¿½?
+    # ´¦Àí SQL ÎÄ¼ş£¬½«½Úµã´æÈë¹ÜÀíÆ÷
     process_sql_file(seed_path, manager)
 
-    # æŸ¥çœ‹ç®¡ç†å™¨ä¸­ä¿å­˜çš„èŠ‚ï¿½?
-    print("ç®¡ç†å™¨çŠ¶?:")
+    # ²é¿´¹ÜÀíÆ÷ÖĞ±£´æµÄ½Úµã
+    print("¹ÜÀíÆ÷×´Ì¬:")
     print(manager)
-    # ä¿å­˜åˆ°æœ¬åœ°æ–‡ï¿½?
+    # ±£´æµ½±¾µØÎÄ¼ş
     file_path = "mysql_seed.pkl"
     manager.save_to_file(file_path)
     exit(0)

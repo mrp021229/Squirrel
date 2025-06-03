@@ -2,12 +2,20 @@
 import os
 import subprocess
 import random
-import sqlglot_mysql
-import sqlglot
 
+import sqlglot
+import sqlglot_mutation
+import sqlglot_fill
+from sqlglot_manager import ExpressionSetManager
+expression_manager = None
 
 def init(seed):
-    pass
+    global expression_manager
+    expression_manager = ExpressionSetManager()
+    expression_manager.load_from_file("mysql_seed.pkl")  # 替换为实际路径
+    sqlglot_mutation.set_expression_manager(expression_manager)  # 注入给子模块
+    sqlglot_fill.set_expression_manager(expression_manager)
+    
     # try:
     #     with open("/home/database.txt", "w") as f:
     #         f.write("1")
@@ -31,18 +39,35 @@ def fuzz_count(buf):
     return 2
 
 
+def mutation(sql):
+    # log_path = "/home/output/fuzz_log.txt"
+    # os.makedirs(os.path.dirname(log_path), exist_ok=True)
+    mutated_sql = sqlglot_mutation.get_mutated_sql(sql)
+    # with open(log_path, "a", encoding="utf-8") as log_file:
+    #     log_file.write("[Mutated SQL Before Fill]")
+    #     try:
+    #         log_file.write(mutated_sql + "\n")
+    #     except Exception as e:
+    #         log_file.write(f"[Error writing mutated SQL: {e}]\n")
+    # print("mutation")
+    # print(mutated_sql)
+    filled_sql = sqlglot_fill.fill_sql(mutated_sql)
+    # print("fill")
+    # print(filled_sql)
+    return filled_sql
+
 def fuzz(buf, add_buf, max_size):
 
-    log_path = "/home/output/fuzz_log.txt"
-    os.makedirs(os.path.dirname(log_path), exist_ok=True)
+    # log_path = "/home/output/fuzz_log.txt"
+    # os.makedirs(os.path.dirname(log_path), exist_ok=True)
 
-    #
-    with open(log_path, "a", encoding="utf-8") as log_file:
-        log_file.write("[Original buf]:")
-        try:
-            log_file.write(buf.decode('utf-8') + "\n")
-        except UnicodeDecodeError:
-            log_file.write("[Decode Error:UTF-8]\n")
+    # #
+    # with open(log_path, "a", encoding="utf-8") as log_file:
+    #     log_file.write("[Original buf]:")
+    #     try:
+    #         log_file.write(buf.decode('utf-8') + "\n")
+    #     except UnicodeDecodeError:
+    #         log_file.write("[Decode Error:UTF-8]\n")
 
 
     buf = buf.decode('utf-8')
@@ -56,6 +81,7 @@ def fuzz(buf, add_buf, max_size):
             mutated_out = None
 
             try:
+                
                 mutated_out = sqlglot_mysql.mutation(sql.strip())
 
             except Exception as e:
@@ -81,12 +107,12 @@ def fuzz(buf, add_buf, max_size):
     buf = bytearray(buf)
 
     #
-    with open(log_path, "a", encoding="utf-8") as log_file:
-        log_file.write("[Mutated buf]:")
-        try:
-            log_file.write(buf.decode('utf-8') + "\n")
-        except UnicodeDecodeError:
-            log_file.write("[Decode Error:UTF-8]\n")
+    # with open(log_path, "a", encoding="utf-8") as log_file:
+    #     log_file.write("[Mutated buf]:")
+    #     try:
+    #         log_file.write(buf.decode('utf-8') + "\n")
+    #     except UnicodeDecodeError:
+    #         log_file.write("[Decode Error:UTF-8]\n")
     if len(buf) == 0:
         return bytearray(b'0')
     return buf

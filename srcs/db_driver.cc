@@ -214,6 +214,7 @@ int main(int argc, char *argv[]) {
     printf("already,live\n");
   }
 
+  std::ofstream sql_file("/home/output/sql_log.txt", std::ios::app);
   //count correct
   std::ofstream log_file("/home/output/fuzz_results.csv", std::ios::app); // 追加写
   log_file << "time,Syntax_correct_rate,Semantic_correct_rate,total,syntax,semantic,Timeout,Normal,ServerCrash,ExecuteError,ConnectFailed\n";
@@ -255,6 +256,14 @@ int main(int argc, char *argv[]) {
     // database->prepare_env();
     client::ExecutionStatus status = database->execute((const char *)buf, len);
     
+    if (!sql_file.is_open()) {
+    std::cerr << "!open't" << std::endl;
+    } else {
+        sql_file.write((const char *)buf); // 写入原始 SQL
+        sql_file << std::endl;                  // 可选：换行
+        sql_file.flush();                       // 立即写入磁盘
+    }
+
     if(status==client::kSyntaxError) SyntaxError++;
     else if(status==client::kSemanticError) SemanticError++;
 
@@ -306,6 +315,13 @@ int main(int argc, char *argv[]) {
       // 清空文件内容
       std::ofstream ofs("/home/table_column_list.txt", std::ofstream::out | std::ofstream::trunc);
       ofs.close();
+      if (!sql_file.is_open()) {
+        std::cerr << "!open't" << std::endl;
+      } else {
+          sql_file << "New database";// 写入原始 SQL
+          sql_file << std::endl;                  // 可选：换行
+          sql_file.flush();                       // 立即写入磁盘
+      }
     }
     else{
       cnt++;
