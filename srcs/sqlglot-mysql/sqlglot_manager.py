@@ -143,8 +143,7 @@ if __name__ == "__main__":
     # 处理 SQL 文件，将节点存入管理器
     process_sql_file(seed_path, manager)
 
-    # 查看管理器中保存的节点
-    print("管理器状态:")
+    
     print(manager)
     # 保存到本地文件
     file_path = "mysql_seed.pkl"

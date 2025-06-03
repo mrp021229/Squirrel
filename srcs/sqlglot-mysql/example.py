@@ -79,7 +79,7 @@ def fuzz(buf, add_buf, max_size):
 
             try:
                 
-                mutated_out = sqlglot_mysql.mutation(sql.strip())
+                mutated_out = mutation(sql.strip())
 
             except Exception as e:
                 mutated_out = None
