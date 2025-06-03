@@ -259,7 +259,7 @@ int main(int argc, char *argv[]) {
     if (!sql_file.is_open()) {
     std::cerr << "!open't" << std::endl;
     } else {
-        sql_file.write((const char *)buf); // 写入原始 SQL
+        sql_file.write((const char *)buf, len); // 写入原始 SQL
         sql_file << std::endl;                  // 可选：换行
         sql_file.flush();                       // 立即写入磁盘
     }
