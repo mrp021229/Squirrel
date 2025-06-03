@@ -52,6 +52,7 @@ def mutation(sql):
     # print("mutation")
     # print(mutated_sql)
     filled_sql = sqlglot_fill.fill_sql(mutated_sql)
+    return filled_sql
 
 def fuzz(buf, add_buf, max_size):
 
