@@ -308,7 +308,7 @@ int main(int argc, char *argv[]) {
       }
     }
     
-    if(cnt > 200){
+    if(cnt > 2000){
       cnt=0;
       database->clean_up_env();
       database->prepare_env();
