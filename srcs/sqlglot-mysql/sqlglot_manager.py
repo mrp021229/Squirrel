@@ -8,14 +8,10 @@ import pickle
 
 class ExpressionSetManager:
     def __init__(self):
-        # 双层字典，第一层键为父节点类型，第二层键为节点类型，值为节点集合
         self.parent_to_nodes = {}
 
     def add_node(self, node: 'Expression', parent_node: 'Expression'):
-        """
-        向集合中添加节点。
-        如果对应的父节点类型和节点类型的集合不存在，则创建一个新集合。
-        """
+        
         parent_type = type(parent_node).__name__
         node_type = type(node).__name__
 
@@ -28,9 +24,7 @@ class ExpressionSetManager:
         self.parent_to_nodes[parent_type][node_type].add(node)
 
     def get_random_node(self, parent_node: 'Expression') -> 'Expression':
-        """
-        随机返回与指定父节点类型和节点类型相同的一个节点。
-        """
+        
         parent_type = type(parent_node).__name__
         node_type = type(parent_node).__name__  # 由于未修改方法签名，默认按 parent_node 类型返回同类型节点
 
@@ -43,9 +37,7 @@ class ExpressionSetManager:
             raise ValueError(f"No nodes available for parent type: {parent_type} and node type: {node_type}")
 
     def get_random_node_v2(self, node: 'Expression') -> 'Expression':
-        """
-        随机返回与指定父节点类型和节点类型相同，且 key 相同的一个节点。
-        """
+        
         parent_type = type(node.parent).__name__
         node_type = type(node).__name__
 
@@ -60,9 +52,7 @@ class ExpressionSetManager:
             return None
 
     def save_to_file(self, file_path: str):
-        """
-        将当前的 ExpressionSetManager 内容保存到本地文件。
-        """
+       
         try:
             with open(file_path, 'wb') as f:
                 pickle.dump(self.parent_to_nodes, f)
@@ -71,9 +61,7 @@ class ExpressionSetManager:
             print(f"Failed to save to {file_path}: {e}")
 
     def load_from_file(self, file_path: str):
-        """
-        从本地文件加载内容并初始化 ExpressionSetManager。
-        """
+        
         try:
             with open(file_path, 'rb') as f:
                 self.parent_to_nodes = pickle.load(f)
@@ -86,9 +74,7 @@ class ExpressionSetManager:
             self.parent_to_nodes = {}
 
     def __str__(self):
-        """
-        返回当前存储状态的字符串表示。
-        """
+        
         lines = []
         for parent_type, node_dict in self.parent_to_nodes.items():
             for node_type, nodes in node_dict.items():
