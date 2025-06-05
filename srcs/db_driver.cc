@@ -161,6 +161,23 @@ static void __afl_end_testcase(client::ExecutionStatus status) {
   if (write(FORKSRV_FD + 1, &waitpid_status, 4) != 4) exit(1);
 }
 
+int file_index = 1;
+auto file_start_time = std::chrono::steady_clock::now();
+std::ofstream sql_file;
+std::ofstream log_file;
+
+void open_log_files(int index) {
+  std::string sql_filename = "/home/output/sql_log_" + std::to_string(index) + ".txt";
+  std::string log_filename = "/home/output/fuzz_results_" + std::to_string(index) + ".csv";
+
+  if (sql_file.is_open()) sql_file.close();
+  if (log_file.is_open()) log_file.close();
+
+  sql_file.open(sql_filename, std::ios::app);
+  log_file.open(log_filename, std::ios::app);
+  log_file << "time,Syntax_correct_rate,Semantic_correct_rate,total,syntax,semantic,Timeout,Normal,ServerCrash,ExecuteError,ConnectFailed\n";
+}
+
 int main(int argc, char *argv[]) {
   printf("Start!!!\n");
   const char *config_file_path = getenv(kConfigEnv);
@@ -214,11 +231,11 @@ int main(int argc, char *argv[]) {
     printf("already,live\n");
   }
 
-  std::ofstream sql_file("/home/output/sql_log.txt", std::ios::app);
-  //count correct
-  std::ofstream log_file("/home/output/fuzz_results.csv", std::ios::app); // ×·¼ÓÐ´
-  log_file << "time,Syntax_correct_rate,Semantic_correct_rate,total,syntax,semantic,Timeout,Normal,ServerCrash,ExecuteError,ConnectFailed\n";
-
+  // std::ofstream sql_file("/home/output/sql_log.txt", std::ios::app);
+  // //count correct
+  // std::ofstream log_file("/home/output/fuzz_results.csv", std::ios::app); // ×·¼ÓÐ´
+  // log_file << "time,Syntax_correct_rate,Semantic_correct_rate,total,syntax,semantic,Timeout,Normal,ServerCrash,ExecuteError,ConnectFailed\n";
+  open_log_files(file_index);
   __afl_start_forkserver();
   //count correct
   // kConnectFailed,
@@ -243,7 +260,12 @@ int main(int argc, char *argv[]) {
   int cnt=0;
   database->prepare_env();
   while ((len = __afl_next_testcase(buf, kMaxInputSize)) > 0) {
-    
+    now = std::chrono::steady_clock::now();
+    if (std::chrono::duration_cast<std::chrono::hours>(now - file_start_time).count() >= 1) {
+      file_index++;
+      file_start_time = now;
+      open_log_files(file_index);
+    }
     // Check for dummy tag "0"
   if (len == 1 && buf[0] == '0') {
     __afl_end_testcase(client::kNormal);  // Or another non-crashing status
