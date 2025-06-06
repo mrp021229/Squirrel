@@ -40,15 +40,15 @@ def fuzz_count(buf):
 
 
 def mutation(sql):
-    log_path = "/home/output/fuzz_log.txt"
-    os.makedirs(os.path.dirname(log_path), exist_ok=True)
+    # log_path = "/home/output/fuzz_log.txt"
+    # os.makedirs(os.path.dirname(log_path), exist_ok=True)
     mutated_sql = sqlglot_mutation.get_mutated_sql(sql)
-    with open(log_path, "a", encoding="utf-8") as log_file:
-        log_file.write("[Mutated SQL Before Fill]")
-        try:
-            log_file.write(mutated_sql + "\n")
-        except Exception as e:
-            log_file.write(f"[Error writing mutated SQL: {e}]\n")
+    # with open(log_path, "a", encoding="utf-8") as log_file:
+    #     log_file.write("[Mutated SQL Before Fill]")
+    #     try:
+    #         log_file.write(mutated_sql + "\n")
+    #     except Exception as e:
+    #         log_file.write(f"[Error writing mutated SQL: {e}]\n")
     # print("mutation")
     # print(mutated_sql)
     filled_sql = sqlglot_fill.fill_sql(mutated_sql)
@@ -56,16 +56,16 @@ def mutation(sql):
 
 def fuzz(buf, add_buf, max_size):
 
-    log_path = "/home/output/fuzz_log.txt"
-    os.makedirs(os.path.dirname(log_path), exist_ok=True)
+    # log_path = "/home/output/fuzz_log.txt"
+    # os.makedirs(os.path.dirname(log_path), exist_ok=True)
 
-    #
-    with open(log_path, "a", encoding="utf-8") as log_file:
-        log_file.write("[Original buf]:")
-        try:
-            log_file.write(buf.decode('utf-8') + "\n")
-        except UnicodeDecodeError:
-            log_file.write("[Decode Error:UTF-8]\n")
+    # #
+    # with open(log_path, "a", encoding="utf-8") as log_file:
+    #     log_file.write("[Original buf]:")
+    #     try:
+    #         log_file.write(buf.decode('utf-8') + "\n")
+    #     except UnicodeDecodeError:
+    #         log_file.write("[Decode Error:UTF-8]\n")
 
 
     buf = buf.decode('utf-8')
@@ -105,12 +105,12 @@ def fuzz(buf, add_buf, max_size):
     buf = bytearray(buf)
 
     #
-    with open(log_path, "a", encoding="utf-8") as log_file:
-        log_file.write("[Mutated buf]:")
-        try:
-            log_file.write(buf.decode('utf-8') + "\n")
-        except UnicodeDecodeError:
-            log_file.write("[Decode Error:UTF-8]\n")
+    # with open(log_path, "a", encoding="utf-8") as log_file:
+    #     log_file.write("[Mutated buf]:")
+    #     try:
+    #         log_file.write(buf.decode('utf-8') + "\n")
+    #     except UnicodeDecodeError:
+    #         log_file.write("[Decode Error:UTF-8]\n")
     if len(buf) == 0:
         return bytearray(b'0')
     return buf
