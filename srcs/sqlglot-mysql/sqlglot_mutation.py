@@ -159,7 +159,8 @@ def get_mutated_sql(sql):
     # print(sql)/home/Squirrel/srcs/sqlglot-pgsql/pg
     if manager is None:
         raise RuntimeError("ExpressionSetManager not initialized")
-
+    with open("memtest.txt", "a") as f:
+        f.write(f"sqlglot_mutation mutation module expression_manager id: {id(manager)}\n")
     parsed = sqlglot.parse(sql,dialect='mysql')
     replacer = SQLRandomReplacer()
 

@@ -15,7 +15,8 @@ def init(seed):
     expression_manager.load_from_file("/home/Squirrel/srcs/sqlglot-mysql/mysql_seed.pkl")  # 替换为实际路径
     sqlglot_mutation.set_expression_manager(expression_manager)  # 注入给子模块
     sqlglot_fill.set_expression_manager(expression_manager)
-    
+    with open("/home/memtest.txt", "a") as f:
+        f.write(f"Main module expression_manager id: {id(expression_manager)}\n")
     # try:
     #     with open("/home/database.txt", "w") as f:
     #         f.write("1")
