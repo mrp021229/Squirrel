@@ -487,8 +487,8 @@ def sort_subqueries(subqueries):
 
 
 def fill_sql(sql):
-    with open("memtest.txt", "a") as f:
-        f.write(f"sqlglot_mutation fill module expression_manager id: {id(new_manager)}\n")
+    # with open("memtest.txt", "a") as f:
+    #     f.write(f"sqlglot_mutation fill module expression_manager id: {id(new_manager)}\n")
     sub_space.clear()
     subqueries.clear()
     scoped_node.clear()

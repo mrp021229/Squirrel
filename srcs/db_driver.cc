@@ -164,18 +164,18 @@ static void __afl_end_testcase(client::ExecutionStatus status) {
 int file_index = 1;
 auto file_start_time = std::chrono::steady_clock::now();
 std::ofstream sql_file;
-std::ofstream log_file;
+// std::ofstream log_file;
 
 void open_log_files(int index) {
   std::string sql_filename = "/home/output/sql_log_" + std::to_string(index) + ".txt";
-  std::string log_filename = "/home/output/fuzz_results_" + std::to_string(index) + ".csv";
+  // std::string log_filename = "/home/output/fuzz_results_" + std::to_string(index) + ".csv";
 
   if (sql_file.is_open()) sql_file.close();
-  if (log_file.is_open()) log_file.close();
+  // if (log_file.is_open()) log_file.close();
 
   sql_file.open(sql_filename, std::ios::app);
-  log_file.open(log_filename, std::ios::app);
-  log_file << "time,Syntax_correct_rate,Semantic_correct_rate,total,syntax,semantic,Timeout,Normal,ServerCrash,ExecuteError,ConnectFailed\n";
+  // log_file.open(log_filename, std::ios::app);
+  // log_file << "time,Syntax_correct_rate,Semantic_correct_rate,total,syntax,semantic,Timeout,Normal,ServerCrash,ExecuteError,ConnectFailed\n";
 }
 
 int main(int argc, char *argv[]) {
@@ -305,8 +305,8 @@ int main(int argc, char *argv[]) {
     if(tim-tips>=5.0){
       double SyntaxCorrect = (total-SyntaxError)*1.0/total;
       double SemanticCorrect = (total-SyntaxError-SemanticError)*1.0/total;
-      log_file << tim << "," << SyntaxCorrect << "," << SemanticCorrect << "," << total << "," << SyntaxError << "," << SemanticError  << "," << Timeout  << "," << Normal  << "," << ServerCrash  << "," << ExecuteError  << "," << ConnectFailed  <<"\n";
-      log_file.flush();
+      // log_file << tim << "," << SyntaxCorrect << "," << SemanticCorrect << "," << total << "," << SyntaxError << "," << SemanticError  << "," << Timeout  << "," << Normal  << "," << ServerCrash  << "," << ExecuteError  << "," << ConnectFailed  <<"\n";
+      // log_file.flush();
       total=0;
       SyntaxError=0;
       SemanticError=0;

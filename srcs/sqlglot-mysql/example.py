@@ -2,7 +2,7 @@
 import os
 import subprocess
 import random
-
+import signal
 import sqlglot
 import sqlglot_mutation
 import sqlglot_fill
@@ -15,8 +15,8 @@ def init(seed):
     expression_manager.load_from_file("/home/Squirrel/srcs/sqlglot-mysql/mysql_seed.pkl")  # 替换为实际路径
     sqlglot_mutation.set_expression_manager(expression_manager)  # 注入给子模块
     sqlglot_fill.set_expression_manager(expression_manager)
-    with open("/home/memtest.txt", "a") as f:
-        f.write(f"Main module expression_manager id: {id(expression_manager)}\n")
+    # with open("/home/memtest.txt", "a") as f:
+    #     f.write(f"Main module expression_manager id: {id(expression_manager)}\n")
     # try:
     #     with open("/home/database.txt", "w") as f:
     #         f.write("1")
@@ -55,65 +55,61 @@ def mutation(sql):
     filled_sql = sqlglot_fill.fill_sql(mutated_sql)
     return filled_sql
 
+class TimeoutException(Exception):
+    pass
+
+def timeout_handler(signum, frame):
+    raise TimeoutException("fuzz() execution timed out")
+
 def fuzz(buf, add_buf, max_size):
+    try:
+        signal.alarm(5)  # 
 
-    # log_path = "/home/output/fuzz_log.txt"
-    # os.makedirs(os.path.dirname(log_path), exist_ok=True)
+        try:
+            with open("/home/check.txt", "w") as f:
+                f.write("1")
+        except Exception:
+            pass
 
-    # #
-    # with open(log_path, "a", encoding="utf-8") as log_file:
-    #     log_file.write("[Original buf]:")
-    #     try:
-    #         log_file.write(buf.decode('utf-8') + "\n")
-    #     except UnicodeDecodeError:
-    #         log_file.write("[Decode Error:UTF-8]\n")
+        try:
+            buf = buf.decode('utf-8')
+            sql_statements = buf.split(';')
 
+            mutated_sql_statements = []
 
-    buf = buf.decode('utf-8')
-    sql_statements = buf.split(';')
+            for sql in sql_statements:
+                if sql.strip():
+                    try:
+                        mutated_out = mutation(sql.strip())
+                    except Exception:
+                        mutated_out = None
 
-    mutated_sql_statements = []
+                    if mutated_out is not None:
+                        mutated_sql_statements.append(mutated_out)
 
-    for sql in sql_statements:
-        if sql.strip():
+            mutated_sql = '; '.join(mutated_sql_statements)
+            mutated_sql = mutated_sql.replace('\ufffd', '[INV]')
+            mutated_sql = mutated_sql.encode('utf-8', errors='ignore')
+            buf = bytearray(mutated_sql)
 
-            mutated_out = None
+            if len(buf) == 0:
+                buf = bytearray(b'0')
 
+        finally:
             try:
-                
-                mutated_out = mutation(sql.strip())
-
-            except Exception as e:
-                mutated_out = None
-            else:
+                with open("/home/check.txt", "r+") as f:
+                    f.seek(0)
+                    f.write("2\n")
+                    f.truncate()
+            except Exception:
                 pass
 
-            if mutated_out is not None:
-                mutated_sql_statements.append(mutated_out)
-                # print("SDFSDFsdf")
-                # # 将原始SQL和变异后的SQL写入文件
-                # with open("/home/mutated_sql.txt", "a") as file:
-                #     file.write("sql: " + sql + "\n")
-                #     file.write("new_sql: " + mutated_out + "\n")
+    except TimeoutException:
+        buf = bytearray(b'0')  # 
 
+    finally:
+        signal.alarm(0)  # 
 
-    # print("SD")
-
-    mutated_sql = '; '.join(mutated_sql_statements)
-    mutated_sql = mutated_sql.replace('\ufffd', '[INV]')
-    mutated_sql = mutated_sql.encode('utf-8', errors='ignore')
-    buf = mutated_sql
-    buf = bytearray(buf)
-
-    #
-    # with open(log_path, "a", encoding="utf-8") as log_file:
-    #     log_file.write("[Mutated buf]:")
-    #     try:
-    #         log_file.write(buf.decode('utf-8') + "\n")
-    #     except UnicodeDecodeError:
-    #         log_file.write("[Decode Error:UTF-8]\n")
-    if len(buf) == 0:
-        return bytearray(b'0')
     return buf
 
 if __name__ == "__main__":

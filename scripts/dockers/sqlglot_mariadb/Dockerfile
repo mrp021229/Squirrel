@@ -77,3 +77,4 @@ RUN sudo chown dobigthing:dobigthing /usr/local/mysql/ -R && \
 RUN AFL_DEBUG=1 __AFL_SHM_ID=1234 /usr/local/mysql/bin/mariadbd 2>&1 | tail -n 1 | cut -d"," -f8 | cut -d" " -f 3 > /tmp/mapsize
 WORKDIR /home/Squirrel/scripts/utils
 # ENTRYPOINT AFL_MAP_SIZE=$(cat /tmp/mapsize) python3 run.py mariadb ../../data/fuzz_root/mysql_input/
+# python3 run.py mariadb ../../data/fuzz_root/mariadb_crash/
