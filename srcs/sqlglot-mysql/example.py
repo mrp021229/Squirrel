@@ -54,6 +54,8 @@ def mutation(sql):
     # print(mutated_sql)
     filled_sql = sqlglot_fill.fill_sql(mutated_sql)
     return filled_sql
+    
+
 
 class TimeoutException(Exception):
     pass
@@ -61,9 +63,11 @@ class TimeoutException(Exception):
 def timeout_handler(signum, frame):
     raise TimeoutException("fuzz() execution timed out")
 
+signal.signal(signal.SIGALRM, timeout_handler)
+
 def fuzz(buf, add_buf, max_size):
     try:
-        signal.alarm(5)  # 
+        signal.alarm(15)  # 
 
         try:
             with open("/home/check.txt", "w") as f:
@@ -106,15 +110,29 @@ def fuzz(buf, add_buf, max_size):
 
     except TimeoutException:
         buf = bytearray(b'0')  # 
-
+        with open("/home/timelog.txt","a") as f:
+            f.write("!")
     finally:
         signal.alarm(0)  # 
 
     return buf
 
+
+
+def test(n):
+    buf = 0
+    try:
+        signal.alarm(5)  # 
+        sleep(n)
+
+    except TimeoutException:
+        buf = 1
+    finally:
+        signal.alarm(0)  # 
+
+    return buf
+
+
 if __name__ == "__main__":
-    print("@#@#")
-    sql = "select a from b where c = 3;select c from a;"
-    tmp=strToBytearray(sql)
-    print(repr)
-    print(fuzz(tmp,None,None))
+    for i in range(10):
+        print(test)
