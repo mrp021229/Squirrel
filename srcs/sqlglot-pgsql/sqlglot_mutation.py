@@ -97,7 +97,7 @@ class SQLRandomReplacer:
 
     # based on experience insert&delete followed by the seeds
     def mutation(self, parsed_sql):
-        mutation_num = 20
+        mutation_num = 10
         for node in parsed_sql.walk(bfs=True):
 
 
