@@ -2,9 +2,7 @@
 import os
 import subprocess
 import random
-import sqlglot_pgsql
-import sqlglot
-
+import signal
 import sqlglot
 import sqlglot_mutation
 import sqlglot_fill
@@ -39,65 +37,81 @@ def queue_new_entry(filename_new_queue, filename_orig_queue):
 def fuzz_count(buf):
     return 2
 
-
-def fuzz(buf, add_buf, max_size):
-
+def mutation(sql):
     # log_path = "/home/output/fuzz_log.txt"
     # os.makedirs(os.path.dirname(log_path), exist_ok=True)
-
-    # #
+    mutated_sql = sqlglot_mutation.get_mutated_sql(sql)
     # with open(log_path, "a", encoding="utf-8") as log_file:
-    #     log_file.write("[Original buf]:")
+    #     log_file.write("[Mutated SQL Before Fill]")
     #     try:
-    #         log_file.write(buf.decode('utf-8') + "\n")
-    #     except UnicodeDecodeError:
-    #         log_file.write("[Decode Error:UTF-8]\n")
+    #         log_file.write(mutated_sql + "\n")
+    #     except Exception as e:
+    #         log_file.write(f"[Error writing mutated SQL: {e}]\n")
+    # print("mutation")
+    # print(mutated_sql)
+    filled_sql = sqlglot_fill.fill_sql(mutated_sql)
+    return filled_sql
+
+class TimeoutException(Exception):
+    pass
+
+def timeout_handler(signum, frame):
+    raise TimeoutException("fuzz() execution timed out")
+
+signal.signal(signal.SIGALRM, timeout_handler)
 
 
-    buf = buf.decode('utf-8')
-    sql_statements = buf.split(';')
 
-    mutated_sql_statements = []
+def fuzz(buf, add_buf, max_size):
+    try:
+        signal.alarm(15)  # 
 
-    for sql in sql_statements:
-        if sql.strip():
+        try:
+            with open("/home/check.txt", "w") as f:
+                f.write("1")
+        except Exception:
+            pass
 
-            mutated_out = None
+        try:
+            buf = buf.decode('utf-8')
+            sql_statements = buf.split(';')
 
+            mutated_sql_statements = []
+
+            for sql in sql_statements:
+                if sql.strip():
+                    try:
+                        mutated_out = mutation(sql.strip())
+                    except Exception:
+                        mutated_out = None
+
+                    if mutated_out is not None:
+                        mutated_sql_statements.append(mutated_out)
+
+            mutated_sql = '; '.join(mutated_sql_statements)
+            mutated_sql = mutated_sql.replace('\ufffd', '[INV]')
+            mutated_sql = mutated_sql.encode('utf-8', errors='ignore')
+            buf = bytearray(mutated_sql)
+
+            if len(buf) == 0:
+                buf = bytearray(b'0')
+
+        finally:
             try:
-                mutated_out = sqlglot_pgsql.mutation(sql.strip())
-
-            except Exception as e:
-                mutated_out = None
-            else:
+                with open("/home/check.txt", "r+") as f:
+                    f.seek(0)
+                    f.write("2\n")
+                    f.truncate()
+            except Exception:
                 pass
 
-            if mutated_out is not None:
-                mutated_sql_statements.append(mutated_out)
-                # print("SDFSDFsdf")
-                # # 将原始SQL和变异后的SQL写入文件
-                # with open("/home/mutated_sql.txt", "a") as file:
-                #     file.write("sql: " + sql + "\n")
-                #     file.write("new_sql: " + mutated_out + "\n")
+    except TimeoutException:
+        buf = bytearray(b'0')  # 
+        with open("/home/timelog.txt","a") as f:
+            f.write("!")
+    finally:
+        signal.alarm(0)  # 
 
-
-    # print("SD")
-
-    mutated_sql = '; '.join(mutated_sql_statements)
-    mutated_sql = mutated_sql.replace('\ufffd', '[INV]')
-    mutated_sql = mutated_sql.encode('utf-8', errors='ignore')
-    buf = mutated_sql
-    buf = bytearray(buf)
-
-    # #
-    # with open(log_path, "a", encoding="utf-8") as log_file:
-    #     log_file.write("[Mutated buf]:")
-    #     try:
-    #         log_file.write(buf.decode('utf-8') + "\n")
-    #     except UnicodeDecodeError:
-    #         log_file.write("[Decode Error:UTF-8]\n")
-    if len(buf) == 0:
-        return bytearray(b'0')
     return buf
 
 if __name__ == "__main__":
