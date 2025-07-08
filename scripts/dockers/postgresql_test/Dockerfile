@@ -1,20 +1,20 @@
 FROM ubuntu:22.04
 LABEL maintainer="Squirrel"
 
-# 安装构建工具与依赖
+# 安装构建工具与 ASan 所需最简依赖
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    clang llvm llvm-dev llvm-runtime llvm-tools-14 lldb-14 lld-14 \
-    build-essential cmake git vim sudo python3 python3-pip \
-    libpq-dev libreadline-dev zlib1g-dev flex bison libyaml-cpp-dev \
-    python3-fire pkg-config clang-format && \
+    clang llvm libclang-common-14-dev libllvm14 \
+    build-essential git sudo \
+    libpq-dev libreadline-dev zlib1g-dev flex bison \
+    python3 python3-pip && \
     apt-get clean
 
 # 安装 Python 库
 RUN pip3 install --upgrade pip && \
     pip3 install sqlglot psycopg2-binary chardet
 
-# 创建用户
+# 创建非 root 用户
 RUN mkdir -p /home && \
     groupadd dobigthing && \
     useradd -l -K UMASK=0000 -d /home -g dobigthing dobigthing && \
@@ -29,12 +29,13 @@ USER dobigthing
 WORKDIR /home
 ARG CACHEBUST=1
 
-# 设置 ASan 编译环境变量
+# 设置 ASan 编译环境变量（调试信息可省略）
 ENV CC=clang
 ENV CXX=clang++
-ENV CFLAGS="-fsanitize=address -O1 -fno-omit-frame-pointer -g"
-ENV CXXFLAGS="-fsanitize=address -O1 -fno-omit-frame-pointer -g"
+ENV CFLAGS="-fsanitize=address -O1 -fno-omit-frame-pointer"
+ENV CXXFLAGS="-fsanitize=address -O1 -fno-omit-frame-pointer"
 ENV LDFLAGS="-fsanitize=address"
+ENV ASAN_OPTIONS=abort_on_error=1,detect_leaks=1
 
 # 复制 PostgreSQL 源码并编译
 COPY postgres/ postgres/
@@ -43,7 +44,7 @@ RUN mkdir bld/ && cd bld/ && \
     make -j$(nproc) && \
     sudo make install
 
-# 初始化数据目录
+# 初始化数据库目录
 RUN sudo mkdir -p /usr/local/pgsql/data && \
     sudo chown dobigthing /usr/local/pgsql/data && \
     /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
