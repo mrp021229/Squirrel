@@ -6,7 +6,7 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
     clang llvm libclang-common-14-dev libllvm14 \
     build-essential git sudo \
-    libpq-dev libreadline-dev zlib1g-dev flex bison pkg-config \
+    libpq-dev libreadline-dev zlib1g-dev flex bison pkg-config libicu-dev \
     python3 python3-pip && \
     apt-get clean
 
