@@ -35,10 +35,10 @@ RUN mkdir bld/
 # ±àÒë PostgreSQL£¬¿ªÆô ASan Ö§³Ö
 WORKDIR /home/bld
 RUN ../postgres/configure --enable-debug --enable-cassert \
-    make clean && \
     CC=clang \
     CFLAGS="-fsanitize=address -O1 -fno-omit-frame-pointer" \
     LDFLAGS="-fsanitize=address" && \
+    make clean && \
     make -j$(nproc) && \
     sudo make install
 
