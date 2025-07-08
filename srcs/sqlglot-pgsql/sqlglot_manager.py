@@ -93,13 +93,17 @@ def process_sql_file(file_path: str, manager: ExpressionSetManager):
                 if sql.endswith(";"):
                     sql = sql[:-1]  # 閸樼粯甯�閺堬拷鐏忓墽娈戦崚鍡楀娇
                 if sql:
-                    # 娴ｈ法鏁? sqlglot 鐟欙絾鐎? SQL 鐠囷拷閸欙拷
-                    tree = sqlglot.parse_one(sql,read='postgres')
-                    # 闁?宥呭坊鐠囷拷濞夋洘鐖叉稉锟介惃鍕?濡?閻愶拷
-                    for node in tree.walk():
-                        # 濞ｈ?插?為棃鐐寸壌閼哄倻鍋?
-                        # if node != tree:
-                        manager.add_node(node, node.parent)
+                    # 使用 sqlglot 解析 SQL 语句
+                    try:
+                        # 使用 sqlglot 解析 SQL 语句
+                        tree = sqlglot.parse_one(sql, read='postgres')
+                        # 遍历语法树中的节点
+                        for node in tree.walk():
+                            # 添加非根节点
+                            # if node != tree:
+                            manager.add_node(node, node.parent)
+                    except Exception as e:
+                        pass
         # print("Finished processing SQL file.")
     except Exception as e:
         pass

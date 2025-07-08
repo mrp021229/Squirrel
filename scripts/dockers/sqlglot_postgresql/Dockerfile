@@ -44,8 +44,8 @@ RUN git clone https://github.com/mrp021229/Squirrel.git && \
     cmake --build build -j && \
     cd AFLplusplus/ && LLVM_CONFIG=llvm-config-14 make -j20
 
-RUN git clone https://github.com/postgres/postgres.git postgres/ && \
-    mkdir bld/ && cd bld/ && \
+COPY postgres/ postgres/
+RUN mkdir bld/ && cd bld/ && \
     CC=/home/Squirrel/AFLplusplus/afl-cc CXX=/home/Squirrel/AFLplusplus/afl-c++ \
     ../postgres/configure
 
