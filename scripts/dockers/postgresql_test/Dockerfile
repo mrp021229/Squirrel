@@ -29,18 +29,12 @@ USER dobigthing
 WORKDIR /home
 ARG CACHEBUST=1
 
-# 设置 ASan 编译环境变量（调试信息可省略）
-ENV CC=clang
-ENV CXX=clang++
-ENV CFLAGS="-fsanitize=address -O1 -fno-omit-frame-pointer"
-ENV CXXFLAGS="-fsanitize=address -O1 -fno-omit-frame-pointer"
-ENV LDFLAGS="-fsanitize=address"
-ENV ASAN_OPTIONS=abort_on_error=1,detect_leaks=1
-
-# 复制 PostgreSQL 源码并编译
-COPY postgres/ postgres/
-RUN mkdir bld/ && cd bld/ && \
-    ../postgres/configure --enable-debug --enable-cassert && \
+# 编译 PostgreSQL，开启 ASan 支持
+WORKDIR /home/bld
+RUN ../postgres/configure --enable-debug --enable-cassert \
+    CC=clang \
+    CFLAGS="-fsanitize=address -O1 -fno-omit-frame-pointer" \
+    LDFLAGS="-fsanitize=address" && \
     make -j$(nproc) && \
     sudo make install
 
