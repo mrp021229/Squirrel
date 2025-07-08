@@ -29,6 +29,9 @@ USER dobigthing
 WORKDIR /home
 ARG CACHEBUST=1
 
+# 复制 PostgreSQL 源码
+COPY postgres/ postgres/
+RUN mkdir bld/
 # 编译 PostgreSQL，开启 ASan 支持
 WORKDIR /home/bld
 RUN ../postgres/configure --enable-debug --enable-cassert \
