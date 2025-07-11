@@ -87,7 +87,7 @@ class ExpressionSetManager:
 # 璇�?�彇鏂囦欢骞惰В鏋�? SQL 璇�鍙�
 def process_sql_file(file_path: str, manager: ExpressionSetManager):
     try:
-        with open(file_path, 'r',encoding='utf-8') as file:
+        with open(file_path, 'r',encoding='utf-8',errors='ignore') as file:
             for line in file:
                 sql = line.strip()  # 鍘绘帀涓ょ��鐨勭┖鏍煎拰鎹㈣�岀��
                 if sql.endswith(";"):

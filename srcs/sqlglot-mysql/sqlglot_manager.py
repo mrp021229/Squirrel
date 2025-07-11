@@ -86,7 +86,7 @@ class ExpressionSetManager:
 # 读取文件并解析 SQL 语句
 def process_sql_file(file_path: str, manager: ExpressionSetManager):
     try:
-        with open(file_path, 'r',encoding='utf-8') as file:
+        with open(file_path, 'r',encoding='utf-8', errors='ignore') as file:
             for line in file:
                 sql = line.strip()  # 去掉两端的空格和换行符
                 if sql.endswith(";"):
