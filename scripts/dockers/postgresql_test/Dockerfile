@@ -31,18 +31,18 @@ ARG CACHEBUST=1
 
 # 复制 PostgreSQL 源码
 COPY postgres/ postgres/
-RUN mkdir bld/
-# 编译 PostgreSQL，开启 ASan 支持
-WORKDIR /home/bld
-RUN ../postgres/configure --enable-debug --enable-cassert \
-    CC=clang \
-    CFLAGS="-fsanitize=address -O1 -fno-omit-frame-pointer" \
-    LDFLAGS="-fsanitize=address" && \
-    make clean && \
-    make -j$(nproc) && \
-    sudo make install
+# RUN mkdir bld/
+# # 编译 PostgreSQL，开启 ASan 支持
+# WORKDIR /home/bld
+# RUN ../postgres/configure --enable-debug --enable-cassert \
+#     CC=clang \
+#     CFLAGS="-fsanitize=address -O1 -fno-omit-frame-pointer" \
+#     LDFLAGS="-fsanitize=address" && \
+#     make clean && \
+#     make -j$(nproc) && \
+#     sudo make install
 
-# 初始化数据库目录
-RUN sudo mkdir -p /usr/local/pgsql/data && \
-    sudo chown dobigthing /usr/local/pgsql/data && \
-    /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
+# # 初始化数据库目录
+# RUN sudo mkdir -p /usr/local/pgsql/data && \
+#     sudo chown dobigthing /usr/local/pgsql/data && \
+#     /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
