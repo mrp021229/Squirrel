@@ -60,9 +60,11 @@ ENV LD_LIBRARY_PATH="/usr/local/openssl-1.1.1/lib:$LD_LIBRARY_PATH"
 USER dobigthing
 WORKDIR /home
 
-# COPY ./mysql /home/mysql
-RUN git clone --branch release-8.0.27-18 --single-branch https://github.com/percona/percona-server.git mysql && \
-    cd mysql && git submodule update --init --recursive
+COPY ./mysql /home/mysql
+RUN sudo chmod -R 777 mysql
+RUN sudo chown -R dobigthing mysql
+# RUN git clone --branch release-8.0.27-18 --single-branch https://github.com/percona/percona-server.git mysql && \
+#     cd mysql && git submodule update --init --recursive
 
 # ∞≤◊∞“¿¿µ + œ¬‘ÿ Boost
 COPY boost_1_73_0.tar.gz /home/
@@ -74,9 +76,11 @@ RUN sudo apt-get -y install apt-transport-https curl software-properties-common 
 
 
 ARG CACHEBUST=1
-RUN git clone https://github.com/mrp021229/Squirrel.git && \
-    cd Squirrel && git submodule update --init && \
-    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -Wno-dev -DMYSQL=ON && \
+COPY Squirrel/ Squirrel/
+RUN sudo chmod -R 777 Squirrel
+RUN sudo chown -R dobigthing Squirrel
+RUN cd Squirrel && \
+    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && \
     cmake --build build -j && \
     cd AFLplusplus/ && LLVM_CONFIG=llvm-config-14 make -j20
     

@@ -10,3 +10,4 @@ db_name: postgres
 host: localhost
 port: 5432
 startup_cmd: "/usr/local/pgsql/bin/postgres -D /usr/local/pgsql/data &"
+# env LD_PRELOAD=/usr/local/pgsql/lib/dict_snowball.so
