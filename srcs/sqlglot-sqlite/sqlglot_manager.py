@@ -23,6 +23,20 @@ class ExpressionSetManager:
 
         self.parent_to_nodes[parent_type][node_type].add(node)
 
+    def get_new_sql(self, node: 'Expression') -> 'Expression':
+        parent_type = type(node.parent).__name__
+        if parent_type in self.parent_to_nodes:
+            node_types = list(self.parent_to_nodes[parent_type].keys())
+            random_node_type = random.choice(node_types)
+
+            # 从随机的节点类型集合中选择一个节点
+            node_set = self.parent_to_nodes[parent_type][random_node_type]
+            random_node = random.choice(list(node_set))
+
+            return random_node
+        else:
+            return None
+
     def get_random_node(self, parent_node: 'Expression') -> 'Expression':
         
         parent_type = type(parent_node).__name__

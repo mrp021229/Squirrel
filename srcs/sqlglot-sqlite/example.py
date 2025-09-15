@@ -58,13 +58,6 @@ signal.signal(signal.SIGALRM, timeout_handler)
 def fuzz(buf, add_buf, max_size):
     try:
         signal.alarm(15)  # 
-
-        try:
-            with open("/home/check.txt", "w") as f:
-                f.write("1")
-        except Exception:
-            pass
-
         try:
             buf = buf.decode('utf-8')
             sql_statements = buf.split(';')
@@ -73,13 +66,40 @@ def fuzz(buf, add_buf, max_size):
 
             for sql in sql_statements:
                 if sql.strip():
-                    try:
-                        mutated_out = mutation(sql.strip())
-                    except Exception:
-                        mutated_out = None
+                    mutated_out = None
+                    new_sql = None
+                    try :
 
-                    if mutated_out is not None:
-                        mutated_sql_statements.append(mutated_out)
+                        new_sql = sqlglot.parse_one(sql)
+                        new_sql = expression_manager.get_new_sql(new_sql)
+                        new_sql = new_sql.sql()
+                    except Exception:
+                        new_sql = None
+                    if random.random()>0.2:
+                        try:
+                            mutated_out = mutation(sql.strip())
+                        except Exception:
+                            mutated_out = None
+
+                        if mutated_out is not None:
+                            mutated_sql_statements.append(mutated_out)
+                        else:
+                            if new_sql is not None:
+                                try:
+                                    mutated_out = mutation(new_sql)
+                                except Exception:
+                                    mutated_out = None
+                                if mutated_out is not None:
+                                    mutated_sql_statements.append(mutated_out)
+                    else:
+                        if new_sql is not None:
+                            try:
+                                mutated_out = mutation(new_sql)
+                            except Exception:
+                                mutated_out = None
+                            if mutated_out is not None:
+                                mutated_sql_statements.append(mutated_out)
+                        
 
             mutated_sql = '; '.join(mutated_sql_statements)
             mutated_sql = mutated_sql.replace('\ufffd', '[INV]')
