@@ -2,3 +2,5 @@ build
 output
 .cache
 Testing
+/Squirrel/scripts/dockers/sqlglot_sqlite/Squirrel/
+/Squirrel/scripts/dockers/sqlglot_sqlite/sqlite3/
