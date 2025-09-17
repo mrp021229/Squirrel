@@ -100,21 +100,49 @@ static void reset_db(sqlite3 **pdb) {
 
 
 
-int file_index = 1;
-auto file_start_time = std::chrono::steady_clock::now();
+// int file_index = 1;
+// auto file_start_time = std::chrono::steady_clock::now();
 std::ofstream sql_file;
 // std::ofstream log_file;
 
-void open_log_files(int index) {
+void open_log_files_from_local_index() {
+  const std::string index_path = "/home/Squirrel/srcs/sqlglot-sqlite/index.txt";
+  int index = 0;
+
+  // Step 1: 读取当前 index
+  {
+    std::ifstream index_file(index_path);
+    if (index_file.is_open()) {
+      index_file >> index;
+      index_file.close();
+    } else {
+      std::cerr << "无法打开 index 文件，使用默认值 0" << std::endl;
+    }
+  }
+
+  // Step 2: 拼接日志文件名
   std::string sql_filename = "/home/output/sql_log_" + std::to_string(index) + ".txt";
-  // std::string log_filename = "/home/output/fuzz_results_" + std::to_string(index) + ".csv";
 
+  // Step 3: 关闭之前的文件句柄（如果开启）
   if (sql_file.is_open()) sql_file.close();
-  // if (log_file.is_open()) log_file.close();
 
+  // Step 4: 打开新的 SQL 日志文件（以追加模式）
   sql_file.open(sql_filename, std::ios::app);
-  // log_file.open(log_filename, std::ios::app);
-  // log_file << "time,Syntax_correct_rate,Semantic_correct_rate,total,syntax,semantic,Timeout,Normal,ServerCrash,ExecuteError,ConnectFailed\n";
+
+  if (!sql_file.is_open()) {
+    std::cerr << "无法打开 SQL 日志文件: " << sql_filename << std::endl;
+  }
+
+  // Step 5: 更新 index.txt 文件内容（index + 1）
+  {
+    std::ofstream index_file(index_path, std::ios::trunc);
+    if (index_file.is_open()) {
+      index_file << (index + 1);
+      index_file.close();
+    } else {
+      std::cerr << "无法写入 index 文件" << std::endl;
+    }
+  }
 }
 
 int main(void) {
@@ -133,20 +161,20 @@ int main(void) {
   static unsigned char buf[MAX_IN + 1];
   unsigned long long iters = 0;
   // —— 持久化主循环：同一进程内最多处理 2000 个输入 ——
-  open_log_files(file_index);
+  open_log_files_from_local_index();
 
-  auto start_time = std::chrono::steady_clock::now();
-  auto now = std::chrono::steady_clock::now();
-  auto tips = std::chrono::duration_cast<std::chrono::seconds>(now - start_time).count();
+  // auto start_time = std::chrono::steady_clock::now();
+  // auto now = std::chrono::steady_clock::now();
+  // auto tips = std::chrono::duration_cast<std::chrono::seconds>(now - start_time).count();
 
-  while (__AFL_LOOP(0x7fffffff)) {
+  while (__AFL_LOOP(100000)) {
     iters++;
-    now = std::chrono::steady_clock::now();
-    if (std::chrono::duration_cast<std::chrono::hours>(now - file_start_time).count() >= 1) {
-      file_index++;
-      file_start_time = now;
-      open_log_files(file_index);
-    }
+    // now = std::chrono::steady_clock::now();
+    // if (std::chrono::duration_cast<std::chrono::hours>(now - file_start_time).count() >= 1) {
+    //   file_index++;
+    //   file_start_time = now;
+    //   open_log_files(file_index);
+    // }
 
 
     // 从 stdin 读取本轮样本（AFL 会把用例写到 stdin 并关闭写端）
@@ -180,8 +208,8 @@ int main(void) {
     }
 
     //count correct
-    auto now = std::chrono::steady_clock::now();
-    auto tim = std::chrono::duration_cast<std::chrono::seconds>(now - start_time).count();
+    // auto now = std::chrono::steady_clock::now();
+    // auto tim = std::chrono::duration_cast<std::chrono::seconds>(now - start_time).count();
 
 
     if(iters==2000){
@@ -203,6 +231,8 @@ int main(void) {
 
   // 会话结束（2000轮后）：收尾并退出；AFL 会 fork 新进程开始下一会话
   sqlite3_close(db);
+  std::ofstream ofs("/home/table_column_list.txt", std::ofstream::out | std::ofstream::trunc);
+      ofs.close();
   return 0;
 }
 // /home/Squirrel/AFLplusplus/afl-fuzz -i /home/Squirrel/data/fuzz_root/input/ -o /home/output ./sqlite_fuzz

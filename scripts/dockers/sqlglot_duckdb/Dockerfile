@@ -6,9 +6,13 @@ ENV DEBIAN_FRONTEND noninteractive
 # common config
 #tcl8.6 tcl8.6-tdbc-sqlite3
 RUN apt-get update && \
-    apt-get -y install make cmake build-essential vim sudo git \
-    clang ninja-build pkg-config clang-format \
-    libpq-dev libyaml-cpp-dev lld llvm python3-fire
+    apt-get -y install \
+      make cmake ninja-build build-essential pkg-config \
+      clang lld llvm clang-format \
+      git curl ca-certificates vim sudo \
+      python3 python3-pip python3-venv \
+      libreadline-dev libssl-dev && \
+    apt-get clean
 
 # 更新 apt 并安装 Python3 和 pip
 RUN apt-get update && \
@@ -48,11 +52,10 @@ RUN cd Squirrel && \
     cmake --build build -j && \
     cd AFLplusplus/ && LLVM_CONFIG=llvm-config-14 make -j20
 
-ARG CFLAGS="-DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384"
 
-COPY sqlite3/ sqlite3/
-RUN sudo chmod -R 777 sqlite3
-RUN sudo chown -R dobigthing sqlite3
+COPY duckdb/ duckdb/
+RUN sudo chmod -R 777 duckdb
+RUN sudo chown -R dobigthing duckdb
 # RUN git clone https://github.com/sqlite/sqlite sqlite3/ && cd sqlite3 && mkdir bld
 
 # WORKDIR /home/sqlite3/bld
