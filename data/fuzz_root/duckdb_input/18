@@ -1,0 +1,1 @@
+insert into v5(v3, v4) values(10, 'duck');
