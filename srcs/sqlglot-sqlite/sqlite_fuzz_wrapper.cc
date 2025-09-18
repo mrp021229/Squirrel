@@ -167,8 +167,8 @@ int main(void) {
   // auto now = std::chrono::steady_clock::now();
   // auto tips = std::chrono::duration_cast<std::chrono::seconds>(now - start_time).count();
 
-  while (__AFL_LOOP(100000)) {
-    iters++;
+  while (__AFL_LOOP(100000000)) {
+    
     // now = std::chrono::steady_clock::now();
     // if (std::chrono::duration_cast<std::chrono::hours>(now - file_start_time).count() >= 1) {
     //   file_index++;
@@ -188,7 +188,7 @@ int main(void) {
       continue;
     }
     buf[len] = '\0';  // 作为 SQL 文本使用时补 NUL
-
+    iters++;
     // 执行 SQL；出现错误只释放错误消息，不退出
     char *err_msg = NULL;
     int rc = sqlite3_exec(db, (char *)buf, NULL, NULL, &err_msg);

@@ -44,18 +44,18 @@ RUN chmod +w /etc/sudoers && \
 USER dobigthing
 WORKDIR /home
 
-COPY Squirrel/ Squirrel/
-RUN sudo chmod -R 777 Squirrel
-RUN sudo chown -R dobigthing Squirrel
-RUN cd Squirrel && \
-    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DSQLITE=ON && \
-    cmake --build build -j && \
-    cd AFLplusplus/ && LLVM_CONFIG=llvm-config-14 make -j20
+# COPY Squirrel/ Squirrel/
+# RUN sudo chmod -R 777 Squirrel
+# RUN sudo chown -R dobigthing Squirrel
+# RUN cd Squirrel && \
+#     cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DSQLITE=ON && \
+#     cmake --build build -j && \
+#     cd AFLplusplus/ && LLVM_CONFIG=llvm-config-14 make -j20
 
 
-COPY duckdb/ duckdb/
-RUN sudo chmod -R 777 duckdb
-RUN sudo chown -R dobigthing duckdb
+# COPY duckdb/ duckdb/
+# RUN sudo chmod -R 777 duckdb
+# RUN sudo chown -R dobigthing duckdb
 # RUN git clone https://github.com/sqlite/sqlite sqlite3/ && cd sqlite3 && mkdir bld
 
 # WORKDIR /home/sqlite3/bld
