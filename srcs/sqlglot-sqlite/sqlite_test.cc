@@ -1,4 +1,3 @@
-// test_sqlite_schema_dump.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

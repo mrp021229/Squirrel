@@ -12,7 +12,7 @@ expression_manager = None
 def init(seed):
     global expression_manager
     expression_manager = ExpressionSetManager()
-    expression_manager.load_from_file("/home/Squirrel/srcs/sqlglot-sqlite/sqlite_seed.pkl")  # 替换为实际路径
+    expression_manager.load_from_file("/home/Squirrel/srcs/sqlglot-duckdb/duckdb_seed.pkl")  # 替换为实际路径
     sqlglot_mutation.set_expression_manager(expression_manager)  # 注入给子模块
     sqlglot_fill.set_expression_manager(expression_manager)
     # with open("/home/memtest.txt", "a") as f:
@@ -70,7 +70,7 @@ def fuzz(buf, add_buf, max_size):
                     new_sql = None
                     try :
 
-                        new_sql = sqlglot.parse_one(sql,dialect='sqlite')
+                        new_sql = sqlglot.parse_one(sql,dialect='duckdb')
                         new_sql = expression_manager.get_new_sql(new_sql)
                         new_sql = new_sql.sql()
                     except Exception:
