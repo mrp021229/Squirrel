@@ -12,7 +12,7 @@ TARGETS  = duckdb_test duckdb_fuzz
 
 # 源码文件
 SRC_TEST = duckdb_test.cc
-SRC_FUZZ = persistent_duckdb_wrapper.cc
+SRC_FUZZ = duckdb_fuzz_wrapper.cc
 
 .PHONY: all clean
 

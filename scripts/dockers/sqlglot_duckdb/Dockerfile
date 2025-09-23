@@ -10,7 +10,7 @@ RUN apt-get update && \
       make cmake ninja-build build-essential pkg-config \
       clang lld llvm clang-format \
       git curl ca-certificates vim sudo \
-      python3 python3-pip python3-venv \
+      python3 python3-pip python3-venv python3-fire\
       libreadline-dev libssl-dev && \
     apt-get clean
 

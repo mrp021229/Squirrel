@@ -68,29 +68,21 @@ def fuzz(buf, add_buf, max_size):
                 if sql.strip():
                     mutated_out = None
                     new_sql = None
-                    try :
+                    # try :
 
-                        new_sql = sqlglot.parse_one(sql,dialect='sqlite')
-                        new_sql = expression_manager.get_new_sql(new_sql)
-                        new_sql = new_sql.sql()
+                    #     new_sql = sqlglot.parse_one(sql,dialect='sqlite')
+                    #     new_sql = expression_manager.get_new_sql(new_sql)
+                    #     new_sql = new_sql.sql()
+                    # except Exception:
+                    #     new_sql = None
+                    # if random.random()>0.2:
+                    try:
+                        mutated_out = mutation(sql.strip())
                     except Exception:
-                        new_sql = None
-                    if random.random()>0.2:
-                        try:
-                            mutated_out = mutation(sql.strip())
-                        except Exception:
-                            mutated_out = None
+                        mutated_out = None
 
-                        if mutated_out is not None:
-                            mutated_sql_statements.append(mutated_out)
-                        else:
-                            if new_sql is not None:
-                                try:
-                                    mutated_out = mutation(new_sql)
-                                except Exception:
-                                    mutated_out = None
-                                if mutated_out is not None:
-                                    mutated_sql_statements.append(mutated_out)
+                    if mutated_out is not None:
+                        mutated_sql_statements.append(mutated_out)
                     else:
                         if new_sql is not None:
                             try:
@@ -99,6 +91,14 @@ def fuzz(buf, add_buf, max_size):
                                 mutated_out = None
                             if mutated_out is not None:
                                 mutated_sql_statements.append(mutated_out)
+                    # else:
+                    #     if new_sql is not None:
+                    #         try:
+                    #             mutated_out = mutation(new_sql)
+                    #         except Exception:
+                    #             mutated_out = None
+                    #         if mutated_out is not None:
+                    #             mutated_sql_statements.append(mutated_out)
                         
 
             mutated_sql = '; '.join(mutated_sql_statements)

@@ -167,7 +167,7 @@ int main(void) {
   // auto now = std::chrono::steady_clock::now();
   // auto tips = std::chrono::duration_cast<std::chrono::seconds>(now - start_time).count();
 
-  while (__AFL_LOOP(100000000)) {
+  while (__AFL_LOOP(100000)) {
     
     // now = std::chrono::steady_clock::now();
     // if (std::chrono::duration_cast<std::chrono::hours>(now - file_start_time).count() >= 1) {

@@ -66,7 +66,7 @@ def run(database, input_dir, output_dir=None, config_file=None, fuzzer=None):
 
   output_id = str(uuid.uuid4())[:10]
   if database == "sqlite":
-    cmd = f"{fuzzer} -i {input_dir} -o {output_dir} -M {output_id} -V 450000 ./sqlite_fuzz"
+    cmd = f"{fuzzer} -i {input_dir} -o {output_dir} -M {output_id} -t 60000 -V 450000 ./sqlite_fuzz"
   
 
   os.system(cmd)
