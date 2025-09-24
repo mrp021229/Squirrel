@@ -4,8 +4,8 @@ LABEL maintainer="Squirrel"
 ENV DEBIAN_FRONTEND noninteractive
 
 # common config
-RUN apt-get update
-RUN apt-get -y install make cmake build-essential vim sudo git tcl8.6 tcl8.6-tdbc-sqlite3\
+RUN apt-get update && \
+    apt-get -y install make cmake build-essential vim sudo git tcl8.6 tcl8.6-tdbc-sqlite3\
     clang ninja-build pkg-config clang-format \
     libpq-dev libyaml-cpp-dev lld llvm python3-fire
 
@@ -30,7 +30,7 @@ RUN git clone https://github.com/s3team/Squirrel.git && \
 
 ARG CFLAGS="-DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384"
 
-RUN git clone https://github.com/sqlite/sqlite sqlite3/ && cd sqlite3 && mkdir bld
+RUN git clone https://github.com/sqlite/sqlite.git sqlite3/ && cd sqlite3 && mkdir bld
 
 WORKDIR /home/sqlite3/bld
 
@@ -48,4 +48,4 @@ RUN $CXX $CXXFLAGS \
    ./sqlite3.o -ldl -pthread
 
 WORKDIR /home/Squirrel/scripts/utils
-ENTRYPOINT python3 run.py sqlite ../../data/fuzz_root/input
+# ENTRYPOINT python3 run.py sqlite ../../data/fuzz_root/input

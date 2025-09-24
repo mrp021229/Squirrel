@@ -48,8 +48,8 @@ ENV LD_LIBRARY_PATH="/usr/local/openssl-1.1.1/lib:$LD_LIBRARY_PATH"
 USER dobigthing
 WORKDIR /home
 
-COPY ./mysql /home/mysql
-# RUN git clone --branch mysql-8.0.27 --depth 1 https://github.com/mysql/mysql-server.git mysql
+# COPY ./mysql /home/mysql
+RUN git clone --branch mysql-8.0.27 --depth 1 https://github.com/mysql/mysql-server.git mysql
 
 # ∞≤◊∞“¿¿µ + œ¬‘ÿ Boost
 COPY boost_1_73_0.tar.gz /home/
