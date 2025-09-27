@@ -505,6 +505,9 @@ def fill_sql(sql):
     for subquery in sorted_subqueries:
         fill_sql_template(subquery['query'])
     fill_sql_template(parsed[0])
+    sub_space.clear()
+    subqueries.clear()
+    scoped_node.clear()
     return parsed[0].sql(dialect='mysql')
 
 
