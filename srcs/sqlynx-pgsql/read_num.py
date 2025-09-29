@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def read_integer_from_file(filename="/home/Squirrel/srcs/sqlglot-pgsql/num.txt"):
+def read_integer_from_file(filename="/home/Squirrel/srcs/sqlynx-pgsql/num.txt"):
     try:
         with open(filename, "r") as file:
             return int(file.read().strip())  # 璇�?�彇鏁存暟骞跺幓鎺�?�袱绔�绌虹櫧瀛�?���?
@@ -12,7 +12,7 @@ def read_integer_from_file(filename="/home/Squirrel/srcs/sqlglot-pgsql/num.txt")
         # print(f"{filename} 鏂囦欢鍐�?�逛笉鏄�鏈�?�晥鐨勬暣鏁�?�?�?")
         return None
 
-def write_integer_to_file(integer, filename="/home/Squirrel/srcs/sqlglot-pgsql/num.txt"):
+def write_integer_to_file(integer, filename="/home/Squirrel/srcs/sqlynx-pgsql/num.txt"):
     try:
         with open(filename, "w") as file:
             file.write(str(integer))  # 灏嗘暣鏁拌浆涓哄瓧绗︿�?�骞跺啓鍏ユ枃浠�?

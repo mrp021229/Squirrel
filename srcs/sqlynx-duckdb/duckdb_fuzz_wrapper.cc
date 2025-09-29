@@ -68,7 +68,7 @@ int dump_schema_to_file(Connection &conn, const std::string &path) {
 // ------------------------------------------------------------
 // 打开日志文件并递增 index
 void open_log_files_from_local_index() {
-  const std::string index_path = "/home/Squirrel/srcs/sqlglot-duckdb/index.txt";
+  const std::string index_path = "/home/Squirrel/srcs/sqlynx-duckdb/index.txt";
   int index = 0;
 
   {

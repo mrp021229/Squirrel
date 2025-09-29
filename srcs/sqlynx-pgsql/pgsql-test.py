@@ -63,7 +63,7 @@ if __name__ == "__main__":
     connection = create_connection()
 
     if connection:
-        success_sql, fail_sql = execute_sql_from_file(connection, "E:\your PhD\姣曡�綷sqlglot\sqlglot-pgsql\\filledSQL.txt")
+        success_sql, fail_sql = execute_sql_from_file(connection, "E:\your PhD\姣曡�綷sqlglot\sqlynx-pgsql\\filledSQL.txt")
         connection.close()
 
         print("\nSUCCESS SQL:")

@@ -40,7 +40,7 @@ def getSumFuc():
     sql = """
             select a,sum(b) from a;
             """
-    file_path = "/home/Squirrel/srcs/sqlglot-sqlite/sqlite_seed.pkl"
+    file_path = "/home/Squirrel/srcs/sqlynx-sqlite/sqlite_seed.pkl"
 
 
     # ?
@@ -521,7 +521,7 @@ def fill_sql(sql):
 # print(filled_sql)
 
 def get_sql():
-    with open('/home/Squirrel/srcs/sqlglot-sqlite/mutation-sqlite.txt', 'r', encoding='utf-8') as file:
+    with open('/home/Squirrel/srcs/sqlynx-sqlite/mutation-sqlite.txt', 'r', encoding='utf-8') as file:
         # 
         content = file.read()
 
@@ -537,7 +537,7 @@ def get_sql():
 
 def write(sql):
     # 
-    output_file = "/home/Squirrel/srcs/sqlglot-sqlite/filledSQL.txt"
+    output_file = "/home/Squirrel/srcs/sqlynx-sqlite/filledSQL.txt"
     with open(output_file, "a", encoding="utf-8") as f:
         f.write(sql + ";\n")
 

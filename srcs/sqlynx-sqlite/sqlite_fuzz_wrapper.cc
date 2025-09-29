@@ -106,7 +106,7 @@ std::ofstream sql_file;
 // std::ofstream log_file;
 
 void open_log_files_from_local_index() {
-  const std::string index_path = "/home/Squirrel/srcs/sqlglot-sqlite/index.txt";
+  const std::string index_path = "/home/Squirrel/srcs/sqlynx-sqlite/index.txt";
   int index = 0;
 
   // Step 1: 读取当前 index

@@ -40,7 +40,7 @@ def getSumFuc():
     sql = """
             select a,sum(b) from a;
             """
-    file_path = "/home/Squirrel/srcs/sqlglot-mysql/mysql_seed.pkl"
+    file_path = "/home/Squirrel/srcs/sqlynx-duckdb/duckdb_seed.pkl"
 
 
     # ?
@@ -508,7 +508,7 @@ def fill_sql(sql):
     sub_space.clear()
     subqueries.clear()
     scoped_node.clear()
-    return parsed[0].sql(dialect='mysql')
+    return parsed[0].sql(dialect='duckdb')
 
 
 # # 
@@ -521,7 +521,7 @@ def fill_sql(sql):
 # print(filled_sql)
 
 def get_sql():
-    with open('/home/Squirrel/srcs/sqlglot-mysql/mutation-mysql.txt', 'r', encoding='utf-8') as file:
+    with open('/home/Squirrel/srcs/sqlynx-duckdb/mutation-duckdb.txt', 'r', encoding='utf-8') as file:
         # 
         content = file.read()
 
@@ -537,7 +537,7 @@ def get_sql():
 
 def write(sql):
     # 
-    output_file = "/home/Squirrel/srcs/sqlglot-mysql/filledSQL.txt"
+    output_file = "/home/Squirrel/srcs/sqlynx-duckdb/filledSQL.txt"
     with open(output_file, "a", encoding="utf-8") as f:
         f.write(sql + ";\n")
 

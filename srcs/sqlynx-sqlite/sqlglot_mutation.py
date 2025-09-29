@@ -28,7 +28,7 @@ def process_sql_file(file_path: str, manager: ExpressionSetManager):
                 if sql.endswith(";"):
                     sql = sql[:-1]  # 
                 if sql:
-                    tree = sqlglot.parse_one(sql,read='duckdb')
+                    tree = sqlglot.parse_one(sql,read='sqlite')
                     for node in tree.walk():
                         if node != tree:
                             manager.add_node(node, node.parent)
@@ -142,10 +142,10 @@ class SQLRandomReplacer:
                     mutation_num = mutation_num - 1
 
             try:
-                # print(parsed_sql.sql(dialect='duckdb'))
-                current_sql = str(parsed_sql.sql(dialect='duckdb'))+';'
+                # print(parsed_sql.sql(dialect='sqlite'))
+                current_sql = str(parsed_sql.sql(dialect='sqlite'))+';'
                 # print(current_sql)
-                check_sql = sqlglot.parse(current_sql,read='duckdb')
+                check_sql = sqlglot.parse(current_sql,read='sqlite')
             except Exception as e:
                 return None
             else:
@@ -161,7 +161,7 @@ def get_mutated_sql(sql):
         raise RuntimeError("ExpressionSetManager not initialized")
     # with open("memtest.txt", "a") as f:
     #     f.write(f"sqlglot_mutation mutation module expression_manager id: {id(manager)}\n")
-    parsed = sqlglot.parse(sql,dialect='duckdb')
+    parsed = sqlglot.parse(sql,dialect='sqlite')
     replacer = SQLRandomReplacer()
 
     new_sql = copy.deepcopy(random.choice(parsed))
@@ -169,17 +169,17 @@ def get_mutated_sql(sql):
 
     try:
         if transformed_sql is not None:
-            check_sql = sqlglot.parse_one(transformed_sql.sql(dialect='duckdb'),read='duckdb')
+            check_sql = sqlglot.parse_one(transformed_sql.sql(dialect='sqlite'),read='sqlite')
     except Exception as e:
         # print("failed")
         return None
     else:
         # print("success")
-        return transformed_sql.sql(dialect='duckdb')
+        return transformed_sql.sql(dialect='sqlite')
 
 if __name__ == "__main__":
     start_time = time.time()
-    file_path = "/home/Squirrel/srcs/sqlglot-duckdb/duckdb_seed.pkl"
+    file_path = "/home/Squirrel/srcs/sqlynx-sqlite/sqlite_seed.pkl"
 
     manager.load_from_file(file_path)
 #from squirrel-pgsql
@@ -195,12 +195,12 @@ if __name__ == "__main__":
     
     update v0 set v1 = 1 where v1=20;
     """
-    parsed = sqlglot.parse(sql,dialect='duckdb')
+    parsed = sqlglot.parse(sql,dialect='sqlite')
     print(parsed[0].args)
     replacer = SQLRandomReplacer()
     num = 0
     # 假�?�文件名
-    output_file = "mutation-duckdb.txt"
+    output_file = "mutation-sqlite.txt"
     with open(output_file, "a", encoding="utf-8") as f:
         for i in range(100):
             print(i)
@@ -212,7 +212,7 @@ if __name__ == "__main__":
             try:
                 print("!")
                 if transformed_sql is not None:
-                    check_sql = sqlglot.parse_one(transformed_sql.sql(dialect='duckdb'),read='duckdb')
+                    check_sql = sqlglot.parse_one(transformed_sql.sql(dialect='sqlite'),read='sqlite')
                 print("@")
             except Exception as e:
                 print("failed")
@@ -221,7 +221,7 @@ if __name__ == "__main__":
                 print("success")
                 print(transformed_sql)
                 if transformed_sql is not None:
-                    f.write(transformed_sql.sql(dialect='duckdb') + ";\n")
+                    f.write(transformed_sql.sql(dialect='sqlite') + ";\n")
                 # print(repr(transformed_sql))
                     num = num + 1
 

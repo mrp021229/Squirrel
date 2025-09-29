@@ -12,7 +12,7 @@ expression_manager = None
 def init(seed):
     global expression_manager
     expression_manager = ExpressionSetManager()
-    expression_manager.load_from_file("/home/Squirrel/srcs/sqlglot-duckdb/duckdb_seed.pkl")  # 替换为实际路径
+    expression_manager.load_from_file("/home/Squirrel/srcs/sqlynx_mysql/mysql_seed.pkl")  # 替换为实际路径
     sqlglot_mutation.set_expression_manager(expression_manager)  # 注入给子模块
     sqlglot_fill.set_expression_manager(expression_manager)
     # with open("/home/memtest.txt", "a") as f:
@@ -41,7 +41,17 @@ def fuzz_count(buf):
 
 
 def mutation(sql):
+    # log_path = "/home/output/fuzz_log.txt"
+    # os.makedirs(os.path.dirname(log_path), exist_ok=True)
     mutated_sql = sqlglot_mutation.get_mutated_sql(sql)
+    # with open(log_path, "a", encoding="utf-8") as log_file:
+    #     log_file.write("[Mutated SQL Before Fill]")
+    #     try:
+    #         log_file.write(mutated_sql + "\n")
+    #     except Exception as e:
+    #         log_file.write(f"[Error writing mutated SQL: {e}]\n")
+    # print("mutation")
+    # print(mutated_sql)
     filled_sql = sqlglot_fill.fill_sql(mutated_sql)
     return filled_sql
     
@@ -58,6 +68,13 @@ signal.signal(signal.SIGALRM, timeout_handler)
 def fuzz(buf, add_buf, max_size):
     try:
         signal.alarm(15)  # 
+
+        try:
+            with open("/home/check.txt", "w") as f:
+                f.write("1")
+        except Exception:
+            pass
+
         try:
             buf = buf.decode('utf-8')
             sql_statements = buf.split(';')
@@ -66,16 +83,6 @@ def fuzz(buf, add_buf, max_size):
 
             for sql in sql_statements:
                 if sql.strip():
-                    mutated_out = None
-                    new_sql = None
-                    # try :
-
-                    #     new_sql = sqlglot.parse_one(sql,dialect='duckdb')
-                    #     new_sql = expression_manager.get_new_sql(new_sql)
-                    #     new_sql = new_sql.sql()
-                    # except Exception:
-                    #     new_sql = None
-                    # if random.random()>0.2:
                     try:
                         mutated_out = mutation(sql.strip())
                     except Exception:
@@ -83,23 +90,6 @@ def fuzz(buf, add_buf, max_size):
 
                     if mutated_out is not None:
                         mutated_sql_statements.append(mutated_out)
-                    else:
-                        if new_sql is not None:
-                            try:
-                                mutated_out = mutation(new_sql)
-                            except Exception:
-                                mutated_out = None
-                            if mutated_out is not None:
-                                mutated_sql_statements.append(mutated_out)
-                    # else:
-                    #     if new_sql is not None:
-                    #         try:
-                    #             mutated_out = mutation(new_sql)
-                    #         except Exception:
-                    #             mutated_out = None
-                    #         if mutated_out is not None:
-                    #             mutated_sql_statements.append(mutated_out)
-                        
 
             mutated_sql = '; '.join(mutated_sql_statements)
             mutated_sql = mutated_sql.replace('\ufffd', '[INV]')

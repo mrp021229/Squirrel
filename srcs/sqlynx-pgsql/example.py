@@ -12,7 +12,7 @@ expression_manager = None
 def init(seed):
     global expression_manager
     expression_manager = ExpressionSetManager()
-    expression_manager.load_from_file("/home/Squirrel/srcs/sqlglot-pgsql/pgsql_seed.pkl")  # 替换为实际路径
+    expression_manager.load_from_file("/home/Squirrel/srcs/sqlynx-pgsql/pgsql_seed.pkl")  # 替换为实际路径
     sqlglot_mutation.set_expression_manager(expression_manager)  # 注入给子模块
     sqlglot_fill.set_expression_manager(expression_manager)
     # try:
