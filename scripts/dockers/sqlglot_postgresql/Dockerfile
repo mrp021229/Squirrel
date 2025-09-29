@@ -13,11 +13,15 @@ RUN apt-get update && \
     apt-get clean
 
 # 安装 sqlglot 库
-RUN pip3 install sqlglot
+RUN pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple sqlglot
+
 
 # 安装Python依赖
-RUN pip3 install --upgrade pip
-RUN pip3 install psycopg2-binary chardet
+# 升级 pip
+RUN pip3 install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# 安装依赖
+RUN pip3 install psycopg2-binary chardet -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 
 
@@ -44,8 +48,8 @@ RUN git clone https://github.com/mrp021229/Squirrel.git && \
     cmake --build build -j && \
     cd AFLplusplus/ && LLVM_CONFIG=llvm-config-14 make -j20
 
-COPY postgres/ postgres/
-RUN mkdir bld/ && cd bld/ && \
+RUN git clone https://github.com/postgres/postgres.git postgres/ && \
+    mkdir bld/ && cd bld/ && \
     CC=/home/Squirrel/AFLplusplus/afl-cc CXX=/home/Squirrel/AFLplusplus/afl-c++ \
     ../postgres/configure
 
@@ -59,3 +63,4 @@ RUN AFL_DEBUG=1 __AFL_SHM_ID=1234 /usr/local/pgsql/bin/postgres 2>&1 | grep "__a
 WORKDIR /home/Squirrel/scripts/utils
 # ENTRYPOINT AFL_MAP_SIZE=$(cat /tmp/mapsize) python3 run.py postgresql ../../data/fuzz_root/pqsql_input/
 #docker中适配python-sqlglot环境，试运行sqlglot脚本
+# AFL_IGNORE_PROBLEMS=1 AFL_MAP_SIZE=$(cat /tmp/mapsize) python3 run.py postgresql ../../data/fuzz_root/pqsql_input/

@@ -222,6 +222,7 @@ int main(int argc, char *argv[]) {
   // Start the database server. In case that the driver
   // is stopped and restarted, we should not start another server.
   __afl_map_shm();
+  system(startup_cmd.c_str());
   if (!database->check_alive()) {
     system(startup_cmd.c_str());
     printf("checkalive!!\n");
